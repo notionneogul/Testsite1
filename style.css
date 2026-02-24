@@ -177,14 +177,14 @@ button#generateBtn:disabled {
     line-height: 1.6;
 }
 
-/* 첫 글자 강조 제거: 일반 텍스트와 동일하게 설정 */
+/* 첫 글자 강조 복원 및 강화 */
 .first-char {
-    color: inherit !important;
-    font-weight: inherit !important;
-    font-size: inherit !important;
-    margin-right: 0 !important;
-    border-bottom: none !important;
-    display: inline !important;
+    color: var(--accent-color) !important;
+    font-weight: 800 !important;
+    font-size: 1.5rem !important;
+    margin-right: 2px !important;
+    border-bottom: 2px solid rgba(139, 109, 5, 0.4) !important;
+    display: inline-block !important;
 }
 
 .final-line {
