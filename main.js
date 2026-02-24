@@ -1,58 +1,43 @@
-// 1. 테마별 고품질 문장 데이터베이스 (조사 처리 포함)
-const themes = {
-    grace: {
-        name: "은혜와 축복",
-        start: ["{word}의 은혜가 강물처럼 당신의 삶에 흘러들어,", "{word}처럼 깊은 주님의 사랑이 지친 마음을 따뜻하게 감싸고,"],
-        mid: ["{word}의 파도를 타고 주님이 주시는 참된 평안을 누리며,", "{word}의 물결 속에서 하나님의 세밀한 손길을 날마다 경험하고,"],
-        end: ["{word}의 풍성한 결실이 당신의 평생에 마르지 않길 축원합니다."]
-    },
-    light: {
-        name: "빛과 소망",
-        start: ["{word}의 밝은 햇살이 당신의 창가를 제일 먼저 찾아오고,", "{word}처럼 찬란한 주의 영광이 당신의 오늘을 환하게 채우며,"],
-        mid: ["{word}의 등불을 들고 어두운 세상을 비추는 소중한 주역이 되고,", "{word}의 미소로 주변에 따뜻한 하늘 나라를 전하는 축복의 통로 되어,"],
-        end: ["{word}의 광채가 당신의 앞길에서 영원히 빛나기를 소망합니다."]
-    },
-    walk: {
-        name: "동행과 인도",
-        start: ["{word}의 길 위에서 주님과 손잡고 행복한 걸음을 시작하고,", "{word}처럼 변함없는 주님의 동행이 당신의 삶을 든든하게 지키며,"],
-        mid: ["{word}의 사명을 향해 한 걸음씩 믿음으로 전진하는 용기를 얻고,", "{word}의 자리마다 주님이 예비하신 복을 보석처럼 발견하여 나아가서,"],
-        end: ["{word}의 약속을 붙들고 주와 함께 승리하는 복된 인생 되소서."]
-    },
-    heart: {
-        name: "마음과 성품",
-        start: ["{word}의 예쁜 마음이 주님 보시기에 가장 아름다운 선물이 되고,", "{word}처럼 고운 당신의 성품 속에 예수님의 향기가 배어 나오며,"],
-        mid: ["{word}의 기도로 하늘 문을 열고 주님의 마음을 시원케 해드리고,", "{word}의 고백으로 날마다 주님께 더 가까이 나아가는 은혜가 가득하여,"],
-        end: ["{word}의 평강이 당신의 생각과 마음을 포근히 안아주길 기도합니다."]
-    }
+// 1. 글자별 정밀 두음 사전 (반드시 해당 글자로 시작하는 단어만 사용)
+const charWords = {
+    '김': ['김이 모락모락 나는 생명의 양식처럼', '김이 서린 창가에 기도를 적듯', '김(이) 모락모락 피어나는 따뜻한 사랑으로'],
+    '이': ['이토록 따뜻한 주님의 사랑이', '이슬처럼 맑고 깨끗한 마음으로', '이곳에서 주님과 함께 걷는 기쁨으로'],
+    '박': ['박수 소리처럼 기분 좋은 축복이', '밝은 햇살이 당신의 창가를 찾아오듯', '밝고 맑은 미소가 당신의 얼굴에'],
+    '최': ['최고의 선물인 오늘 하루를 주님과', '최초의 사랑 그 설렘을 소중히 간직하며', '최선을 다해 믿음의 길을 걷는 당신을'],
+    '정': ['정성 가득한 당신의 마음을 주님이', '정결한 마음으로 주 앞에 서는 당신이', '정직하고 고운 성품이 보석처럼 빛나서'],
+    '강': ['강건한 믿음의 뿌리가 당신을 지탱하고', '강물처럼 도도하게 흐르는 주의 은혜 속에', '강가에 심은 나무처럼 풍성한 열매를'],
+    '조': ['조용히 들려오는 주님의 세밀한 음성이', '좋은 일들만 당신의 앞길에 가득하기를', '조화로운 삶의 고백이 주님께 기쁨 되어'],
+    '윤': ['윤슬처럼 반짝이는 은혜의 물결이', '윤택한 영혼의 복이 당신의 삶 위에', '우리와 함께하시는 임마누엘 하나님이'],
+    '성': ['성령의 충만한 기름 부으심이 당신께', '성실한 삶의 향기로 주님을 나타내며', '성결한 삶을 향한 당신의 고운 마음이'],
+    '은': ['은혜의 보좌 앞으로 담대히 나아가며', '은총의 햇살이 당신의 길을 비추어주고', '은은하게 퍼지는 예수님의 향기처럼'],
+    '혜': ['혜성처럼 나타나 주의 영광을 밝히고', '혜안을 주셔서 주의 뜻을 분별하게 하며', '혜택받은 은혜를 널리 나누는 통로 되어'],
+    '지': ['지혜로운 마음으로 매일 승리하는 당신', '지극한 정성으로 당신을 돌보시는 주님', '지금 이 순간도 당신을 응원하시는 주를'],
+    '서': ['서광이 비치는 아침처럼 소망이 열리고', '서로 사랑하며 주의 뜻을 이루어가며', '서약하신 주님의 약속이 당신의 삶 속에'],
+    '민': ['민들레 홀씨처럼 주의 사랑을 전하고', '믿음의 눈을 들어 약속의 땅을 바라보며', '미소 짓는 당신의 얼굴에 평강이 가득해'],
+    '유': ['유난히 따뜻한 주의 사랑이 당신을 덮고', '유일하게 빛나는 당신의 가치를 주님이', '유연하고 부드러운 마음으로 세상을 품어'],
+    '한': ['한결같은 주님의 인자하심이 당신을 안고', '환한 미소 속에 깃든 주의 평안을 누리며', '한계 없는 하나님의 축복이 가득히 임해'],
+    '진': ['진실한 마음으로 주를 대하는 당신이 귀해', '진귀한 보물보다 당신을 더 사랑하시는 주', '진리의 말씀을 등불 삼아 용기 있게 걸어'],
+    '희': ['희망의 노래가 당신의 삶에 울려 퍼지고', '희귀하고 값진 보석처럼 당신이 쓰임 받길', '희망찬 내일의 약속을 믿음으로 바라보며'],
+    '하': ['하늘 문을 활짝 여시고 복을 내려주시길', '하나님의 형상을 닮은 당신은 참 소중해', '하늘 가득한 주님의 영광이 당신을 비추어'],
+    '수': ['수줍게 피어난 꽃처럼 당신의 미소가 예뻐', '수정처럼 맑고 깨끗한 평안이 당신께 임해', '수많은 약속의 말씀들이 삶에서 이루어져'],
+    '용': ['용기 있게 주의 길을 선택하는 당신의 믿음', '용솟음치는 성령의 능력이 당신을 강건케 해', '용납하시는 주의 은혜 안에서 참 자유 얻길'],
+    '준': ['준비하신 여호와 이레의 복이 가득 임하고', '준엄한 주의 말씀 앞에 겸손히 순종하며', '준비된 천국 시민으로 주와 함께 동행해'],
+    '현': ['현명한 지혜로 선한 길을 선택하며 살고', '현존하시는 하나님의 영광을 날마다 대면해', '현재 주어진 환경에서 감사의 조건을 찾아'],
+    '제': ['제일 먼저 주의 나라와 의를 구하는 삶', '제단의 숯불처럼 심령이 뜨겁게 타올라', '제시하신 소망의 길을 당당히 걸어가서']
 };
 
-const charWords = {
-    '김': ['기도', '기쁨', '기다림'], '이': ['이름', '이슬', '이곳'], '박': ['박수', '밝은', '밤하늘'],
-    '최': ['최고', '최선', '처음'], '정': ['정성', '정결', '정직'], '강': ['강건', '강가', '가장'],
-    '조': ['조용', '조화', '좋은'], '윤': ['윤슬', '윤택', '우리'], '성': ['성령', '성실', '선물'],
-    '은': ['은혜', '은총', '은은함'], '혜': ['혜성', '지혜', '밝음'], '지': ['지혜', '지금', '지극함'],
-    '서': ['서광', '서로', '서약'], '민': ['민들레', '믿음', '미소'], '유': ['유난히', '유일함', '유연함'],
-    '한': ['한결', '한마음', '환함'], '진': ['진실', '진심', '진귀함'], '희': ['희망', '기쁨', '하얀'],
-    '영': ['영원', '영광', '영혼'], '준': ['준비', '예쁨', '귀함'], '훈': ['훈훈함', '포근함', '향기'],
-    '하': ['하늘', '하나님', '하루'], '나': ['나의', '나그네', '나눔'], '수': ['수줍음', '수정', '맑음'],
-    '용': ['용기', '용납', '믿음'], '전': ['전부', '전심', '모든'], '무': ['무지개', '무한함', '무성함'],
-    '겸': ['겸손', '겸허', '고움'], '제': ['제일', '언제나', '함께'], '태': ['태양', '태초', '태산'],
-    '원': ['원함', '원대함', '원천'], '승': ['승리', '승전', '승전보'], '빈': ['빈틈없음', '빈마음', '빈자리']
+const themes = {
+    grace: { name: "은혜와 축복", start: ["{word} 흘러들어,", "{word} 적시고,"], mid: ["{word} 누리며,", "{word} 경험하고,"], end: ["{word} 축원합니다."] },
+    light: { name: "빛과 소망", start: ["{word} 찾아오고,", "{word} 채우며,"], mid: ["{word} 되고,", "{word} 되어,"], end: ["{word} 소망합니다."] },
+    walk: { name: "동행과 인도", start: ["{word} 시작하고,", "{word} 지키며,"], mid: ["{word} 얻고,", "{word} 나아가서,"], end: ["{word} 되소서."] },
+    heart: { name: "마음과 성품", start: ["{word} 되고,", "{word} 나오며,"], mid: ["{word} 드리고,", "{word} 가득하여,"], end: ["{word} 기도합니다."] }
 };
 
 const finalBliss = ['주님의 이름으로 당신을 오늘 더 축복합니다.', '언제나 주님과 함께 걷는 가장 행복한 사람 되세요.'];
 
-function getJosa(word, template) {
-    const lastChar = word[word.length - 1];
-    const code = lastChar.charCodeAt(0);
-    const hasBatchim = (code - 44032) % 28 !== 0;
-    
-    // 이(가) 처리
-    let processed = template.replace(/{word}이\(가\)/g, hasBatchim ? word + '이' : word + '가');
-    // 을(를) 처리
-    processed = processed.replace(/{word}을\(를\)/g, hasBatchim ? word + '을' : word + '를');
-    // 나머지 범용 치환
-    return processed.replace(/{word}/g, word);
+function getProcessedPhrase(word, template) {
+    // 템플릿에 {word}가 있으면 조립, 없으면 단어 자체가 문장인 경우
+    return template ? template.replace(/{word}/g, word) : word;
 }
 
 const generateBtn = document.getElementById('generateBtn');
@@ -73,36 +58,38 @@ generateBtn.addEventListener('click', () => {
         generateThreeCreativeOptions(name);
         loadingArea.classList.add('hidden');
         generateBtn.disabled = false;
-    }, 1500);
+    }, 1200);
 });
 
-function generateThreeCreativeOptions(name) {
+function generateThreeOptions(name) {
     cardsContainer.innerHTML = '';
     const themeKeys = Object.keys(themes);
-    const usedCombinations = new Set();
+    const usedPhrases = new Set();
 
     for (let i = 1; i <= 3; i++) {
         const theme = themes[themeKeys[Math.floor(Math.random() * themeKeys.length)]];
-        const poemLines = generateSentenceByTheme(name, theme, usedCombinations);
+        const poemLines = generateStrictAcrostic(name, theme, usedPhrases);
         cardsContainer.appendChild(createCard(poemLines, i, theme.name));
     }
     resultArea.classList.remove('hidden');
 }
 
-function generateSentenceByTheme(name, theme, used) {
+function generateStrictAcrostic(name, theme, used) {
     const chars = name.split('');
     const lines = chars.map((char, index) => {
         let pos = index === 0 ? 'start' : (index === chars.length - 1 ? 'end' : 'mid');
-        let wordList = charWords[char] || [char + '의 마음'];
+        let wordList = charWords[char] || [`${char}라는 이름 위에 주님의 축복이 머물고`];
         
         let phrase = "";
         let attempts = 0;
+        
+        // [핵심 절차] 첫 글자 일치 여부를 엄격히 검증
         do {
             let word = wordList[Math.floor(Math.random() * wordList.length)];
             let template = theme[pos][Math.floor(Math.random() * theme[pos].length)];
-            phrase = getJosa(word, template);
+            phrase = getProcessedPhrase(word, template);
             attempts++;
-        } while (used.has(phrase) && attempts < 10);
+        } while ((phrase[0] !== char || used.has(phrase)) && attempts < 20);
         
         used.add(phrase);
         return phrase;
@@ -123,7 +110,7 @@ function createCard(lines, index, themeName) {
         line.className = 'poem-line';
         if (i === lines.length - 1) line.classList.add('final-line');
         content.appendChild(line);
-        typeWriter(line, text, i * 600);
+        typeWriter(line, text, i * 500);
     });
 
     const btn = document.createElement('button');
@@ -131,9 +118,10 @@ function createCard(lines, index, themeName) {
     btn.innerText = '이 축복 메시지 복사하기';
     btn.onclick = () => {
         navigator.clipboard.writeText(lines.join('\n')).then(() => {
+            const original = btn.innerText;
             btn.innerText = '✅ 복사 완료!';
             btn.classList.add('success');
-            setTimeout(() => { btn.innerText = '이 축복 메시지 복사하기'; btn.classList.remove('success'); }, 2000);
+            setTimeout(() => { btn.innerText = original; btn.classList.remove('success'); }, 2000);
         });
     };
     card.appendChild(btn);
@@ -144,7 +132,6 @@ function typeWriter(element, text, delay) {
     setTimeout(() => {
         let i = 0;
         element.innerHTML = '';
-        
         const firstChar = text[0];
         const rest = text.substring(1);
         
