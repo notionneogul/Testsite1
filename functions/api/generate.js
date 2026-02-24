@@ -1,7 +1,6 @@
 export async function onRequestPost(context) {
   const { request, env } = context;
 
-  // Cloudflare 대시보드에서 설정할 환경 변수 이름: GEMINI_API_KEY
   const API_KEY = env.GEMINI_API_KEY;
   
   if (!API_KEY) {
@@ -14,8 +13,8 @@ export async function onRequestPost(context) {
   try {
     const { name } = await request.json();
     
-    // Google Gemini API 호출
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
+    // 모델을 gemini-pro로 변경하고 API 버전을 v1으로 수정하여 호환성 확보
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${API_KEY}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -46,7 +45,6 @@ export async function onRequestPost(context) {
 
     const data = await response.json();
     
-    // 에러 발생 시 처리
     if (!response.ok) {
       return new Response(JSON.stringify({ error: data.error.message }), {
         status: response.status,
@@ -54,7 +52,6 @@ export async function onRequestPost(context) {
       });
     }
 
-    // AI의 텍스트 응답 추출
     const text = data.candidates[0].content.parts[0].text;
     
     return new Response(text, {
