@@ -152,16 +152,22 @@ async function renderResult(text) {
 function createCard(lines, verse, index) {
     const card = document.createElement('div');
     card.className = 'poem-card';
-    card.dataset.index = index; // 캡처 시 식별용
+    card.dataset.index = index;
+    // 캡처 시 재구성을 위해 원본 텍스트 저장
+    card.dataset.poem = JSON.stringify(lines);
+    card.dataset.verse = verse;
+
     card.style.animationDelay = `${index * 0.2}s`;
     card.innerHTML = `<span class="card-tag">축복 제안 ${index}</span><div class="poem-content"></div>`;
     const content = card.querySelector('.poem-content');
+    
     lines.forEach((text, i) => {
         const line = document.createElement('div');
         line.className = 'poem-line';
         content.appendChild(line);
         typeWriter(line, text, i * 600);
     });
+
     if (verse) {
         setTimeout(() => {
             const verseLine = document.createElement('div');
@@ -170,6 +176,7 @@ function createCard(lines, verse, index) {
             content.appendChild(verseLine);
         }, lines.length * 600 + 300);
     }
+
     const btnGroup = document.createElement('div');
     btnGroup.className = 'card-btn-group';
     const copyBtn = document.createElement('button');
@@ -194,8 +201,11 @@ function createCard(lines, verse, index) {
 }
 
 function saveCardAsImage(cardElement, index) {
-    // 성구가 아직 생성되지 않았다면 알림
-    if (!cardElement.querySelector('.verse-line')) {
+    const verseTextRaw = cardElement.dataset.verse;
+    const poemLinesRaw = JSON.parse(cardElement.dataset.poem);
+
+    // 아직 성구가 생성되지 않았다면 대기 안내
+    if (verseTextRaw && !cardElement.querySelector('.verse-line')) {
         alert('축복 메시지가 완성될 때까지 잠시만 기다려주세요!');
         return;
     }
@@ -208,7 +218,7 @@ function saveCardAsImage(cardElement, index) {
     const btnGroup = cardElement.querySelector('.card-btn-group');
     const tag = cardElement.querySelector('.card-tag');
     
-    btnGroup.style.visibility = 'hidden'; // 레이아웃 유지를 위해 hidden 사용
+    btnGroup.style.visibility = 'hidden';
     tag.style.opacity = '0';
 
     html2canvas(cardElement, {
@@ -216,41 +226,52 @@ function saveCardAsImage(cardElement, index) {
         backgroundColor: isDarkMode ? '#1e293b' : '#fdfbf7',
         useCORS: true,
         onclone: (clonedDoc) => {
-            // 복제된 문서에서 해당 카드 찾기
             const clonedCard = clonedDoc.querySelector(`.poem-card[data-index="${index}"]`);
             if (clonedCard) {
-                // 캡처 방해 요소 제거
+                // 1. 모든 애니메이션 및 필터 제거
+                clonedCard.style.animation = 'none';
                 clonedCard.style.backdropFilter = 'none';
                 clonedCard.style.webkitBackdropFilter = 'none';
                 clonedCard.style.boxShadow = 'none';
                 clonedCard.style.paddingBottom = '40px';
-                
-                // 색상 강제 지정 (이미지 가독성)
+
+                const contentArea = clonedCard.querySelector('.poem-content');
+                contentArea.innerHTML = ''; // 기존 내용 삭제 후 재구성
+
+                // 2. 색상 변수 설정
                 const textColor = isDarkMode ? '#f0f0f0' : '#2c241e';
                 const accentColor = isDarkMode ? '#ffd700' : '#a68b5c';
                 const verseTextColor = isDarkMode ? '#e5e5e5' : '#4a3728';
 
-                clonedCard.querySelectorAll('.poem-line').forEach(l => {
-                    l.style.opacity = '1';
-                    l.style.color = textColor;
+                // 3. 삼행시 본문 강제 재삽입 (타이핑 효과 없음)
+                poemLinesRaw.forEach(text => {
+                    const line = document.createElement('div');
+                    line.className = 'poem-line';
+                    line.style.opacity = '1';
+                    line.style.color = textColor;
+                    line.style.marginBottom = '18px';
+                    
+                    const firstChar = text[0];
+                    const restText = text.substring(1);
+                    line.innerHTML = `<span class="first-char" style="color:${accentColor}; font-weight:800; font-size:1.6rem; margin-right:4px;">${firstChar}</span>${restText}`;
+                    contentArea.appendChild(line);
                 });
-                clonedCard.querySelectorAll('.first-char').forEach(c => {
-                    c.style.color = accentColor;
-                });
-                
-                const vLine = clonedCard.querySelector('.verse-line');
-                if (vLine) {
-                    vLine.style.display = 'block';
-                    vLine.style.opacity = '1';
-                    vLine.style.visibility = 'visible';
+
+                // 4. 성구 영역 강제 재삽입
+                if (verseTextRaw) {
+                    const vLine = document.createElement('div');
+                    vLine.className = 'verse-line';
+                    vLine.style.marginTop = '25px';
+                    vLine.style.paddingTop = '15px';
                     vLine.style.borderTop = `1px dashed ${accentColor}`;
-                    const vLabel = vLine.querySelector('.verse-label');
-                    const vText = vLine.querySelector('p');
-                    if (vLabel) vLabel.style.color = accentColor;
-                    if (vText) {
-                        vText.style.color = verseTextColor;
-                        vText.style.opacity = '1';
-                    }
+                    vLine.style.textAlign = 'center';
+                    vLine.style.opacity = '1';
+                    vLine.style.display = 'block';
+                    vLine.innerHTML = `
+                        <span class="verse-label" style="color:${accentColor}; font-weight:700; font-size:0.75rem; display:inline-block; margin-bottom:10px;">📜 추천 성구</span>
+                        <p style="color:${verseTextColor}; font-size:0.95rem; font-style:italic; line-height:1.5; font-weight:500; margin:0;">${verseTextRaw}</p>
+                    `;
+                    contentArea.appendChild(vLine);
                 }
             }
         }
