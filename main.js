@@ -79,14 +79,9 @@ function createCard(lines, index) {
     lines.forEach((text, i) => {
         const line = document.createElement('div');
         line.className = 'poem-line';
-        if (i === lines.length - 1) {
-            line.classList.add('final-line');
-            content.appendChild(line);
-            line.innerText = text;
-        } else {
-            content.appendChild(line);
-            typeWriter(line, text, i * 600);
-        }
+        // 모든 줄을 동일한 N행시 스타일로 처리 (마지막 줄 특수 효과 제거)
+        content.appendChild(line);
+        typeWriter(line, text, i * 600);
     });
 
     const btn = document.createElement('button');
