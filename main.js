@@ -153,9 +153,20 @@ function saveCardAsImage(cardElement, index) {
                     targetClonedCard.style.paddingBottom = '40px';
                     // 타이핑이 덜 끝났을 수 있는 상황을 대비해 opacity 강제 설정
                     const poemLines = targetClonedCard.querySelectorAll('.poem-line');
-                    poemLines.forEach(line => line.style.opacity = '1');
+                    poemLines.forEach(line => {
+                        line.style.opacity = '1';
+                        line.style.color = '#222222';
+                    });
+                    
                     const verseLine = targetClonedCard.querySelector('.verse-line');
-                    if (verseLine) verseLine.style.display = 'block';
+                    if (verseLine) {
+                        verseLine.style.display = 'block';
+                        verseLine.style.opacity = '1';
+                        verseLine.style.visibility = 'visible';
+                        // 성구 텍스트 색상 강제 지정
+                        const verseText = verseLine.querySelector('p');
+                        if (verseText) verseText.style.color = '#4a3728';
+                    }
                 }
             }
         }).then(canvas => {

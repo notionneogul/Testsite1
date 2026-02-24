@@ -308,21 +308,23 @@ button#generateBtn:disabled {
     border-top: 1px dashed rgba(139, 109, 5, 0.2);
     text-align: center;
     animation: fadeIn 0.8s forwards;
+    opacity: 1 !important; /* 캡처 시 안정성을 위해 기본 불투명도 보장 */
 }
 
 .verse-label {
     display: inline-block;
     font-size: 0.75rem;
-    color: var(--accent-color);
+    color: var(--accent-color) !important; /* 강제 지정 */
     font-weight: 700;
     margin-bottom: 10px;
 }
 
 .verse-line p {
     font-size: 0.95rem;
-    color: var(--primary-color);
+    color: #4a3728 !important; /* 변수 대신 직접 색상 지정으로 캡처 안정성 확보 */
     font-style: italic;
     line-height: 1.5;
+    font-weight: 500;
 }
 
 /* 푸터 및 하단 링크 */
