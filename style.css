@@ -120,21 +120,20 @@ button#generateBtn:hover {
 
 .poem-content {
     font-family: 'Noto Serif KR', serif;
-    font-size: 1.25rem;
+    font-size: 1.3rem;
     text-align: left;
     margin-bottom: 30px;
     word-break: keep-all;
-    color: #111111 !important; /* 매우 짙은 회색 */
+    color: #222222 !important;
 }
 
 .poem-line {
-    margin-bottom: 22px;
+    margin-bottom: 18px;
     opacity: 0;
     transform: translateY(15px);
     animation: lineFadeIn 0.6s forwards;
-    display: flex;
-    align-items: flex-start;
-    color: #111111 !important;
+    display: block; /* 줄 바꿈 자연스럽게 */
+    line-height: 1.6;
 }
 
 .poem-line:last-child {
@@ -144,19 +143,20 @@ button#generateBtn:hover {
 .first-char {
     color: var(--accent-color) !important;
     font-weight: 800;
-    font-size: 1.7rem;
-    margin-right: 4px;
-    flex-shrink: 0;
-    border-bottom: 3px solid rgba(139, 109, 5, 0.4);
-    line-height: 1.1;
+    font-size: 1.6rem;
+    margin-right: 2px;
+    border-bottom: 2px solid rgba(139, 109, 5, 0.4);
+    display: inline-block;
 }
 
-.word-rest {
+.final-line {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px dashed rgba(109, 88, 69, 0.2);
+    font-weight: 600;
     color: var(--primary-color) !important;
-    font-weight: 800;
-    font-size: 1.4rem;
-    margin-right: 10px;
-    line-height: 1.3;
+    font-size: 1.1rem;
+    text-align: center;
 }
 
 .secondary-btn {
