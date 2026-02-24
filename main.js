@@ -252,10 +252,15 @@ function saveCardAsImage(cardElement, index) {
                     
                     const label = verseArea.querySelector('.verse-label');
                     const text = verseArea.querySelector('p');
-                    if (label) label.style.color = accentColor;
+                    if (label) {
+                        label.style.color = accentColor;
+                        label.style.opacity = '1';
+                    }
                     if (text) {
-                        text.style.color = textColor;
+                        // 가독성을 위해 색상을 더 명확하게 지정
+                        text.style.color = isDarkMode ? '#ffffff' : '#2c241e';
                         text.style.opacity = '1';
+                        text.style.fontWeight = '600';
                     }
                 }
 
@@ -264,12 +269,12 @@ function saveCardAsImage(cardElement, index) {
                 const footerElement = document.createElement('div');
                 footerElement.style.marginTop = '30px';
                 footerElement.style.paddingTop = '20px';
-                footerElement.style.borderTop = '1px solid rgba(166, 139, 92, 0.2)';
+                footerElement.style.borderTop = `1px solid ${isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(166, 139, 92, 0.2)'}`;
                 footerElement.style.textAlign = 'center';
-                footerElement.style.fontSize = '0.85rem';
-                footerElement.style.color = accentColor;
-                footerElement.style.fontWeight = '500';
-                footerElement.style.lineHeight = '1.5';
+                footerElement.style.fontSize = '0.9rem';
+                footerElement.style.color = accentColor; // 금빛 유지
+                footerElement.style.fontWeight = '700'; // 더 굵게
+                footerElement.style.lineHeight = '1.6';
                 footerElement.innerText = footerBlessing;
                 
                 clonedCard.appendChild(footerElement);
