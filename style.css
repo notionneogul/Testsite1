@@ -98,14 +98,36 @@ button#generateBtn:hover {
     display: none;
 }
 
+.selection-guide {
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--accent-color);
+    font-weight: 600;
+    margin-bottom: 20px;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.cards-container {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
 .poem-card {
     background: #ffffff !important;
-    padding: 40px 30px;
+    padding: 30px 25px;
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
     position: relative;
-    border: 1px solid rgba(139, 109, 5, 0.3);
+    border: 1px solid rgba(139, 109, 5, 0.2);
     overflow: hidden;
+    transition: transform 0.3s, border-color 0.3s;
+    cursor: pointer;
+}
+
+.poem-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent-color);
 }
 
 .poem-card::before {
@@ -114,25 +136,37 @@ button#generateBtn:hover {
     top: 0;
     left: 0;
     width: 100%;
-    height: 5px;
+    height: 4px;
     background: linear-gradient(90deg, var(--accent-color), var(--primary-color));
+}
+
+.poem-card .card-tag {
+    position: absolute;
+    top: 12px;
+    right: 15px;
+    font-size: 0.7rem;
+    background: #fdfaf2;
+    padding: 4px 10px;
+    border-radius: 20px;
+    color: var(--muted-text);
+    border: 1px solid rgba(139, 109, 5, 0.1);
 }
 
 .poem-content {
     font-family: 'Noto Serif KR', serif;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     text-align: left;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
     word-break: keep-all;
     color: #222222 !important;
 }
 
 .poem-line {
-    margin-bottom: 18px;
+    margin-bottom: 15px;
     opacity: 0;
-    transform: translateY(15px);
-    animation: lineFadeIn 0.6s forwards;
-    display: block; /* 줄 바꿈 자연스럽게 */
+    transform: translateY(10px);
+    animation: lineFadeIn 0.5s forwards;
+    display: block;
     line-height: 1.6;
 }
 
@@ -143,39 +177,41 @@ button#generateBtn:hover {
 .first-char {
     color: var(--accent-color) !important;
     font-weight: 800;
-    font-size: 1.6rem;
+    font-size: 1.5rem;
     margin-right: 2px;
     border-bottom: 2px solid rgba(139, 109, 5, 0.4);
     display: inline-block;
 }
 
 .final-line {
-    margin-top: 25px;
-    padding-top: 20px;
+    margin-top: 20px;
+    padding-top: 15px;
     border-top: 1px dashed rgba(109, 88, 69, 0.2);
     font-weight: 600;
     color: var(--primary-color) !important;
-    font-size: 1.1rem;
+    font-size: 1rem;
     text-align: center;
 }
 
-.secondary-btn {
+.copy-btn-small {
     width: 100%;
     background-color: #fdfaf2;
     color: var(--primary-color) !important;
-    border: 2px solid rgba(74, 55, 40, 0.3);
-    font-size: 1rem;
-    padding: 16px;
+    border: 1.5px solid rgba(109, 88, 69, 0.2);
+    font-size: 0.9rem;
+    padding: 12px;
     font-weight: 700;
-    border-radius: 14px;
+    border-radius: 12px;
     cursor: pointer;
+    transition: all 0.2s;
 }
 
-.secondary-btn:hover {
-    background-color: #f5f0e1;
+.copy-btn-small:hover {
+    background-color: var(--primary-color);
+    color: #ffffff !important;
 }
 
-.secondary-btn.success {
+.copy-btn-small.success {
     background-color: #e8f5e9;
     border-color: #81c784;
     color: #2e7d32 !important;
