@@ -13,8 +13,8 @@ export async function onRequestPost(context) {
   try {
     const { name } = await request.json();
     
-    // 최신 모델 gemini-2.0-flash 적용 및 v1beta API 사용
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`, {
+    // 가장 안정적이고 빠른 gemini-1.5-flash 모델과 v1 정식 API 사용
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
