@@ -228,22 +228,21 @@ function saveCardAsImage(cardElement, index) {
                 clonedCard.style.backdropFilter = 'none';
                 clonedCard.style.webkitBackdropFilter = 'none';
                 clonedCard.style.boxShadow = 'none';
-                clonedCard.style.paddingBottom = '40px';
+                clonedCard.style.paddingBottom = '60px'; // 하단 문구 공간 확보
 
-                // 본문 텍스트 상태 강제 보정
+                // 본문 텍스트 강제 보정
                 clonedCard.querySelectorAll('.poem-line').forEach(line => {
                     line.style.opacity = '1';
                     line.style.color = textColor;
                     line.style.visibility = 'visible';
                 });
 
-                // 첫 글자 강조 색상 보정
                 clonedCard.querySelectorAll('.first-char').forEach(char => {
                     char.style.color = accentColor;
                     char.style.opacity = '1';
                 });
 
-                // 성구 영역 상태 강제 보정 (가장 중요)
+                // 성구 영역 강제 보정
                 const verseArea = clonedCard.querySelector('.verse-line');
                 if (verseArea) {
                     verseArea.style.display = 'block';
@@ -255,10 +254,25 @@ function saveCardAsImage(cardElement, index) {
                     const text = verseArea.querySelector('p');
                     if (label) label.style.color = accentColor;
                     if (text) {
-                        text.style.color = textColor; // 본문과 동일한 색상 적용
+                        text.style.color = textColor;
                         text.style.opacity = '1';
                     }
                 }
+
+                // --- 맨 아래 성구(Footer Blessing) 강제 추가 ---
+                const footerBlessing = document.querySelector('.blessing-footer').innerText;
+                const footerElement = document.createElement('div');
+                footerElement.style.marginTop = '30px';
+                footerElement.style.paddingTop = '20px';
+                footerElement.style.borderTop = '1px solid rgba(166, 139, 92, 0.2)';
+                footerElement.style.textAlign = 'center';
+                footerElement.style.fontSize = '0.85rem';
+                footerElement.style.color = accentColor;
+                footerElement.style.fontWeight = '500';
+                footerElement.style.lineHeight = '1.5';
+                footerElement.innerText = footerBlessing;
+                
+                clonedCard.appendChild(footerElement);
             }
         }
     }).then(canvas => {
