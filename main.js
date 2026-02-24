@@ -3,9 +3,9 @@ import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
 // 사용자께서 제공하신 Gemini API 키
 const API_KEY = "AIzaSyAhQA4FYaG-zP6NLzzc0k-i5K9MVoA4A9A";
 const genAI = new GoogleGenerativeAI(API_KEY);
-// 좀 더 빠르고 효율적인 flash 모델 사용
+// 안정적인 gemini-pro 모델 사용 (1.5-flash 404 에러 해결)
 const model = genAI.getGenerativeModel({ 
-    model: "gemini-1.5-flash",
+    model: "gemini-pro",
     generationConfig: {
         temperature: 0.7,
         topP: 0.8,
