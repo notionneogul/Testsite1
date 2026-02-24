@@ -9,6 +9,18 @@
     --muted-text: #6d5b4e;
     --border-radius: 24px;
     --shadow: 0 12px 40px rgba(74, 55, 40, 0.15);
+    --canvas-bg: linear-gradient(135deg, #fdfbf7 0%, #f0f7ff 50%, #fff9e6 100%);
+}
+
+/* 다크 모드 변수 정의 */
+body.dark-mode {
+    --primary-color: #e5e5e5;
+    --accent-color: #ffd700; /* 다크모드에서 더 밝은 금빛 */
+    --card-bg: rgba(30, 30, 30, 0.85);
+    --text-color: #f0f0f0;
+    --muted-text: #aaaaaa;
+    --shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+    --canvas-bg: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #020617 100%);
 }
 
 @keyframes fadeInUp {
@@ -30,7 +42,8 @@
 
 body {
     font-family: 'Pretendard', -apple-system, sans-serif;
-    background-color: var(--cream-white);
+    background-color: #fdfbf7;
+    transition: background-color 0.5s ease;
     position: relative;
     overflow-x: hidden;
     color: var(--text-color);
@@ -41,15 +54,37 @@ body {
     padding: 20px;
 }
 
-/* 인터랙티브 캔버스 배경 */
 #bgCanvas {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 0; left: 0; width: 100%; height: 100%;
     z-index: -1;
-    background: linear-gradient(135deg, #fdfbf7 0%, #f0f7ff 50%, #fff9e6 100%);
+    background: var(--canvas-bg);
+    transition: background 0.5s ease;
+}
+
+/* 테마 토글 버튼 스타일 */
+.theme-toggle {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--card-bg);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.theme-toggle:hover {
+    transform: scale(1.1) rotate(15deg);
 }
 
 .container {
@@ -92,16 +127,17 @@ header p {
 }
 
 .input-group {
-    background: rgba(255, 255, 255, 0.7);
+    background: var(--card-bg);
     padding: 8px;
     border-radius: 28px;
-    box-shadow: 0 15px 35px rgba(74, 55, 40, 0.1);
+    box-shadow: var(--shadow);
     display: flex;
     margin-bottom: 35px;
-    border: 1px solid rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     gap: 5px;
+    transition: all 0.3s ease;
 }
 
 input[type="text"] {
@@ -111,7 +147,7 @@ input[type="text"] {
     background: transparent;
     font-size: 1.1rem;
     outline: none;
-    color: #000000 !important;
+    color: var(--text-color) !important;
     font-weight: 500;
     min-width: 0;
 }
@@ -119,7 +155,7 @@ input[type="text"] {
 button#generateBtn {
     padding: 0 24px;
     background-color: var(--primary-color);
-    color: #ffffff !important;
+    color: var(--bg-color) !important;
     border: none;
     border-radius: 20px;
     font-size: 1rem;
@@ -130,7 +166,7 @@ button#generateBtn {
 }
 
 button#generateBtn:disabled {
-    background-color: #ccc;
+    background-color: #666;
     cursor: not-allowed;
 }
 
@@ -149,7 +185,7 @@ button#generateBtn:disabled {
 .loader {
     width: 40px;
     height: 40px;
-    border: 4px solid #f3f3f3;
+    border: 4px solid rgba(255, 255, 255, 0.1);
     border-top: 4px solid var(--accent-color);
     border-radius: 50%;
     margin: 0 auto;
@@ -179,16 +215,17 @@ button#generateBtn:disabled {
 }
 
 .poem-card {
-    background: rgba(255, 255, 255, 0.85) !important;
+    background: var(--card-bg) !important;
     padding: 55px 28px 35px;
     border-radius: var(--border-radius);
-    box-shadow: 0 10px 40px rgba(74, 55, 40, 0.08);
+    box-shadow: var(--shadow);
     position: relative;
-    border: 1px solid rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     overflow: hidden;
     animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    transition: all 0.3s ease;
 }
 
 .poem-card::before {
@@ -218,7 +255,7 @@ button#generateBtn:disabled {
     text-align: left;
     margin-bottom: 30px;
     word-break: keep-all;
-    color: #2c241e !important;
+    color: var(--text-color) !important;
     font-weight: 500;
     margin-top: 10px;
 }
@@ -259,35 +296,35 @@ button#generateBtn:disabled {
     border-radius: 12px;
     cursor: pointer;
     transition: all 0.2s ease;
-    border: 1.5px solid rgba(109, 88, 69, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     display: flex;
     align-items: center;
     justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-color) !important;
 }
 
 .copy-btn {
-    background-color: #fdfaf2;
-    color: var(--primary-color) !important;
+    background-color: rgba(166, 139, 92, 0.1);
 }
 
 .save-btn {
     background-color: var(--primary-color);
-    color: #ffffff !important;
+    color: #fff !important;
     border: none;
 }
 
 .action-btn.success {
-    background-color: #e8f5e9;
-    border-color: #81c784;
-    color: #2e7d32 !important;
+    background-color: #2e7d32;
+    color: #fff !important;
 }
 
 .guide-section {
     margin-top: 50px;
-    background: rgba(255, 255, 255, 0.5);
+    background: var(--card-bg);
     padding: 25px;
     border-radius: 16px;
-    border: 1px solid rgba(139, 109, 5, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .guide-section h2 {
@@ -297,13 +334,13 @@ button#generateBtn:disabled {
 }
 
 .guide-section ul {
-    list-style: none; /* 중복 점 문제 해결 */
+    list-style: none;
     padding: 0;
 }
 
 .guide-section li {
     font-size: 0.85rem;
-    color: #666;
+    color: var(--muted-text);
     margin-bottom: 8px;
     padding-left: 18px;
     position: relative;
@@ -319,10 +356,9 @@ button#generateBtn:disabled {
 .verse-line {
     margin-top: 25px;
     padding-top: 15px;
-    border-top: 1px dashed rgba(139, 109, 5, 0.2);
+    border-top: 1px dashed rgba(166, 139, 92, 0.3);
     text-align: center;
     animation: fadeIn 0.8s forwards;
-    opacity: 1 !important;
 }
 
 .verse-label {
@@ -335,7 +371,7 @@ button#generateBtn:disabled {
 
 .verse-line p {
     font-size: 0.95rem;
-    color: #4a3728 !important;
+    color: var(--primary-color) !important;
     font-style: italic;
     line-height: 1.5;
     font-weight: 500;
@@ -353,13 +389,14 @@ footer {
 }
 
 .footer-links a {
-    color: #888;
+    color: var(--muted-text);
     text-decoration: none;
 }
 
 .copyright {
     font-size: 0.75rem;
-    color: #aaa;
+    color: var(--muted-text);
+    opacity: 0.6;
     margin-bottom: 20px;
 }
 
@@ -375,4 +412,5 @@ footer {
     .input-group { border-radius: 16px; }
     .poem-card { padding: 60px 20px 30px; }
     .poem-content { font-size: 1.15rem; }
+    .theme-toggle { bottom: 20px; right: 20px; width: 45px; height: 45px; }
 }

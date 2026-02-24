@@ -4,6 +4,21 @@ const nameInput = document.getElementById('nameInput');
 const resultArea = document.getElementById('resultArea');
 const loadingArea = document.getElementById('loadingArea');
 const cardsContainer = document.getElementById('cardsContainer');
+const themeToggle = document.getElementById('themeToggle');
+
+// --- 테마 전환 로직 ---
+themeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+    const isDark = document.body.classList.contains('dark-mode');
+    themeToggle.querySelector('.icon').innerText = isDark ? '🌙' : '☀️';
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+});
+
+// 초기 테마 설정 불러오기
+if (localStorage.getItem('theme') === 'dark') {
+    document.body.classList.add('dark-mode');
+    themeToggle.querySelector('.icon').innerText = '🌙';
+}
 
 // --- 인터랙티브 배경 로직 ---
 const canvas = document.getElementById('bgCanvas');
@@ -34,30 +49,32 @@ class Particle {
     constructor() {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 2 + 0.5; // 크기 다양화
+        this.size = Math.random() * 2 + 0.5;
         this.baseX = this.x;
         this.baseY = this.y;
         this.density = (Math.random() * 30) + 1;
-        this.opacity = Math.random() * 0.5 + 0.2;
-        this.pulseSpeed = Math.random() * 0.02 + 0.01;
-        this.pulse = 0;
+        this.opacity = Math.random() * 0.6 + 0.2;
+        this.pulseSpeed = Math.random() * 0.03 + 0.01;
+        this.pulse = Math.random() * Math.PI;
     }
     draw() {
-        const currentOpacity = this.opacity + Math.sin(this.pulse) * 0.2; // 반짝임 효과
-        ctx.shadowBlur = this.size * 4;
-        ctx.shadowColor = 'rgba(166, 139, 92, 0.3)';
-        ctx.fillStyle = `rgba(166, 139, 92, ${currentOpacity})`;
+        const currentOpacity = this.opacity + Math.sin(this.pulse) * 0.3;
+        // 별빛 색상: 더욱 노란 금빛으로 강화
+        const starColor = `rgba(255, 215, 100, ${Math.max(0.1, currentOpacity)})`;
+        
+        ctx.shadowBlur = this.size * 6; // 광채 강화
+        ctx.shadowColor = 'rgba(255, 200, 0, 0.5)';
+        ctx.fillStyle = starColor;
         
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.closePath();
         ctx.fill();
         
-        // 초기화 (성능을 위해 그림자 효과 해제)
         ctx.shadowBlur = 0;
     }
     update() {
-        this.pulse += this.pulseSpeed; // 반짝임 애니메이션 진행
+        this.pulse += this.pulseSpeed;
 
         let dx = mouse.x - this.x;
         let dy = mouse.y - this.y;
@@ -75,11 +92,11 @@ class Particle {
         } else {
             if (this.x !== this.baseX) {
                 let dx = this.x - this.baseX;
-                this.x -= dx / 20;
+                this.x -= dx / 25;
             }
             if (this.y !== this.baseY) {
                 let dy = this.y - this.baseY;
-                this.y -= dy / 20;
+                this.y -= dy / 25;
             }
         }
     }
@@ -196,7 +213,7 @@ function saveCardAsImage(cardElement, index) {
     setTimeout(() => {
         html2canvas(cardElement, {
             scale: 2,
-            backgroundColor: '#fdfbf7',
+            backgroundColor: document.body.classList.contains('dark-mode') ? '#1e293b' : '#fdfbf7',
             useCORS: true,
             onclone: (clonedDoc) => {
                 const allClonedCards = clonedDoc.querySelectorAll('.poem-card');
@@ -204,13 +221,11 @@ function saveCardAsImage(cardElement, index) {
                 if (targetClonedCard) {
                     targetClonedCard.style.paddingBottom = '40px';
                     const poemLines = targetClonedCard.querySelectorAll('.poem-line');
-                    poemLines.forEach(line => { line.style.opacity = '1'; line.style.color = '#2c241e'; });
+                    poemLines.forEach(line => { line.style.opacity = '1'; });
                     const verseLine = targetClonedCard.querySelector('.verse-line');
                     if (verseLine) {
                         verseLine.style.display = 'block';
                         verseLine.style.opacity = '1';
-                        const verseText = verseLine.querySelector('p');
-                        if (verseText) verseText.style.color = '#4a3728';
                     }
                 }
             }
