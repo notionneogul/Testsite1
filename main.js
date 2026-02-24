@@ -1,44 +1,75 @@
-// 1. 글자별 정밀 두음 사전 (반드시 해당 글자로 시작하는 단어만 사용)
-const charWords = {
-    '김': ['김이 모락모락 나는 생명의 양식처럼', '김이 서린 창가에 기도를 적듯', '김(이) 모락모락 피어나는 따뜻한 사랑으로'],
-    '이': ['이토록 따뜻한 주님의 사랑이', '이슬처럼 맑고 깨끗한 마음으로', '이곳에서 주님과 함께 걷는 기쁨으로'],
-    '박': ['박수 소리처럼 기분 좋은 축복이', '밝은 햇살이 당신의 창가를 찾아오듯', '밝고 맑은 미소가 당신의 얼굴에'],
-    '최': ['최고의 선물인 오늘 하루를 주님과', '최초의 사랑 그 설렘을 소중히 간직하며', '최선을 다해 믿음의 길을 걷는 당신을'],
-    '정': ['정성 가득한 당신의 마음을 주님이', '정결한 마음으로 주 앞에 서는 당신이', '정직하고 고운 성품이 보석처럼 빛나서'],
-    '강': ['강건한 믿음의 뿌리가 당신을 지탱하고', '강물처럼 도도하게 흐르는 주의 은혜 속에', '강가에 심은 나무처럼 풍성한 열매를'],
-    '조': ['조용히 들려오는 주님의 세밀한 음성이', '좋은 일들만 당신의 앞길에 가득하기를', '조화로운 삶의 고백이 주님께 기쁨 되어'],
-    '윤': ['윤슬처럼 반짝이는 은혜의 물결이', '윤택한 영혼의 복이 당신의 삶 위에', '우리와 함께하시는 임마누엘 하나님이'],
-    '성': ['성령의 충만한 기름 부으심이 당신께', '성실한 삶의 향기로 주님을 나타내며', '성결한 삶을 향한 당신의 고운 마음이'],
-    '은': ['은혜의 보좌 앞으로 담대히 나아가며', '은총의 햇살이 당신의 길을 비추어주고', '은은하게 퍼지는 예수님의 향기처럼'],
-    '혜': ['혜성처럼 나타나 주의 영광을 밝히고', '혜안을 주셔서 주의 뜻을 분별하게 하며', '혜택받은 은혜를 널리 나누는 통로 되어'],
-    '지': ['지혜로운 마음으로 매일 승리하는 당신', '지극한 정성으로 당신을 돌보시는 주님', '지금 이 순간도 당신을 응원하시는 주를'],
-    '서': ['서광이 비치는 아침처럼 소망이 열리고', '서로 사랑하며 주의 뜻을 이루어가며', '서약하신 주님의 약속이 당신의 삶 속에'],
-    '민': ['민들레 홀씨처럼 주의 사랑을 전하고', '믿음의 눈을 들어 약속의 땅을 바라보며', '미소 짓는 당신의 얼굴에 평강이 가득해'],
-    '유': ['유난히 따뜻한 주의 사랑이 당신을 덮고', '유일하게 빛나는 당신의 가치를 주님이', '유연하고 부드러운 마음으로 세상을 품어'],
-    '한': ['한결같은 주님의 인자하심이 당신을 안고', '환한 미소 속에 깃든 주의 평안을 누리며', '한계 없는 하나님의 축복이 가득히 임해'],
-    '진': ['진실한 마음으로 주를 대하는 당신이 귀해', '진귀한 보물보다 당신을 더 사랑하시는 주', '진리의 말씀을 등불 삼아 용기 있게 걸어'],
-    '희': ['희망의 노래가 당신의 삶에 울려 퍼지고', '희귀하고 값진 보석처럼 당신이 쓰임 받길', '희망찬 내일의 약속을 믿음으로 바라보며'],
-    '하': ['하늘 문을 활짝 여시고 복을 내려주시길', '하나님의 형상을 닮은 당신은 참 소중해', '하늘 가득한 주님의 영광이 당신을 비추어'],
-    '수': ['수줍게 피어난 꽃처럼 당신의 미소가 예뻐', '수정처럼 맑고 깨끗한 평안이 당신께 임해', '수많은 약속의 말씀들이 삶에서 이루어져'],
-    '용': ['용기 있게 주의 길을 선택하는 당신의 믿음', '용솟음치는 성령의 능력이 당신을 강건케 해', '용납하시는 주의 은혜 안에서 참 자유 얻길'],
-    '준': ['준비하신 여호와 이레의 복이 가득 임하고', '준엄한 주의 말씀 앞에 겸손히 순종하며', '준비된 천국 시민으로 주와 함께 동행해'],
-    '현': ['현명한 지혜로 선한 길을 선택하며 살고', '현존하시는 하나님의 영광을 날마다 대면해', '현재 주어진 환경에서 감사의 조건을 찾아'],
-    '제': ['제일 먼저 주의 나라와 의를 구하는 삶', '제단의 숯불처럼 심령이 뜨겁게 타올라', '제시하신 소망의 길을 당당히 걸어가서']
+const dictionary = {
+    '박': {
+        start: ['밝은 햇살이 당신의 창가를 찾아와 주님의 인사를 대신 전해주듯이,', '박수 소리 가득한 찬양의 고백이 당신의 입술에서 날마다 넘쳐나길 바라고,', '밝고 맑은 마음으로 세상을 아름답게 바라보는 영의 눈이 활짝 열려,'],
+        mid: ['밝게 빛나는 별처럼 당신의 존재가 어두운 세상을 환하게 비추는 빛이 되고,', '박토를 옥토로 바꾸시는 주님의 놀라운 창조의 능력을 삶의 자리에서 맛보며,', '박애의 따뜻한 마음으로 주변을 돌보는 주님의 귀한 손길이 되어,'],
+        end: ['밝아오는 소망의 아침이 당신의 모든 날들을 찬란하게 비추길 간절히 축복합니다.', '박수받기에 충분한 당신의 귀한 삶을 주님이 늘 지켜주실 거예요.', '밝고 환한 미소가 당신의 얼굴에서 영원히 떠나지 않길 기도해요.']
+    },
+    '한': {
+        start: ['한결같은 주님의 사랑이 당신의 고단한 마음을 포근히 안아주고,', '환한 미소 속에 깃든 주의 평안이 만나는 모든 이에게 따뜻하게 전해지며,', '한계가 없는 하나님의 축복이 당신의 삶과 가정 위에 가득히 쏟아져서,'],
+        mid: ['한마음으로 주님을 사랑하며 당신이 속한 공동체에 활력을 불어넣고,', '한국과 열방을 품고 기도하며 주님의 이름을 높이는 지도자로 자라나서,', '한결같이 당신을 지키시는 주님을 소리 높여 찬양하는 예배의 삶을 살며,'],
+        end: ['한결같은 믿음으로 주와 동행하는 당신의 모든 순간을 축복합니다.', '한 번뿐인 소중한 인생을 주님과 함께 가장 아름답게 꽃피우소서.', '한없이 넓고 깊은 주의 은혜 안에서 날마다 새 힘을 얻길 빌어요.']
+    },
+    '용': {
+        start: ['용기 있게 주의 길을 선택하는 당신의 믿음이 참으로 귀하고 소중하며,', '용솟음치는 성령의 능력이 당신의 심령을 날마다 강건하게 만져주시고,', '용납하시는 주의 은혜 안에서 세상이 줄 수 없는 진정한 자유를 누리길,'],
+        mid: ['용서와 사랑의 마음으로 이웃을 먼저 품는 예수님의 성품을 닮아가고,', '용기 백배하여 세상의 어떤 거친 파도 속에서도 주님 한 분만 바라보며,', '용사처럼 담대하게 어둠의 권세를 이기고 주의 승리를 선포하는 자 되어,'],
+        end: ['용기 있는 믿음의 발걸음마다 주님이 예비하신 복이 가득하길 빌어요.', '용납받은 죄인의 감사함으로 평생 주님만을 노래하는 복된 인생 되소서.', '용기 있게 주를 증거하는 당신의 삶을 통해 많은 이들이 복을 받길.']
+    },
+    '김': {
+        start: ['기도의 깊은 향기가 하늘 보좌에 상달되어 당신을 포근히 감싸고,', '기쁨의 노래가 마음속 깊은 곳에서 샘물처럼 솟아오르는 오늘 되길,', '기대하는 마음으로 시작하는 오늘이 당신께 큰 선물이 되어,'],
+        mid: ['기쁨이 넘치는 삶의 고백을 통해 주님의 살아계심을 온 땅에 증거하며,', '기도로 세상을 이기는 믿음의 단단함이 당신의 영혼 속에 날마다 깊어지고,', '기쁨이 샘물처럼 솟아나 당신의 주변까지 행복하게 만들어서,'],
+        end: ['기적 같은 주님의 사랑이 당신의 평생에 마르지 않는 축복이 되길 원합니다.', '기다려온 소망의 열매들이 당신의 삶 속에서 풍성하게 맺히길 간절히 축원해요.', '기꺼이 주를 따르는 당신의 발걸음이 하늘나라의 별처럼 빛나길 축복합니다.']
+    },
+    '윤': {
+        start: ['윤슬처럼 반짝이는 은혜의 물결이 당신의 마음을 부드럽게 적시고,', '우리와 함께하시는 임마누엘의 하나님을 당신의 삶에서 깊이 경험하며,', '윤택한 영혼의 복이 당신의 삶과 가정 위에 가득히 넘치는 오늘 되길,'],
+        mid: ['윤기 나는 믿음의 고백이 당신의 입술에서 늘 끊이지 않아 기쁘고,', '우리를 향한 주님의 선하신 계획이 당신의 삶에서 하나둘 이루어지며,', '우리 모두의 기쁨이 되는 당신의 존재가 참으로 소중하고 귀해서,'],
+        end: ['윤회 없는 영원한 생명의 나라를 소망하며 끝까지 승리하시길 축복합니다.', '윤택하게 하시는 주의 손길이 당신의 평생을 든든히 붙드실 거예요.', '우리 주님이 예비하신 가장 선한 길로만 걷는 주인공이 되소서.']
+    },
+    '정': {
+        start: ['정결한 마음으로 주를 바라보는 당신의 모습이 참 아름답고 귀하며,', '정성 가득한 당신의 마음을 주님이 기쁘게 받아주시는 은혜가 있고,', '정다운 사람들과 함께 웃으며 행복한 추억을 만들어가는 오늘 되길,'],
+        mid: ['정직하고 고운 성품이 당신의 삶을 보석보다 더 빛나게 만들고,', '정말로 좋은 일들만 당신의 앞길에 예비되어 있음을 믿고 걸으며,', '정든 주의 품 안에서 세상이 줄 수 없는 참된 평안을 가득 누려서,'],
+        end: ['정말 행복한 당신의 모든 날을 주님의 이름으로 축복하고 응원해요.', '정오의 햇살보다 밝게 빛나는 주의 영광이 당신의 평생에 함께하시길.', '정성껏 빚으신 당신의 인생이 주님께 가장 큰 기쁨이 될 것입니다.']
+    },
+    '제': {
+        start: ['제일 먼저 주의 나라와 의를 구하는 복된 인생의 길을 걷기 시작하고,', '제단의 숯불처럼 당신의 심령이 주를 향한 열정으로 뜨겁게 달구어져서,', '제일 소중한 당신의 존재가 주님 안에서 보석보다 더 찬란하게 빛나길,'],
+        mid: ['제자로서의 삶을 기쁨으로 감당하며 주님의 발자취를 묵묵히 따라가고,', '제한 없는 하나님의 능력이 당신의 삶에 살아있는 증거가 되어 나타나며,', '제시하신 소망의 길을 믿음으로 당당히 걷는 승리자의 기쁨을 누려서,'],
+        end: ['제일 먼저 주님을 찾는 당신의 삶에 하늘의 보화가 가득하길 축복해요.', '제일 좋은 것으로 채우시는 하나님의 선하심을 날마다 경험하며 사소서.', '제일 아름다운 이름으로 주님의 생명책에 기록되는 영광을 누리시길.']
+    },
+    '무': {
+        start: ['무지개처럼 아름다운 주의 약속이 당신의 삶에 선명하게 펼쳐지고,', '무한하신 주의 사랑이 당신의 모든 아픔과 상처를 따뜻하게 싸매시며,', '무성한 잎사귀처럼 풍성한 은혜를 주변의 많은 이들에게 나누어주는 오늘,'],
+        mid: ['무거운 짐을 다 주께 맡기고 주가 주시는 참된 안식 속에서 쉬며,', '무에서 유를 만드시는 하나님의 창조적 능력을 당신의 삶에서 체험하고,', '무성하게 자라나는 믿음의 나무가 되어 지친 이들에게 시원한 그늘이 되어,'],
+        end: ['무엇과도 바꿀 수 없는 예수 그리스도를 소유한 하늘 부자가 되소서.', '무한한 가능성을 지닌 주님의 자녀로 세상의 벽을 넉넉히 넘어서길.', '무궁무진한 하늘의 복이 당신의 평생에 끊이지 않기를 간절히 빌어요.']
+    },
+    '겸': {
+        start: ['겸손한 마음으로 주를 바라보는 당신에게 하늘의 신령한 복이 임하고,', '겸허히 주의 말씀에 귀 기울여 세상 지혜보다 하늘 지혜를 먼저 얻으며,', '겸손과 온유로 옷 입고 주님의 사랑을 묵묵히 실천하는 당신이 되어,'],
+        mid: ['겸전한 성품으로 주님의 향기를 전하는 작은 예수로 이 땅을 살아가고,', '겸손하게 주님과 동행하는 당신의 모든 걸음을 하늘 천사가 지켜주며,', '겸허한 순종 끝에 예비된 하늘의 큰 영광과 상급을 기쁨으로 바라보아서,'],
+        end: ['겸손히 주를 높이는 당신의 삶을 하나님이 반드시 높여주실 것입니다.', '겸손함이 당신의 가장 아름다운 옷이 되어 주님께 기쁨이 되길 빌어요.', '겸손의 왕으로 오신 예수님을 닮아가는 가장 복된 인생이 되시길.']
+    }
 };
 
-const themes = {
-    grace: { name: "은혜와 축복", start: ["{word} 흘러들어,", "{word} 적시고,"], mid: ["{word} 누리며,", "{word} 경험하고,"], end: ["{word} 축원합니다."] },
-    light: { name: "빛과 소망", start: ["{word} 찾아오고,", "{word} 채우며,"], mid: ["{word} 되고,", "{word} 되어,"], end: ["{word} 소망합니다."] },
-    walk: { name: "동행과 인도", start: ["{word} 시작하고,", "{word} 지키며,"], mid: ["{word} 얻고,", "{word} 나아가서,"], end: ["{word} 되소서."] },
-    heart: { name: "마음과 성품", start: ["{word} 되고,", "{word} 나오며,"], mid: ["{word} 드리고,", "{word} 가득하여,"], end: ["{word} 기도합니다."] }
-};
-
-const finalBliss = ['주님의 이름으로 당신을 오늘 더 축복합니다.', '언제나 주님과 함께 걷는 가장 행복한 사람 되세요.'];
-
-function getProcessedPhrase(word, template) {
-    // 템플릿에 {word}가 있으면 조립, 없으면 단어 자체가 문장인 경우
-    return template ? template.replace(/{word}/g, word) : word;
+function getJosa(char, type) {
+    const code = char.charCodeAt(0);
+    if (code < 44032 || code > 55203) return '';
+    const hasBatchim = (code - 44032) % 28 !== 0;
+    const josaMap = {
+        '이/가': hasBatchim ? '이' : '가', '은/는': hasBatchim ? '은' : '는',
+        '을/를': hasBatchim ? '을' : '를', '으로/로': hasBatchim ? '으로' : '로',
+        '이라는/라는': hasBatchim ? '이라는' : '라는', '와/과': hasBatchim ? '과' : '와'
+    };
+    return josaMap[type] || '';
 }
+
+const fallbacks = {
+    start: (char) => `${char}${getJosa(char, '이라는/라는')} 소중한 이름 위에 주님의 특별한 축복이 가득 머물고,`,
+    mid: (char) => `${char}${getJosa(char, '와/과')} 함께하시는 주님의 따뜻한 온기가 당신의 삶의 자리마다 가득하며,`,
+    end: (char) => `${char}${getJosa(char, '이/가')} 걷는 모든 길에 주님의 따뜻한 동행과 평강이 있길 간절히 축복합니다.`
+};
+
+const finalBliss = [
+    '주님의 이름으로 당신을 오늘 더 축복합니다.',
+    '영원토록 주와 동행하는 가장 복된 인생 되소서.',
+    '따스한 주님의 손길이 당신의 하루를 꼭 안아주시길 기도해요.',
+    '하늘의 평화와 기쁨이 당신의 생각을 굳게 지켜주길 원합니다.'
+];
 
 const generateBtn = document.getElementById('generateBtn');
 const nameInput = document.getElementById('nameInput');
@@ -49,70 +80,60 @@ const cardsContainer = document.getElementById('cardsContainer');
 generateBtn.addEventListener('click', () => {
     const name = nameInput.value.trim();
     if (!name) return alert('성함을 입력해주세요!');
-    
     generateBtn.disabled = true;
     resultArea.classList.add('hidden');
     loadingArea.classList.remove('hidden');
-    
     setTimeout(() => {
-        generateThreeCreativeOptions(name);
+        generateThreeOptions(name);
         loadingArea.classList.add('hidden');
         generateBtn.disabled = false;
-    }, 1200);
+    }, 800);
 });
 
 function generateThreeOptions(name) {
     cardsContainer.innerHTML = '';
-    const themeKeys = Object.keys(themes);
-    const usedPhrases = new Set();
-
+    const globalUsed = new Set();
     for (let i = 1; i <= 3; i++) {
-        const theme = themes[themeKeys[Math.floor(Math.random() * themeKeys.length)]];
-        const poemLines = generateStrictAcrostic(name, theme, usedPhrases);
-        cardsContainer.appendChild(createCard(poemLines, i, theme.name));
+        const poemLines = generateSinglePoem(name, globalUsed);
+        cardsContainer.appendChild(createCard(poemLines, i));
     }
     resultArea.classList.remove('hidden');
+    scrollToResult();
 }
 
-function generateStrictAcrostic(name, theme, used) {
-    const chars = name.split('');
-    const lines = chars.map((char, index) => {
-        let pos = index === 0 ? 'start' : (index === chars.length - 1 ? 'end' : 'mid');
-        let wordList = charWords[char] || [`${char}라는 이름 위에 주님의 축복이 머물고`];
-        
-        let phrase = "";
-        let attempts = 0;
-        
-        // [핵심 절차] 첫 글자 일치 여부를 엄격히 검증
-        do {
-            let word = wordList[Math.floor(Math.random() * wordList.length)];
-            let template = theme[pos][Math.floor(Math.random() * theme[pos].length)];
-            phrase = getProcessedPhrase(word, template);
-            attempts++;
-        } while ((phrase[0] !== char || used.has(phrase)) && attempts < 20);
-        
-        used.add(phrase);
+function generateSinglePoem(name, globalUsed) {
+    const characters = name.split('');
+    const lines = characters.map((char, index) => {
+        let position = index === 0 ? 'start' : (index === characters.length - 1 ? 'end' : 'mid');
+        let phrase = '';
+        if (dictionary[char]) {
+            const options = dictionary[char][position];
+            let available = options.filter(opt => !globalUsed.has(opt));
+            if (available.length === 0) available = options;
+            phrase = available[Math.floor(Math.random() * available.length)];
+        } else {
+            phrase = fallbacks[position](char);
+        }
+        globalUsed.add(phrase);
         return phrase;
     });
     lines.push(finalBliss[Math.floor(Math.random() * finalBliss.length)]);
     return lines;
 }
 
-function createCard(lines, index, themeName) {
+function createCard(lines, index) {
     const card = document.createElement('div');
     card.className = 'poem-card';
     card.style.animationDelay = `${index * 0.2}s`;
-    card.innerHTML = `<span class="card-tag">AI ${themeName} 테마</span><div class="poem-content"></div>`;
-    
+    card.innerHTML = `<span class="card-tag">축복 제안 ${index}</span><div class="poem-content"></div>`;
     const content = card.querySelector('.poem-content');
     lines.forEach((text, i) => {
         const line = document.createElement('div');
         line.className = 'poem-line';
         if (i === lines.length - 1) line.classList.add('final-line');
         content.appendChild(line);
-        typeWriter(line, text, i * 500);
+        typeWriter(line, text, i * 400);
     });
-
     const btn = document.createElement('button');
     btn.className = 'copy-btn-small';
     btn.innerText = '이 축복 메시지 복사하기';
@@ -134,17 +155,15 @@ function typeWriter(element, text, delay) {
         element.innerHTML = '';
         const firstChar = text[0];
         const rest = text.substring(1);
-        
         const firstSpan = document.createElement('span');
         firstSpan.className = 'first-char';
         firstSpan.innerText = firstChar;
         element.appendChild(firstSpan);
-
         function typing() {
             if (i < rest.length) {
                 element.innerHTML += rest.charAt(i);
                 i++;
-                setTimeout(typing, 25);
+                setTimeout(typing, 20);
             }
         }
         typing();
