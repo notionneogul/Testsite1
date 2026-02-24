@@ -15,7 +15,7 @@
 /* 다크 모드 변수 정의 */
 body.dark-mode {
     --primary-color: #e5e5e5;
-    --accent-color: #ffd700; /* 다크모드에서 더 밝은 금빛 */
+    --accent-color: #ffd700;
     --card-bg: rgba(30, 30, 30, 0.85);
     --text-color: #f0f0f0;
     --muted-text: #aaaaaa;
@@ -152,22 +152,41 @@ input[type="text"] {
     min-width: 0;
 }
 
+/* 개선된 축복 생성 버튼 디자인 */
 button#generateBtn {
     padding: 0 24px;
-    background-color: var(--primary-color);
-    color: var(--bg-color) !important;
+    background-color: var(--accent-color);
+    color: #ffffff !important; /* 기본 흰색 글자 */
     border: none;
     border-radius: 20px;
     font-size: 1rem;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
     white-space: nowrap;
     flex-shrink: 0;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(166, 139, 92, 0.3);
+}
+
+button#generateBtn:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(166, 139, 92, 0.4);
+}
+
+/* 다크 모드 버튼 보정 */
+body.dark-mode button#generateBtn {
+    background-color: var(--accent-color);
+    color: #1a1a1a !important; /* 금빛 배경에 어두운 글자색으로 대비 극대화 */
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
 }
 
 button#generateBtn:disabled {
     background-color: #666;
+    color: #999 !important;
     cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
 }
 
 .loading-area {
@@ -310,8 +329,7 @@ button#generateBtn:disabled {
 
 .save-btn {
     background-color: var(--primary-color);
-    color: #fff !important;
-    border: none;
+    color: #ffffff !important;
 }
 
 .action-btn.success {
