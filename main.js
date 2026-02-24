@@ -1,6 +1,5 @@
 // UI 요소
 const generateBtn = document.getElementById('generateBtn');
-// 주석 추가: 환경 변수 적용을 위한 재배포용 트리거
 const nameInput = document.getElementById('nameInput');
 const resultArea = document.getElementById('resultArea');
 const loadingArea = document.getElementById('loadingArea');
@@ -16,23 +15,31 @@ generateBtn.addEventListener('click', async () => {
     loadingArea.classList.remove('hidden');
 
     try {
-        // 우리가 만든 서버 API(/api/generate)로 요청을 보냅니다.
         const response = await fetch('/api/generate', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name })
         });
 
+        // HTML 응답이 올 경우를 대비해 텍스트로 먼저 받음
+        const responseText = await response.text();
+
         if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error || '생성 실패');
+            let errorMessage = '생성 실패';
+            try {
+                const errorJson = JSON.parse(responseText);
+                errorMessage = errorJson.error || errorMessage;
+            } catch (e) {
+                // JSON 파싱 실패 시 (HTML 응답인 경우)
+                errorMessage = `서버 에러 (${response.status})`;
+            }
+            throw new Error(errorMessage);
         }
 
-        const text = await response.text();
-        await renderResult(text);
+        await renderResult(responseText);
         
     } catch (error) {
-        console.error("오류:", error);
+        console.error("오류 상세:", error);
         alert(`축복 생성 중 오류가 발생했습니다: ${error.message}`);
     } finally {
         loadingArea.classList.add('hidden');
@@ -46,6 +53,8 @@ async function renderResult(text) {
     try {
         const startIdx = text.indexOf('[');
         const endIdx = text.lastIndexOf(']');
+        if (startIdx === -1 || endIdx === -1) throw new Error("데이터 형식 오류");
+        
         const jsonStr = text.substring(startIdx, endIdx + 1);
         const poemOptions = JSON.parse(jsonStr);
 
