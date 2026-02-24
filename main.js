@@ -105,9 +105,7 @@ const fallbacks = [
     { word: '{char}심', rest: '으로 주를 경외하는 당신의 삶에 하늘의 평강이 가득하길 소망합니다' },
     { word: '{char}랑', rest: '스러운 주님의 자녀로서 세상에 선한 영향력을 끼치는 통로 되길 축복합니다' },
     { word: '{char}성', rest: '스러운 마음으로 주님을 섬기는 당신의 수고를 주께서 기억하시고 복 주실 것입니다' },
-    { word: '{char}망', rest: '의 소망을 품고 기도로 나아가는 당신의 내일이 오늘보다 빛나길 원합니다' },
-    { word: '{char}연', rest: '히 주어지는 은혜가 아니라 하나님께서 당신을 위해 예비하신 특별한 선물입니다' },
-    { word: '{char}광', rest: '스러운 주님의 일에 참여하는 기쁨이 당신의 영혼에 가득하기를 축복합니다' }
+    { word: '{char}망', rest: '의 소망을 품고 기도로 나아가는 당신의 내일이 오늘보다 빛나길 원합니다' }
 ];
 
 const generateBtn = document.getElementById('generateBtn');
@@ -115,56 +113,111 @@ const nameInput = document.getElementById('nameInput');
 const resultArea = document.getElementById('resultArea');
 const poemContent = document.getElementById('poemContent');
 const copyBtn = document.getElementById('copyBtn');
+const aiModeToggle = document.getElementById('aiModeToggle');
+const apiConfig = document.getElementById('apiConfig');
+const apiKeyInput = document.getElementById('apiKeyInput');
 
-generateBtn.addEventListener('click', () => {
+// Load API key from local storage
+apiKeyInput.value = localStorage.getItem('gemini_api_key') || '';
+
+aiModeToggle.addEventListener('change', () => {
+    apiConfig.classList.toggle('hidden', !aiModeToggle.checked);
+});
+
+apiKeyInput.addEventListener('input', () => {
+    localStorage.setItem('gemini_api_key', apiKeyInput.value);
+});
+
+generateBtn.addEventListener('click', async () => {
     const name = nameInput.value.trim();
     if (!name) {
         alert('성함을 입력해주세요!');
         return;
     }
-    generatePoem(name);
+
+    if (aiModeToggle.checked) {
+        const apiKey = apiKeyInput.value.trim();
+        if (!apiKey) {
+            alert('AI 모드를 사용하려면 Gemini API Key를 입력해주세요.');
+            return;
+        }
+        await generatePoemWithAI(name, apiKey);
+    } else {
+        generatePoemLocal(name);
+    }
 });
 
-function generatePoem(name) {
-    poemContent.innerHTML = '';
+async function generatePoemWithAI(name, apiKey) {
+    poemContent.innerHTML = '<div class="loading-dots">AI가 은혜로운 메시지를 작성 중입니다</div>';
+    resultArea.classList.remove('hidden');
+
+    const prompt = `성함 '${name}'으로 삼행시(N행시)를 지어줘. 
+    주제는 '기독교적 축복과 은혜'야. 
+    각 행은 반드시 해당 글자로 시작해야 해.
+    결과는 반드시 다음 JSON 형식으로만 응답해줘: 
+    [{"word": "시작단어", "rest": "나머지문구"}, ...]
+    예: 이름이 '홍길동'이라면 [{"word": "홍수", "rest": "처럼 밀려오는..."}, {"word": "길", "rest": "되신..."}, {"word": "동행", "rest": "하시는..."}]`;
+
+    try {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                contents: [{ parts: [{ text: prompt }] }],
+                generationConfig: { response_mime_type: "application/json" }
+            })
+        });
+
+        const data = await response.json();
+        const resultText = data.candidates[0].content.parts[0].text;
+        const poemData = JSON.parse(resultText);
+        
+        displayPoem(poemData);
+    } catch (error) {
+        console.error('AI 생성 실패:', error);
+        alert('AI 생성 중 오류가 발생했습니다. 로컬 모드로 전환합니다.');
+        generatePoemLocal(name);
+    }
+}
+
+function generatePoemLocal(name) {
     const characters = name.split('');
     const usedWords = new Set();
-    
-    characters.forEach((char, index) => {
-        const line = document.createElement('div');
-        line.className = 'poem-line';
-        line.style.animationDelay = `${index * 0.4}s`;
-        
+    const poemData = characters.map(char => {
         let selected;
         if (dictionary[char]) {
             const options = dictionary[char].filter(o => !usedWords.has(o.word));
             selected = options.length > 0 ? options[Math.floor(Math.random() * options.length)] : dictionary[char][0];
         } else {
-            // Fallback 중복 방지 로직 개선
             const options = fallbacks.filter(o => !usedWords.has(o.word.replace('{char}', char)));
             const raw = options.length > 0 ? options[Math.floor(Math.random() * options.length)] : fallbacks[0];
-            selected = {
-                word: raw.word.replace('{char}', char),
-                rest: raw.rest
-            };
+            selected = { word: raw.word.replace('{char}', char), rest: raw.rest };
         }
         usedWords.add(selected.word);
+        return selected;
+    });
+    displayPoem(poemData);
+}
 
-        const firstChar = selected.word.charAt(0);
-        const remainingWord = selected.word.substring(1);
+function displayPoem(poemData) {
+    poemContent.innerHTML = '';
+    poemData.forEach((item, index) => {
+        const line = document.createElement('div');
+        line.className = 'poem-line';
+        line.style.animationDelay = `${index * 0.4}s`;
         
-        line.innerHTML = `<span class="first-char">${firstChar}</span><span class="word-rest">${remainingWord}</span>${selected.rest}`;
+        const firstChar = item.word.charAt(0);
+        const remainingWord = item.word.substring(1);
+        
+        line.innerHTML = `<span class="first-char">${firstChar}</span><span class="word-rest">${remainingWord}</span>${item.rest}`;
         poemContent.appendChild(line);
     });
 
     resultArea.classList.remove('hidden');
     if (window.navigator.vibrate) window.navigator.vibrate(10);
-
+    
     setTimeout(() => {
-        const yOffset = -20; 
-        const element = resultArea;
-        const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-        window.scrollTo({top: y, behavior: 'smooth'});
+        resultArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 100);
 }
 
@@ -182,11 +235,4 @@ copyBtn.addEventListener('click', () => {
             copyBtn.classList.remove('success');
         }, 2000);
     });
-});
-
-nameInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-        generateBtn.click();
-        nameInput.blur();
-    }
 });
