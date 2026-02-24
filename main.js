@@ -196,6 +196,14 @@ function createCard(lines, verse, index) {
 }
 
 function saveCardAsImage(cardElement, index) {
+    const verseTextRaw = cardElement.dataset.verse;
+    const poemLinesRaw = JSON.parse(cardElement.dataset.poem);
+
+    if (verseTextRaw && !cardElement.querySelector('.verse-line')) {
+        alert('축복 메시지가 완성될 때까지 잠시만 기다려주세요!');
+        return;
+    }
+
     const saveBtn = cardElement.querySelector('.save-btn');
     const originalText = saveBtn.innerText;
     saveBtn.innerText = '저장 중...';
@@ -214,6 +222,7 @@ function saveCardAsImage(cardElement, index) {
         scale: 2,
         backgroundColor: isDarkMode ? '#1e293b' : '#fdfbf7',
         useCORS: true,
+        logging: false,
         onclone: (clonedDoc) => {
             const clonedCard = clonedDoc.querySelector(`.poem-card[data-index="${index}"]`);
             if (clonedCard) {
@@ -221,36 +230,41 @@ function saveCardAsImage(cardElement, index) {
                 clonedCard.style.backdropFilter = 'none';
                 clonedCard.style.webkitBackdropFilter = 'none';
                 clonedCard.style.boxShadow = 'none';
-                clonedCard.style.paddingBottom = '60px'; // 여백 충분히 확보
+                clonedCard.style.paddingBottom = '60px';
 
-                // 모든 텍스트 강제 고정
-                clonedCard.querySelectorAll('.poem-line').forEach(l => {
-                    l.style.opacity = '1';
-                    l.style.color = textColor;
-                    l.style.animation = 'none';
-                });
-                clonedCard.querySelectorAll('.first-char').forEach(c => {
-                    c.style.color = accentColor;
-                    c.style.opacity = '1';
+                // 내용을 캡처용으로 강제 재구성
+                const contentArea = clonedCard.querySelector('.poem-content');
+                contentArea.innerHTML = ''; 
+
+                poemLinesRaw.forEach(text => {
+                    const line = document.createElement('div');
+                    line.style.opacity = '1';
+                    line.style.color = textColor;
+                    line.style.marginBottom = '18px';
+                    line.style.fontSize = '1.25rem';
+                    line.style.lineHeight = '1.6';
+                    
+                    const firstChar = text[0];
+                    const restText = text.substring(1);
+                    line.innerHTML = `<span style="color:${accentColor}; font-weight:800; font-size:1.6rem; margin-right:4px;">${firstChar}</span>${restText}`;
+                    contentArea.appendChild(line);
                 });
 
-                const verseArea = clonedCard.querySelector('.verse-line');
-                if (verseArea) {
-                    verseArea.style.opacity = '1';
-                    verseArea.style.visibility = 'visible';
-                    verseArea.style.display = 'block';
-                    verseArea.style.borderTop = `1px dashed ${accentColor}`;
-                    const label = verseArea.querySelector('.verse-label');
-                    const text = verseArea.querySelector('p');
-                    if (label) label.style.color = accentColor;
-                    if (text) {
-                        text.style.color = textColor;
-                        text.style.fontWeight = '600';
-                        text.style.opacity = '1';
-                    }
+                if (verseTextRaw) {
+                    const vLine = document.createElement('div');
+                    vLine.style.marginTop = '30px';
+                    vLine.style.paddingTop = '20px';
+                    vLine.style.borderTop = `1px dashed ${accentColor}`;
+                    vLine.style.textAlign = 'center';
+                    vLine.style.opacity = '1';
+                    vLine.style.display = 'block';
+                    vLine.innerHTML = `
+                        <span style="color:${accentColor}; font-weight:700; font-size:0.8rem; display:inline-block; margin-bottom:10px;">📜 추천 성구</span>
+                        <p style="color:${textColor}; font-size:1rem; font-style:italic; line-height:1.6; font-weight:600; margin:0;">${verseTextRaw}</p>
+                    `;
+                    contentArea.appendChild(vLine);
                 }
 
-                // --- 하단 성구(Footer Blessing) 명시적 강제 삽입 ---
                 const footerContent = document.querySelector('.blessing-footer').innerText;
                 const footerDiv = document.createElement('div');
                 footerDiv.style.marginTop = '40px';
@@ -262,7 +276,6 @@ function saveCardAsImage(cardElement, index) {
                 footerDiv.style.fontWeight = '700';
                 footerDiv.style.lineHeight = '1.6';
                 footerDiv.innerText = footerContent;
-                
                 clonedCard.appendChild(footerDiv);
             }
         }
@@ -271,7 +284,6 @@ function saveCardAsImage(cardElement, index) {
         link.download = `Blessing_Card_${index}.png`;
         link.href = canvas.toDataURL('image/png');
         link.click();
-        
         btnGroup.style.visibility = 'visible';
         tag.style.opacity = '1';
         saveBtn.innerText = originalText;
