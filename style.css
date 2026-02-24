@@ -1,12 +1,12 @@
 :root {
-    --primary-color: #6d5845;
-    --accent-color: #b8860b;
+    --primary-color: #4a3728; /* 더 어두운 브라운 */
+    --accent-color: #8b6d05;  /* 더 진한 금색 */
     --bg-color: #fdfbf7;
     --card-bg: #ffffff;
-    --text-color: #2c2c2c;
-    --muted-text: #707070;
+    --text-color: #1a1a1a;    /* 거의 검은색 */
+    --muted-text: #555555;
     --border-radius: 20px;
-    --shadow: 0 12px 40px rgba(109, 88, 69, 0.15);
+    --shadow: 0 12px 40px rgba(74, 55, 40, 0.2);
 }
 
 * {
@@ -19,9 +19,6 @@
 body {
     font-family: 'Pretendard', -apple-system, sans-serif;
     background-color: var(--bg-color);
-    background-image: 
-        radial-gradient(circle at 10% 20%, rgba(184, 134, 11, 0.08) 0%, transparent 25%),
-        radial-gradient(circle at 90% 80%, rgba(109, 88, 69, 0.08) 0%, transparent 25%);
     color: var(--text-color);
     line-height: 1.7;
     display: flex;
@@ -44,14 +41,14 @@ header {
 header h1 {
     font-family: 'Noto Serif KR', serif;
     font-size: 2.2rem;
-    color: var(--primary-color);
+    color: var(--primary-color) !important;
     margin-bottom: 12px;
     letter-spacing: -0.5px;
     font-weight: 700;
 }
 
 header p {
-    color: var(--muted-text);
+    color: var(--muted-text) !important;
     font-size: 1rem;
 }
 
@@ -62,7 +59,7 @@ header p {
     box-shadow: var(--shadow);
     display: flex;
     margin-bottom: 30px;
-    border: 2px solid rgba(184, 134, 11, 0.1);
+    border: 2px solid rgba(139, 109, 5, 0.2);
 }
 
 input[type="text"] {
@@ -72,14 +69,14 @@ input[type="text"] {
     background: transparent;
     font-size: 1.1rem;
     outline: none;
-    color: var(--text-color);
+    color: #000000 !important; /* 확실한 검정 */
     font-weight: 500;
 }
 
 button#generateBtn {
     padding: 0 28px;
     background-color: var(--primary-color);
-    color: white;
+    color: #ffffff !important;
     border: none;
     border-radius: 18px;
     font-size: 1rem;
@@ -89,13 +86,12 @@ button#generateBtn {
 }
 
 button#generateBtn:hover {
-    background-color: #4e3f32;
+    background-color: #2e2219;
     transform: translateY(-2px);
 }
 
 .result-area {
     margin-top: 30px;
-    display: block;
 }
 
 .result-area.hidden {
@@ -103,12 +99,12 @@ button#generateBtn:hover {
 }
 
 .poem-card {
-    background: var(--card-bg);
+    background: #ffffff !important;
     padding: 40px 30px;
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
     position: relative;
-    border: 1px solid rgba(184, 134, 11, 0.2);
+    border: 1px solid rgba(139, 109, 5, 0.3);
     overflow: hidden;
 }
 
@@ -128,16 +124,17 @@ button#generateBtn:hover {
     text-align: left;
     margin-bottom: 30px;
     word-break: keep-all;
-    color: #333;
+    color: #111111 !important; /* 매우 짙은 회색 */
 }
 
 .poem-line {
-    margin-bottom: 20px;
+    margin-bottom: 22px;
     opacity: 0;
     transform: translateY(15px);
     animation: lineFadeIn 0.6s forwards;
     display: flex;
     align-items: flex-start;
+    color: #111111 !important;
 }
 
 .poem-line:last-child {
@@ -145,19 +142,19 @@ button#generateBtn:hover {
 }
 
 .first-char {
-    color: var(--accent-color);
-    font-weight: 700;
-    font-size: 1.6rem;
+    color: var(--accent-color) !important;
+    font-weight: 800;
+    font-size: 1.7rem;
     margin-right: 4px;
     flex-shrink: 0;
-    border-bottom: 3px solid rgba(184, 134, 11, 0.3);
+    border-bottom: 3px solid rgba(139, 109, 5, 0.4);
     line-height: 1.1;
 }
 
 .word-rest {
-    color: var(--primary-color);
-    font-weight: 700;
-    font-size: 1.35rem;
+    color: var(--primary-color) !important;
+    font-weight: 800;
+    font-size: 1.4rem;
     margin-right: 10px;
     line-height: 1.3;
 }
@@ -165,14 +162,13 @@ button#generateBtn:hover {
 .secondary-btn {
     width: 100%;
     background-color: #fdfaf2;
-    color: var(--primary-color);
-    border: 1.5px solid rgba(109, 88, 69, 0.2);
+    color: var(--primary-color) !important;
+    border: 2px solid rgba(74, 55, 40, 0.3);
     font-size: 1rem;
     padding: 16px;
-    font-weight: 600;
+    font-weight: 700;
     border-radius: 14px;
     cursor: pointer;
-    transition: all 0.2s;
 }
 
 .secondary-btn:hover {
@@ -182,51 +178,28 @@ button#generateBtn:hover {
 .secondary-btn.success {
     background-color: #e8f5e9;
     border-color: #81c784;
-    color: #2e7d32;
+    color: #2e7d32 !important;
 }
 
 footer {
     margin-top: 60px;
     text-align: center;
     font-size: 0.9rem;
-    color: var(--muted-text);
+    color: var(--muted-text) !important;
     padding-bottom: 50px;
 }
 
 @keyframes lineFadeIn {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 /* Mobile Adjustments */
 @media (max-width: 480px) {
-    header h1 {
-        font-size: 1.8rem;
-    }
-    
-    .input-group {
-        flex-direction: column;
-        padding: 15px;
-    }
-    
-    input[type="text"] {
-        text-align: center;
-        margin-bottom: 15px;
-        padding: 10px;
-    }
-    
-    button#generateBtn {
-        height: 55px;
-        width: 100%;
-    }
-    
-    .poem-card {
-        padding: 30px 20px;
-    }
-    
-    .poem-content {
-        font-size: 1.15rem;
-    }
+    header h1 { font-size: 1.8rem; }
+    .input-group { flex-direction: column; padding: 15px; }
+    input[type="text"] { text-align: center; margin-bottom: 15px; }
+    button#generateBtn { height: 55px; width: 100%; }
+    .poem-card { padding: 30px 20px; }
+    .poem-content { font-size: 1.15rem; }
 }
