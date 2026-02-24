@@ -332,6 +332,18 @@ button#generateBtn:disabled {
     color: #ffffff !important;
 }
 
+/* 다크 모드 이미지 저장 버튼 가시성 강화 */
+body.dark-mode .save-btn {
+    background-color: #5d4037; /* 다크 모드에 어울리는 깊은 브라운 */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .save-btn:hover {
+    background-color: #6d4c41;
+}
+
 .action-btn.success {
     background-color: #2e7d32;
     color: #fff !important;
