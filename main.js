@@ -34,20 +34,31 @@ class Particle {
     constructor() {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 3 + 1;
+        this.size = Math.random() * 2 + 0.5; // 크기 다양화
         this.baseX = this.x;
         this.baseY = this.y;
         this.density = (Math.random() * 30) + 1;
-        this.color = 'rgba(166, 139, 92, 0.2)';
+        this.opacity = Math.random() * 0.5 + 0.2;
+        this.pulseSpeed = Math.random() * 0.02 + 0.01;
+        this.pulse = 0;
     }
     draw() {
-        ctx.fillStyle = this.color;
+        const currentOpacity = this.opacity + Math.sin(this.pulse) * 0.2; // 반짝임 효과
+        ctx.shadowBlur = this.size * 4;
+        ctx.shadowColor = 'rgba(166, 139, 92, 0.3)';
+        ctx.fillStyle = `rgba(166, 139, 92, ${currentOpacity})`;
+        
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.closePath();
         ctx.fill();
+        
+        // 초기화 (성능을 위해 그림자 효과 해제)
+        ctx.shadowBlur = 0;
     }
     update() {
+        this.pulse += this.pulseSpeed; // 반짝임 애니메이션 진행
+
         let dx = mouse.x - this.x;
         let dy = mouse.y - this.y;
         let distance = Math.sqrt(dx * dx + dy * dy);
@@ -64,11 +75,11 @@ class Particle {
         } else {
             if (this.x !== this.baseX) {
                 let dx = this.x - this.baseX;
-                this.x -= dx / 10;
+                this.x -= dx / 20;
             }
             if (this.y !== this.baseY) {
                 let dy = this.y - this.baseY;
-                this.y -= dy / 10;
+                this.y -= dy / 20;
             }
         }
     }
