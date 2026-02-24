@@ -152,7 +152,7 @@ async function renderResult(text) {
 function createCard(lines, verse, index) {
     const card = document.createElement('div');
     card.className = 'poem-card';
-    card.id = `card-${index}`;
+    card.dataset.index = index; // 캡처 시 식별용
     card.style.animationDelay = `${index * 0.2}s`;
     card.innerHTML = `<span class="card-tag">축복 제안 ${index}</span><div class="poem-content"></div>`;
     const content = card.querySelector('.poem-content');
@@ -194,6 +194,12 @@ function createCard(lines, verse, index) {
 }
 
 function saveCardAsImage(cardElement, index) {
+    // 성구가 아직 생성되지 않았다면 알림
+    if (!cardElement.querySelector('.verse-line')) {
+        alert('축복 메시지가 완성될 때까지 잠시만 기다려주세요!');
+        return;
+    }
+
     const saveBtn = cardElement.querySelector('.save-btn');
     const originalText = saveBtn.innerText;
     saveBtn.innerText = '저장 중...';
@@ -202,58 +208,67 @@ function saveCardAsImage(cardElement, index) {
     const btnGroup = cardElement.querySelector('.card-btn-group');
     const tag = cardElement.querySelector('.card-tag');
     
-    btnGroup.style.display = 'none';
+    btnGroup.style.visibility = 'hidden'; // 레이아웃 유지를 위해 hidden 사용
     tag.style.opacity = '0';
 
-    setTimeout(() => {
-        html2canvas(cardElement, {
-            scale: 2,
-            backgroundColor: isDarkMode ? '#1e293b' : '#fdfbf7', // 테마별 배경색 명시
-            useCORS: true,
-            onclone: (clonedDoc) => {
-                const targetClonedCard = clonedDoc.getElementById(`card-${index}`);
-                if (targetClonedCard) {
-                    targetClonedCard.style.paddingBottom = '40px';
-                    
-                    // 텍스트 가독성 강제 보정
-                    const poemLines = targetClonedCard.querySelectorAll('.poem-line');
-                    const firstChars = targetClonedCard.querySelectorAll('.first-char');
-                    const verseLine = targetClonedCard.querySelector('.verse-line');
-                    const verseText = verseLine ? verseLine.querySelector('p') : null;
+    html2canvas(cardElement, {
+        scale: 2,
+        backgroundColor: isDarkMode ? '#1e293b' : '#fdfbf7',
+        useCORS: true,
+        onclone: (clonedDoc) => {
+            // 복제된 문서에서 해당 카드 찾기
+            const clonedCard = clonedDoc.querySelector(`.poem-card[data-index="${index}"]`);
+            if (clonedCard) {
+                // 캡처 방해 요소 제거
+                clonedCard.style.backdropFilter = 'none';
+                clonedCard.style.webkitBackdropFilter = 'none';
+                clonedCard.style.boxShadow = 'none';
+                clonedCard.style.paddingBottom = '40px';
+                
+                // 색상 강제 지정 (이미지 가독성)
+                const textColor = isDarkMode ? '#f0f0f0' : '#2c241e';
+                const accentColor = isDarkMode ? '#ffd700' : '#a68b5c';
+                const verseTextColor = isDarkMode ? '#e5e5e5' : '#4a3728';
 
-                    const textColor = isDarkMode ? '#f0f0f0' : '#2c241e';
-                    const accentColor = isDarkMode ? '#ffd700' : '#a68b5c';
-                    const verseTextColor = isDarkMode ? '#e5e5e5' : '#4a3728';
-
-                    poemLines.forEach(line => {
-                        line.style.opacity = '1';
-                        line.style.color = textColor;
-                    });
-                    firstChars.forEach(char => {
-                        char.style.color = accentColor;
-                    });
-                    if (verseLine) {
-                        verseLine.style.display = 'block';
-                        verseLine.style.opacity = '1';
-                        if (verseText) verseText.style.color = verseTextColor;
+                clonedCard.querySelectorAll('.poem-line').forEach(l => {
+                    l.style.opacity = '1';
+                    l.style.color = textColor;
+                });
+                clonedCard.querySelectorAll('.first-char').forEach(c => {
+                    c.style.color = accentColor;
+                });
+                
+                const vLine = clonedCard.querySelector('.verse-line');
+                if (vLine) {
+                    vLine.style.display = 'block';
+                    vLine.style.opacity = '1';
+                    vLine.style.visibility = 'visible';
+                    vLine.style.borderTop = `1px dashed ${accentColor}`;
+                    const vLabel = vLine.querySelector('.verse-label');
+                    const vText = vLine.querySelector('p');
+                    if (vLabel) vLabel.style.color = accentColor;
+                    if (vText) {
+                        vText.style.color = verseTextColor;
+                        vText.style.opacity = '1';
                     }
                 }
             }
-        }).then(canvas => {
-            const link = document.createElement('a');
-            link.download = `Blessing_${index}.png`;
-            link.href = canvas.toDataURL('image/png');
-            link.click();
-            btnGroup.style.display = 'flex';
-            tag.style.opacity = '1';
-            saveBtn.innerText = originalText;
-        }).catch(err => {
-            console.error(err);
-            btnGroup.style.display = 'flex';
-            tag.style.opacity = '1';
-            saveBtn.innerText = originalText;
-        });
-    }, 500);
+        }
+    }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = `Blessing_Card_${index}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        
+        btnGroup.style.visibility = 'visible';
+        tag.style.opacity = '1';
+        saveBtn.innerText = originalText;
+    }).catch(err => {
+        console.error(err);
+        btnGroup.style.visibility = 'visible';
+        tag.style.opacity = '1';
+        saveBtn.innerText = originalText;
+    });
 }
 
 function typeWriter(element, text, delay) {
