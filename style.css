@@ -153,10 +153,16 @@ button#generateBtn:active {
     color: var(--accent-color);
     font-weight: 700;
     font-size: 1.4rem;
-    margin-right: 12px;
+    margin-right: 2px; /* 줄임 */
     flex-shrink: 0;
     border-bottom: 2px solid rgba(212, 175, 55, 0.3);
     line-height: 1.2;
+}
+
+.word-rest {
+    color: var(--primary-color);
+    font-weight: 600;
+    margin-right: 8px;
 }
 
 .secondary-btn {

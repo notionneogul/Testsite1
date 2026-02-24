@@ -1,39 +1,103 @@
 const dictionary = {
-    '홍': ['홍수처럼 밀려오는 주님의 크신 은혜가 삶에 가득하길', '홍해를 가르신 기적으로 당신의 앞길을 여시길', '홍조 띤 얼굴로 주를 향한 첫사랑을 노래하길'],
-    '길': ['길 되신 예수님을 따라 걷는 발걸음이 복되길', '길가에 핀 꽃 한 송이에서도 주의 손길을 발견하길', '길고 긴 인생의 여정 속에 주님이 늘 동행하시길'],
-    '동': ['동행하시는 성령님의 따뜻한 숨결이 느껴지는 하루', '동쪽에서 떠오르는 태양처럼 당신의 믿음이 빛나길', '동녘의 새벽빛이 어둠을 밝히듯 소망이 피어나길'],
-    '이': ['이토록 아름다운 당신의 삶이 주님께 영광 되길', '이제는 내가 사는 것이 아니요 오직 내 안의 주를 위해', '이슬처럼 맑고 순수한 영혼으로 세상을 비추길'],
-    '김': ['김이 모락모락 나는 생명의 양식으로 늘 풍성하길', '김을 내뿜으며 전진하는 믿음의 경주를 멈추지 않길', '김이 서린 창가에 드리는 기도가 하늘에 닿기를'],
-    '박': ['박수 치며 기쁨으로 주님의 이름을 높여 부르길', '박토를 옥토로 바꾸시는 주님의 창조를 경험하길', '박동하는 심장마다 주를 향한 열정이 식지 않길'],
-    '최': ['최고의 예배자로 주님 앞에 서는 당신이 아름답습니다', '최선을 다해 선한 싸움을 싸우는 당신을 응원합니다', '최초의 사랑, 그 설렘과 감격이 날마다 새로워지길'],
-    '정': ['정결한 마음으로 주님의 얼굴을 구하는 삶이 되길', '정의가 강물처럼 흐르는 세상을 만드는 통로가 되길', '정성을 다해 드리는 당신의 삶이 향기로운 제물 되길'],
-    '나': ['나의 힘이 되신 여호와를 날마다 의지하며 승리하길', '나를 지으신 하나님의 목적대로 빛나는 삶을 살길', '나그네 길 인생 속에서도 천국 소망 잃지 않길'],
-    '미': ['미소 속에 피어나는 주님의 평강이 모두에게 전해지길', '미래와 희망을 약속하신 주의 말씀을 굳게 붙잡길', '미완의 내 삶을 아름답게 빚으실 주님을 신뢰하길'],
-    '성': ['성령의 충만한 기름 부으심이 당신의 사역 위에 있길', '성벽을 지키는 파수꾼처럼 깨어 기도하는 용사가 되길', '성결한 삶을 향한 거룩한 몸부림이 보석처럼 빛나길'],
-    '민': ['민족과 열방을 가슴에 품고 기도하는 지도자가 되길', '민낯의 진실함으로 하나님 앞에 단독자로 서길', '민들레 홀씨처럼 복음의 씨앗을 널리 퍼뜨리길'],
-    '지': ['지혜와 계시의 영을 부어주셔서 주를 더 깊이 알길', '지극히 작은 자 하나에게 베푼 사랑이 하늘에 쌓이길', '지금 이 순간도 당신을 위해 일하시는 주를 바라보길'],
-    '수': ['수고하고 무거운 짐을 주님 발 앞에 내려놓고 쉬길', '수많은 별들보다 더 빛나는 주님의 약속이 성취되길', '수면 위에 비친 평온한 달빛처럼 주의 평안이 깃들길'],
-    '하': ['하늘 문을 여시고 쌓을 곳이 없도록 복을 부어주시길', '하루의 시작과 끝이 오직 감사의 고백으로 가득하길', '하나님의 형상을 닮은 당신은 세상에서 가장 귀한 존재'],
-    '윤': ['윤슬처럼 반짝이는 주님의 은혜가 당신의 바다에 가득하길', '윤택한 영혼의 샘물이 마르지 않고 흘러넘치길', '윤기를 더하시는 성령의 만지심이 당신의 삶을 채우길'],
-    '선': ['선한 목자 되신 주님이 푸른 초장으로 인도하시길', '선포되는 말씀이 당신의 삶을 변화시키는 능력이 되길', '선물로 주신 소중한 사람들과 사랑을 나누는 삶 되길'],
-    '영': ['영원한 생명의 나라를 꿈꾸며 오늘도 믿음으로 전진하길', '영광의 광채가 당신의 얼굴 위에 가득히 비추길', '영혼의 깊은 곳에서 터져 나오는 기쁨의 찬양을 부르길'],
-    '전': ['전능하신 하나님의 손길이 당신의 삶을 붙드심을 믿습니다', '전신 갑주를 입고 믿음의 선한 싸움에서 승리하길', '전심으로 주를 찾는 자에게 만나주시는 은혜가 있길'],
-    '진': ['진리의 말씀이 당신의 발에 등이요 길에 빛이 되길', '진실한 고백이 담긴 당신의 기도를 주께서 들으십니다', '진흙 속에 핀 꽃처럼 세상을 아름답게 밝히는 존재 되길'],
-    '희': ['희망의 항구로 인도하시는 성령님의 바람을 타길', '희생과 사랑으로 세상을 치유하는 주의 도구 되길', '희귀하고 값진 진주처럼 당신의 영혼이 귀하게 쓰이길'],
-    '원': ['원하는 모든 소망이 주님의 뜻 안에서 결실을 맺길', '원대한 꿈을 품고 독수리처럼 날아오르는 믿음 되길', '원수 앞에서도 상을 베푸시는 주의 넉넉함을 누리길'],
-    '혜': ['혜성처럼 나타나 주의 영광을 온 땅에 비추길', '혜안을 주셔서 하나님의 뜻을 분별하는 지혜자가 되길', '혜택받은 은혜를 나누며 이웃을 섬기는 삶 되길'],
-    '준': ['준비된 마음 위에 성령의 단비가 내려 풍성케 하길', '준엄한 주의 말씀 앞에 겸손히 순종하는 삶 되길', '준비하신 예비의 복이 당신의 삶에 가득 쏟아지길'],
-    '경': ['경외하는 마음으로 주님과 날마다 깊이 교제하길', '경이로운 주의 창조 세계 속에 당신의 자리도 빛나길', '경주를 마치는 날까지 주님이 당신의 상급 되시길'],
+    '홍': [
+        { word: '홍수', rest: '처럼 밀려오는 주의 은혜가 당신의 삶에 넘쳐나길 기도합니다' },
+        { word: '홍해', rest: '를 가르신 기적의 하나님이 당신의 앞길을 예비하고 계십니다' }
+    ],
+    '길': [
+        { word: '길', rest: '되신 예수님을 따라 걷는 당신의 발걸음마다 평강이 있기를' },
+        { word: '길가', rest: '에 핀 꽃 한 송이에서도 주님의 세밀한 사랑을 발견하길 소망합니다' }
+    ],
+    '동': [
+        { word: '동행', rest: '하시는 성령님의 따뜻한 손길이 날마다 당신을 붙들어 주실 것입니다' },
+        { word: '동녘', rest: '의 새벽빛처럼 당신의 믿음이 세상을 밝게 비추길 축복합니다' }
+    ],
+    '이': [
+        { word: '이제', rest: '는 내가 사는 것이 아니요 오직 내 안의 주를 위해 사는 기쁨을 누리길' },
+        { word: '이슬', rest: '처럼 맑고 순수한 영혼으로 주님의 향기를 전하는 자 되길 바랍니다' }
+    ],
+    '김': [
+        { word: '김', rest: '이 모락모락 나는 생명의 양식처럼 주님의 말씀이 늘 풍성하길' },
+        { word: '기도', rest: '의 향연이 하늘 보좌에 상달되어 응답의 기쁨을 누리는 삶 되길' }
+    ],
+    '박': [
+        { word: '박수', rest: '치며 기쁨으로 주님의 이름을 높여 드리는 예배의 삶 되길' },
+        { word: '박동', rest: '하는 심장마다 주를 향한 뜨거운 열정과 사랑이 식지 않길 축복합니다' }
+    ],
+    '최': [
+        { word: '최고', rest: '의 예배자로 주님 앞에 서는 당신의 모습이 참으로 아름답습니다' },
+        { word: '최선', rest: '을 다해 믿음의 경주를 완주하는 당신에게 생명의 면류관이 예비되어 있습니다' }
+    ],
+    '정': [
+        { word: '정결', rest: '한 마음으로 주님의 얼굴을 구할 때 하늘의 평강이 임할 것입니다' },
+        { word: '정의', rest: '가 강물처럼 흐르는 세상을 만드는 복된 통로로 쓰임 받길 원합니다' }
+    ],
+    '나': [
+        { word: '나', rest: '의 힘이 되신 여호와를 날마다 의지하며 넉넉히 승리하는 삶 되길' },
+        { word: '나그네', rest: ' 길 인생 속에서도 천국 소망 품고 주와 함께 걷는 당신 되길' }
+    ],
+    '미': [
+        { word: '미소', rest: ' 속에 피어나는 주님의 평강이 만나는 모든 이들에게 전해지길' },
+        { word: '미래', rest: '와 희망을 약속하신 신실하신 하나님을 끝까지 신뢰하며 나아가길' }
+    ],
+    '성': [
+        { word: '성령', rest: '의 충만한 기름 부으심이 당신의 모든 사역과 삶 위에 가득하길' },
+        { word: '성결', rest: '한 삶을 향한 당신의 거룩한 몸부림을 주께서 귀히 보실 것입니다' }
+    ],
+    '민': [
+        { word: '민족', rest: '과 열방을 가슴에 품고 기도하는 주님의 신실한 일꾼 되길 축복합니다' },
+        { word: '민들레', rest: ' 홀씨처럼 복음의 기쁜 소식을 널리 퍼뜨리는 발걸음 되길' }
+    ],
+    '지': [
+        { word: '지혜', rest: '와 계시의 영을 부어주셔서 주님의 뜻을 온전히 분별하길 기도합니다' },
+        { word: '지금', rest: '도 당신을 위해 친히 간구하시는 주님의 사랑을 잊지 마세요' }
+    ],
+    '수': [
+        { word: '수고', rest: '하고 무거운 짐을 주님 발 앞에 내려놓고 참된 안식을 누리길' },
+        { word: '수정', rest: '처럼 맑은 생명수 강가로 인도하시는 주님의 평안을 누리세요' }
+    ],
+    '하': [
+        { word: '하늘', rest: ' 문을 여시고 감당할 수 없는 복을 당신의 가정 위에 부어주시길' },
+        { word: '하나님', rest: '의 형상을 닮은 당신은 이 세상 그 무엇보다 귀하고 소중합니다' }
+    ],
+    '윤': [
+        { word: '윤슬', rest: '처럼 반짝이는 주님의 은혜가 당신의 모든 날을 덮어주시길' },
+        { word: '윤택', rest: '한 영혼의 샘물이 마르지 않고 날마다 흘러넘치기를 소망합니다' }
+    ],
+    '선': [
+        { word: '선한', rest: ' 목자 되신 주님이 당신의 일생을 푸른 초장으로 인도하실 것입니다' },
+        { word: '선물', rest: '로 주신 귀한 오늘을 주님과 기쁨으로 동행하며 채워가길' }
+    ],
+    '영': [
+        { word: '영원', rest: '하신 주님의 사랑이 당신을 영원토록 지키시고 보호하실 것입니다' },
+        { word: '영광', rest: '의 광채가 당신의 얼굴 위에 가득하여 주를 나타내는 삶 되길' }
+    ],
+    '전': [
+        { word: '전능', rest: '하신 하나님의 손길이 당신의 모든 연약함을 강건케 하실 줄 믿습니다' },
+        { word: '전심', rest: '으로 주를 찾는 자에게 만나주시는 은혜가 오늘 당신께 있기를' }
+    ],
+    '진': [
+        { word: '진리', rest: '의 말씀이 당신의 앞길을 비추는 영롱한 빛이 되어줄 것입니다' },
+        { word: '진실', rest: '한 마음으로 드리는 당신의 예배를 주께서 기쁘게 받으십니다' }
+    ],
+    '희': [
+        { word: '희망', rest: '의 소망을 주시는 주님 안에서 날마다 새 힘을 얻으시길 축복합니다' },
+        { word: '희생', rest: '과 사랑으로 헌신하는 당신의 손길을 통해 주의 나라가 확장될 것입니다' }
+    ],
+    '은': [
+        { word: '은혜', rest: '의 보좌 앞으로 담대히 나아가 때를 따라 돕는 복을 누리길' },
+        { word: '은총', rest: '의 구름 기둥이 당신이 걷는 모든 길을 시원하게 덮어줄 것입니다' }
+    ],
+    '혜': [
+        { word: '혜안', rest: '을 주셔서 하나님의 선하신 뜻을 온전히 분별하는 지혜자가 되길' },
+        { word: '혜택', rest: '받은 자의 사명으로 주신 복을 이웃에게 나누는 아름다운 삶 되길' }
+    ]
 };
 
-// 범용 문구 - 조사 처리를 위해 {josa_i}, {josa_eul} 등의 플레이스홀더 사용
 const fallbacks = [
-    '{josa_eui} 마음 중심에 주님이 늘 계시기를 기도합니다',
-    '{josa_nim}의 삶이 하나님의 선하신 뜻대로 이루어지길 소망합니다',
-    '라는 소중한 이름 위에 하늘의 신령한 복이 더해지길',
-    '{josa_i} 걷는 모든 길에 주의 등불이 밝게 비추길 바랍니다',
-    ' 속에 감추어진 하나님의 계획이 아름답게 꽃피길 축복합니다',
-    '{josa_eul} 사랑하시는 주님의 따뜻한 손길이 늘 함께하시길'
+    { word: '{char}심', rest: '으로 주를 경외하는 당신의 삶에 하늘의 복이 가득하길 원합니다' },
+    { word: '{char}랑', rest: '스러운 주님의 자녀로서 세상의 빛과 소금이 되는 삶 되길 축복합니다' },
+    { word: '{char}성', rest: '스러운 마음으로 주님을 섬기는 당신의 수고를 주께서 기억하십니다' },
+    { word: '{char}망', rest: '의 끈을 놓지 않고 기도로 승리하는 당신의 내일을 응원합니다' }
 ];
 
 const generateBtn = document.getElementById('generateBtn');
@@ -41,23 +105,6 @@ const nameInput = document.getElementById('nameInput');
 const resultArea = document.getElementById('resultArea');
 const poemContent = document.getElementById('poemContent');
 const copyBtn = document.getElementById('copyBtn');
-
-// 받침 유무 확인 함수
-function hasBatchim(char) {
-    const code = char.charCodeAt(0);
-    if (code < 44032 || code > 55203) return false;
-    return (code - 44032) % 28 !== 0;
-}
-
-// 조사 처리 함수
-function replaceJosa(char, text) {
-    const batchim = hasBatchim(char);
-    return text
-        .replace(/{josa_i}/g, batchim ? '이' : '가')
-        .replace(/{josa_eul}/g, batchim ? '을' : '를')
-        .replace(/{josa_eui}/g, batchim ? '의' : '의') // 의는 동일하지만 확장성 위해
-        .replace(/{josa_nim}/g, batchim ? '님' : '님');
-}
 
 generateBtn.addEventListener('click', () => {
     const name = nameInput.value.trim();
@@ -71,33 +118,31 @@ generateBtn.addEventListener('click', () => {
 function generatePoem(name) {
     poemContent.innerHTML = '';
     const characters = name.split('');
-    const usedPhrases = new Set(); // 중복 방지
+    const usedPhrases = new Set();
     
     characters.forEach((char, index) => {
         const line = document.createElement('div');
         line.className = 'poem-line';
         line.style.animationDelay = `${index * 0.4}s`;
         
-        let phrase = '';
+        let selected;
         if (dictionary[char]) {
-            const options = dictionary[char].filter(p => !usedPhrases.has(p));
-            // 만약 모든 옵션을 다 썼다면 다시 전체에서 선택
-            const source = options.length > 0 ? options : dictionary[char];
-            phrase = source[Math.floor(Math.random() * source.length)];
-            usedPhrases.add(phrase);
-            
-            if (phrase.startsWith(char)) {
-                phrase = phrase.substring(1);
-            }
+            const options = dictionary[char].filter(o => !usedPhrases.has(o.word));
+            selected = options.length > 0 ? options[Math.floor(Math.random() * options.length)] : dictionary[char][0];
         } else {
-            const options = fallbacks.filter(p => !usedPhrases.has(p));
-            const source = options.length > 0 ? options : fallbacks;
-            let rawPhrase = source[Math.floor(Math.random() * source.length)];
-            usedPhrases.add(rawPhrase);
-            phrase = replaceJosa(char, rawPhrase);
+            const raw = fallbacks[Math.floor(Math.random() * fallbacks.length)];
+            selected = {
+                word: raw.word.replace('{char}', char),
+                rest: raw.rest
+            };
         }
+        usedPhrases.add(selected.word);
 
-        line.innerHTML = `<span class="first-char">${char}</span>${phrase}`;
+        // 첫 글자 강조 스타일 유지하면서 단어 전체 출력
+        const firstChar = selected.word.charAt(0);
+        const remainingWord = selected.word.substring(1);
+        
+        line.innerHTML = `<span class="first-char">${firstChar}</span><span class="word-rest">${remainingWord}</span> ${selected.rest}`;
         poemContent.appendChild(line);
     });
 
