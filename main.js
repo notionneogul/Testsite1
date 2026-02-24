@@ -1,6 +1,5 @@
 // UI 요소
 const generateBtn = document.getElementById('generateBtn');
-// 주석 추가: 환경 변수 적용을 위한 재배포용 트리거
 const nameInput = document.getElementById('nameInput');
 const resultArea = document.getElementById('resultArea');
 const loadingArea = document.getElementById('loadingArea');
@@ -58,8 +57,7 @@ async function renderResult(text) {
         const poemOptions = JSON.parse(jsonStr);
 
         poemOptions.forEach((option, i) => {
-            // option은 { poem: [], verse: "" } 형태임
-            const poemLines = option.poem || option; // 구버전 대응
+            const poemLines = option.poem || option;
             const verse = option.verse || "";
             cardsContainer.appendChild(createCard(poemLines, verse, i + 1));
         });
@@ -80,7 +78,6 @@ function createCard(lines, verse, index) {
     
     const content = card.querySelector('.poem-content');
     
-    // N행시 출력
     lines.forEach((text, i) => {
         const line = document.createElement('div');
         line.className = 'poem-line';
@@ -88,7 +85,6 @@ function createCard(lines, verse, index) {
         typeWriter(line, text, i * 600);
     });
 
-    // 추천 성구 추가 (마지막 시 이후에 출력되도록 딜레이)
     if (verse) {
         setTimeout(() => {
             const verseLine = document.createElement('div');
@@ -98,20 +94,57 @@ function createCard(lines, verse, index) {
         }, lines.length * 600 + 500);
     }
 
-    const btn = document.createElement('button');
-    btn.className = 'copy-btn-small';
-    btn.innerText = '이 축복 메시지 복사하기';
-    btn.onclick = () => {
+    // 버튼 그룹 추가
+    const btnGroup = document.createElement('div');
+    btnGroup.className = 'card-btn-group';
+    
+    // 복사 버튼
+    const copyBtn = document.createElement('button');
+    copyBtn.className = 'action-btn copy-btn';
+    copyBtn.innerText = '메시지 복사';
+    copyBtn.onclick = () => {
         const fullMessage = [...lines, "", verse].join('\n');
         navigator.clipboard.writeText(fullMessage).then(() => {
-            const original = btn.innerText;
-            btn.innerText = '✅ 복사 완료!';
-            btn.classList.add('success');
-            setTimeout(() => { btn.innerText = original; btn.classList.remove('success'); }, 2000);
+            copyBtn.innerText = '✅ 복사 완료!';
+            setTimeout(() => { copyBtn.innerText = '메시지 복사'; }, 2000);
         });
     };
-    card.appendChild(btn);
+
+    // 이미지 저장 버튼
+    const saveImgBtn = document.createElement('button');
+    saveImgBtn.className = 'action-btn save-btn';
+    saveImgBtn.innerText = '이미지로 저장';
+    saveImgBtn.onclick = () => saveCardAsImage(card, index);
+
+    btnGroup.appendChild(copyBtn);
+    btnGroup.appendChild(saveImgBtn);
+    card.appendChild(btnGroup);
+    
     return card;
+}
+
+function saveCardAsImage(cardElement, index) {
+    // 캡처 시 불필요한 요소(버튼 등) 잠시 숨기기
+    const btnGroup = cardElement.querySelector('.card-btn-group');
+    const tag = cardElement.querySelector('.card-tag');
+    btnGroup.style.opacity = '0';
+    tag.style.opacity = '0';
+
+    html2canvas(cardElement, {
+        scale: 2, // 고해상도 캡처
+        backgroundColor: '#fdfbf7', // 배경색 지정
+        useCORS: true, // 외부 리소스 허용
+        logging: false
+    }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = `축복메시지_${index}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        
+        // 다시 버튼 보이기
+        btnGroup.style.opacity = '1';
+        tag.style.opacity = '1';
+    });
 }
 
 function typeWriter(element, text, delay) {

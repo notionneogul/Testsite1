@@ -197,19 +197,48 @@ button#generateBtn:disabled {
     text-align: center;
 }
 
-.copy-btn-small {
-    width: 100%;
-    background-color: #fdfaf2;
-    color: var(--primary-color) !important;
-    border: 1.5px solid rgba(109, 88, 69, 0.2);
-    font-size: 0.9rem;
+.card-btn-group {
+    display: flex;
+    gap: 12px;
+    margin-top: 25px;
+}
+
+.action-btn {
+    flex: 1;
     padding: 12px;
+    font-size: 0.9rem;
     font-weight: 700;
     border-radius: 12px;
     cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1.5px solid rgba(109, 88, 69, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.copy-btn-small.success {
+.copy-btn {
+    background-color: #fdfaf2;
+    color: var(--primary-color) !important;
+}
+
+.save-btn {
+    background-color: var(--primary-color);
+    color: #ffffff !important;
+    border: none;
+}
+
+.save-btn:hover {
+    background-color: #5d4037;
+    transform: translateY(-2px);
+}
+
+.copy-btn:hover {
+    background-color: #f5f0e1;
+    transform: translateY(-2px);
+}
+
+.action-btn.success {
     background-color: #e8f5e9;
     border-color: #81c784;
     color: #2e7d32 !important;
