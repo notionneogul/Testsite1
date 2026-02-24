@@ -14,7 +14,6 @@ themeToggle.addEventListener('click', () => {
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
 });
 
-// 초기 테마 설정 불러오기
 if (localStorage.getItem('theme') === 'dark') {
     document.body.classList.add('dark-mode');
     themeToggle.querySelector('.icon').innerText = '🌙';
@@ -59,23 +58,18 @@ class Particle {
     }
     draw() {
         const currentOpacity = this.opacity + Math.sin(this.pulse) * 0.3;
-        // 별빛 색상: 더욱 노란 금빛으로 강화
         const starColor = `rgba(255, 215, 100, ${Math.max(0.1, currentOpacity)})`;
-        
-        ctx.shadowBlur = this.size * 6; // 광채 강화
+        ctx.shadowBlur = this.size * 6;
         ctx.shadowColor = 'rgba(255, 200, 0, 0.5)';
         ctx.fillStyle = starColor;
-        
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.closePath();
         ctx.fill();
-        
         ctx.shadowBlur = 0;
     }
     update() {
         this.pulse += this.pulseSpeed;
-
         let dx = mouse.x - this.x;
         let dy = mouse.y - this.y;
         let distance = Math.sqrt(dx * dx + dy * dy);
@@ -85,7 +79,6 @@ class Particle {
         let force = (maxDistance - distance) / maxDistance;
         let directionX = forceDirectionX * force * this.density;
         let directionY = forceDirectionY * force * this.density;
-
         if (distance < mouse.radius) {
             this.x -= directionX;
             this.y -= directionY;
@@ -113,16 +106,13 @@ function animate() {
 
 initCanvas();
 animate();
-// ----------------------------
 
 generateBtn.addEventListener('click', async () => {
     const name = nameInput.value.trim();
     if (!name) return alert('성함을 입력해주세요!');
-    
     generateBtn.disabled = true;
     resultArea.classList.add('hidden');
     loadingArea.classList.remove('hidden');
-
     try {
         const response = await fetch('/api/generate', {
             method: 'POST',
@@ -162,6 +152,7 @@ async function renderResult(text) {
 function createCard(lines, verse, index) {
     const card = document.createElement('div');
     card.className = 'poem-card';
+    card.id = `card-${index}`;
     card.style.animationDelay = `${index * 0.2}s`;
     card.innerHTML = `<span class="card-tag">축복 제안 ${index}</span><div class="poem-content"></div>`;
     const content = card.querySelector('.poem-content');
@@ -206,26 +197,45 @@ function saveCardAsImage(cardElement, index) {
     const saveBtn = cardElement.querySelector('.save-btn');
     const originalText = saveBtn.innerText;
     saveBtn.innerText = '저장 중...';
+    
+    const isDarkMode = document.body.classList.contains('dark-mode');
     const btnGroup = cardElement.querySelector('.card-btn-group');
     const tag = cardElement.querySelector('.card-tag');
+    
     btnGroup.style.display = 'none';
     tag.style.opacity = '0';
+
     setTimeout(() => {
         html2canvas(cardElement, {
             scale: 2,
-            backgroundColor: document.body.classList.contains('dark-mode') ? '#1e293b' : '#fdfbf7',
+            backgroundColor: isDarkMode ? '#1e293b' : '#fdfbf7', // 테마별 배경색 명시
             useCORS: true,
             onclone: (clonedDoc) => {
-                const allClonedCards = clonedDoc.querySelectorAll('.poem-card');
-                const targetClonedCard = Array.from(allClonedCards)[index - 1];
+                const targetClonedCard = clonedDoc.getElementById(`card-${index}`);
                 if (targetClonedCard) {
                     targetClonedCard.style.paddingBottom = '40px';
+                    
+                    // 텍스트 가독성 강제 보정
                     const poemLines = targetClonedCard.querySelectorAll('.poem-line');
-                    poemLines.forEach(line => { line.style.opacity = '1'; });
+                    const firstChars = targetClonedCard.querySelectorAll('.first-char');
                     const verseLine = targetClonedCard.querySelector('.verse-line');
+                    const verseText = verseLine ? verseLine.querySelector('p') : null;
+
+                    const textColor = isDarkMode ? '#f0f0f0' : '#2c241e';
+                    const accentColor = isDarkMode ? '#ffd700' : '#a68b5c';
+                    const verseTextColor = isDarkMode ? '#e5e5e5' : '#4a3728';
+
+                    poemLines.forEach(line => {
+                        line.style.opacity = '1';
+                        line.style.color = textColor;
+                    });
+                    firstChars.forEach(char => {
+                        char.style.color = accentColor;
+                    });
                     if (verseLine) {
                         verseLine.style.display = 'block';
                         verseLine.style.opacity = '1';
+                        if (verseText) verseText.style.color = verseTextColor;
                     }
                 }
             }
@@ -234,6 +244,11 @@ function saveCardAsImage(cardElement, index) {
             link.download = `Blessing_${index}.png`;
             link.href = canvas.toDataURL('image/png');
             link.click();
+            btnGroup.style.display = 'flex';
+            tag.style.opacity = '1';
+            saveBtn.innerText = originalText;
+        }).catch(err => {
+            console.error(err);
             btnGroup.style.display = 'flex';
             tag.style.opacity = '1';
             saveBtn.innerText = originalText;
