@@ -5,9 +5,90 @@ const resultArea = document.getElementById('resultArea');
 const loadingArea = document.getElementById('loadingArea');
 const cardsContainer = document.getElementById('cardsContainer');
 
+// --- 인터랙티브 배경 로직 ---
+const canvas = document.getElementById('bgCanvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+const particleCount = 60;
+let mouse = { x: null, y: null, radius: 150 };
+
+window.addEventListener('mousemove', (e) => {
+    mouse.x = e.x;
+    mouse.y = e.y;
+});
+
+window.addEventListener('resize', () => {
+    initCanvas();
+});
+
+function initCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    particles = [];
+    for (let i = 0; i < particleCount; i++) {
+        particles.push(new Particle());
+    }
+}
+
+class Particle {
+    constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 3 + 1;
+        this.baseX = this.x;
+        this.baseY = this.y;
+        this.density = (Math.random() * 30) + 1;
+        this.color = 'rgba(166, 139, 92, 0.2)';
+    }
+    draw() {
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.closePath();
+        ctx.fill();
+    }
+    update() {
+        let dx = mouse.x - this.x;
+        let dy = mouse.y - this.y;
+        let distance = Math.sqrt(dx * dx + dy * dy);
+        let forceDirectionX = dx / distance;
+        let forceDirectionY = dy / distance;
+        let maxDistance = mouse.radius;
+        let force = (maxDistance - distance) / maxDistance;
+        let directionX = forceDirectionX * force * this.density;
+        let directionY = forceDirectionY * force * this.density;
+
+        if (distance < mouse.radius) {
+            this.x -= directionX;
+            this.y -= directionY;
+        } else {
+            if (this.x !== this.baseX) {
+                let dx = this.x - this.baseX;
+                this.x -= dx / 10;
+            }
+            if (this.y !== this.baseY) {
+                let dy = this.y - this.baseY;
+                this.y -= dy / 10;
+            }
+        }
+    }
+}
+
+function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let i = 0; i < particles.length; i++) {
+        particles[i].update();
+        particles[i].draw();
+    }
+    requestAnimationFrame(animate);
+}
+
+initCanvas();
+animate();
+// ----------------------------
+
 generateBtn.addEventListener('click', async () => {
     const name = nameInput.value.trim();
-    
     if (!name) return alert('성함을 입력해주세요!');
     
     generateBtn.disabled = true;
@@ -20,25 +101,11 @@ generateBtn.addEventListener('click', async () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name })
         });
-
         const responseText = await response.text();
-
-        if (!response.ok) {
-            let errorMessage = '생성 실패';
-            try {
-                const errorJson = JSON.parse(responseText);
-                errorMessage = errorJson.error || errorMessage;
-            } catch (e) {
-                errorMessage = `서버 에러 (${response.status})`;
-            }
-            throw new Error(errorMessage);
-        }
-
+        if (!response.ok) throw new Error('생성 실패');
         await renderResult(responseText);
-        
     } catch (error) {
-        console.error("오류 상세:", error);
-        alert(`축복 생성 중 오류가 발생했습니다: ${error.message}`);
+        alert(`오류가 발생했습니다: ${error.message}`);
     } finally {
         loadingArea.classList.add('hidden');
         generateBtn.disabled = false;
@@ -47,26 +114,20 @@ generateBtn.addEventListener('click', async () => {
 
 async function renderResult(text) {
     cardsContainer.innerHTML = '';
-    
     try {
         const startIdx = text.indexOf('[');
         const endIdx = text.lastIndexOf(']');
-        if (startIdx === -1 || endIdx === -1) throw new Error("데이터 형식 오류");
-        
         const jsonStr = text.substring(startIdx, endIdx + 1);
         const poemOptions = JSON.parse(jsonStr);
-
         poemOptions.forEach((option, i) => {
             const poemLines = option.poem || option;
             const verse = option.verse || "";
             cardsContainer.appendChild(createCard(poemLines, verse, i + 1));
         });
-        
         resultArea.classList.remove('hidden');
         scrollToResult();
     } catch (e) {
-        console.error("렌더링 에러:", e);
-        throw new Error("AI 응답을 처리하는 중 오류가 발생했습니다.");
+        console.error(e);
     }
 }
 
@@ -75,18 +136,13 @@ function createCard(lines, verse, index) {
     card.className = 'poem-card';
     card.style.animationDelay = `${index * 0.2}s`;
     card.innerHTML = `<span class="card-tag">축복 제안 ${index}</span><div class="poem-content"></div>`;
-    
     const content = card.querySelector('.poem-content');
-    
-    // N행시 출력
     lines.forEach((text, i) => {
         const line = document.createElement('div');
         line.className = 'poem-line';
         content.appendChild(line);
         typeWriter(line, text, i * 600);
     });
-
-    // 추천 성구 추가 (타이핑 후 등장하도록 함)
     if (verse) {
         setTimeout(() => {
             const verseLine = document.createElement('div');
@@ -95,12 +151,8 @@ function createCard(lines, verse, index) {
             content.appendChild(verseLine);
         }, lines.length * 600 + 300);
     }
-
-    // 버튼 그룹 추가
     const btnGroup = document.createElement('div');
     btnGroup.className = 'card-btn-group';
-    
-    // 복사 버튼
     const copyBtn = document.createElement('button');
     copyBtn.className = 'action-btn copy-btn';
     copyBtn.innerText = '메시지 복사';
@@ -112,17 +164,13 @@ function createCard(lines, verse, index) {
             setTimeout(() => { copyBtn.innerText = original; }, 2000);
         });
     };
-
-    // 이미지 저장 버튼
     const saveImgBtn = document.createElement('button');
     saveImgBtn.className = 'action-btn save-btn';
     saveImgBtn.innerText = '이미지 저장';
     saveImgBtn.onclick = () => saveCardAsImage(card, index);
-
     btnGroup.appendChild(copyBtn);
     btnGroup.appendChild(saveImgBtn);
     card.appendChild(btnGroup);
-    
     return card;
 }
 
@@ -130,40 +178,26 @@ function saveCardAsImage(cardElement, index) {
     const saveBtn = cardElement.querySelector('.save-btn');
     const originalText = saveBtn.innerText;
     saveBtn.innerText = '저장 중...';
-
-    // 캡처 시 불필요한 요소(버튼 그룹) 잠시 숨기기
     const btnGroup = cardElement.querySelector('.card-btn-group');
     const tag = cardElement.querySelector('.card-tag');
     btnGroup.style.display = 'none';
     tag.style.opacity = '0';
-
-    // 성구가 나타날 때까지 기다린 후 캡처 (최대 1초 대기)
     setTimeout(() => {
         html2canvas(cardElement, {
             scale: 2,
             backgroundColor: '#fdfbf7',
             useCORS: true,
-            allowTaint: true,
-            logging: false,
             onclone: (clonedDoc) => {
-                // 복제된 문서에서 버튼 그룹을 완전히 제거하여 여백 방지
                 const allClonedCards = clonedDoc.querySelectorAll('.poem-card');
                 const targetClonedCard = Array.from(allClonedCards)[index - 1];
                 if (targetClonedCard) {
                     targetClonedCard.style.paddingBottom = '40px';
-                    // 타이핑이 덜 끝났을 수 있는 상황을 대비해 opacity 강제 설정
                     const poemLines = targetClonedCard.querySelectorAll('.poem-line');
-                    poemLines.forEach(line => {
-                        line.style.opacity = '1';
-                        line.style.color = '#222222';
-                    });
-                    
+                    poemLines.forEach(line => { line.style.opacity = '1'; line.style.color = '#2c241e'; });
                     const verseLine = targetClonedCard.querySelector('.verse-line');
                     if (verseLine) {
                         verseLine.style.display = 'block';
                         verseLine.style.opacity = '1';
-                        verseLine.style.visibility = 'visible';
-                        // 성구 텍스트 색상 강제 지정
                         const verseText = verseLine.querySelector('p');
                         if (verseText) verseText.style.color = '#4a3728';
                     }
@@ -171,21 +205,14 @@ function saveCardAsImage(cardElement, index) {
             }
         }).then(canvas => {
             const link = document.createElement('a');
-            link.download = `축복메시지_${index}.png`;
+            link.download = `Blessing_${index}.png`;
             link.href = canvas.toDataURL('image/png');
             link.click();
-            
-            // 원상 복구
-            btnGroup.style.display = 'flex';
-            tag.style.opacity = '1';
-            saveBtn.innerText = originalText;
-        }).catch(err => {
-            console.error('이미지 저장 실패:', err);
             btnGroup.style.display = 'flex';
             tag.style.opacity = '1';
             saveBtn.innerText = originalText;
         });
-    }, 500); // 캡처 전 0.5초의 여유 시간을 주어 성구 렌더링 확인
+    }, 500);
 }
 
 function typeWriter(element, text, delay) {
