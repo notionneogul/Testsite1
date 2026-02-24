@@ -194,12 +194,6 @@ function createCard(lines, verse, index) {
 }
 
 function saveCardAsImage(cardElement, index) {
-    // 성구가 아직 생성되지 않았다면 대기 안내
-    if (!cardElement.querySelector('.verse-line')) {
-        alert('축복 메시지가 완성될 때까지 잠시만 기다려주세요!');
-        return;
-    }
-
     const saveBtn = cardElement.querySelector('.save-btn');
     const originalText = saveBtn.innerText;
     saveBtn.innerText = '저장 중...';
@@ -208,10 +202,9 @@ function saveCardAsImage(cardElement, index) {
     const btnGroup = cardElement.querySelector('.card-btn-group');
     const tag = cardElement.querySelector('.card-tag');
     
-    btnGroup.style.display = 'none';
+    btnGroup.style.visibility = 'hidden';
     tag.style.opacity = '0';
 
-    // 캡처 시 가독성을 위한 색상 값
     const textColor = isDarkMode ? '#f0f0f0' : '#2c241e';
     const accentColor = isDarkMode ? '#ffd700' : '#a68b5c';
 
@@ -219,65 +212,63 @@ function saveCardAsImage(cardElement, index) {
         scale: 2,
         backgroundColor: isDarkMode ? '#1e293b' : '#fdfbf7',
         useCORS: true,
-        logging: false,
         onclone: (clonedDoc) => {
             const clonedCard = clonedDoc.querySelector(`.poem-card[data-index="${index}"]`);
             if (clonedCard) {
-                // 애니메이션 및 캡처 방해 요소 제거
                 clonedCard.style.animation = 'none';
                 clonedCard.style.backdropFilter = 'none';
                 clonedCard.style.webkitBackdropFilter = 'none';
                 clonedCard.style.boxShadow = 'none';
-                clonedCard.style.paddingBottom = '60px'; // 하단 문구 공간 확보
+                clonedCard.style.paddingBottom = '50px';
 
-                // 본문 텍스트 강제 보정
-                clonedCard.querySelectorAll('.poem-line').forEach(line => {
-                    line.style.opacity = '1';
-                    line.style.color = textColor;
-                    line.style.visibility = 'visible';
+                // 모든 줄 가시성 강제 고정
+                clonedCard.querySelectorAll('.poem-line').forEach(l => {
+                    l.style.opacity = '1';
+                    l.style.color = textColor;
+                    l.style.animation = 'none';
+                });
+                clonedCard.querySelectorAll('.first-char').forEach(c => {
+                    c.style.color = accentColor;
+                    c.style.opacity = '1';
                 });
 
-                clonedCard.querySelectorAll('.first-char').forEach(char => {
-                    char.style.color = accentColor;
-                    char.style.opacity = '1';
-                });
-
-                // 성구 영역 강제 보정
+                // 성구 영역 가시성 극대화 보정
                 const verseArea = clonedCard.querySelector('.verse-line');
                 if (verseArea) {
-                    verseArea.style.display = 'block';
+                    verseArea.style.animation = 'none'; // 애니메이션 제거
                     verseArea.style.opacity = '1';
                     verseArea.style.visibility = 'visible';
+                    verseArea.style.display = 'block';
                     verseArea.style.borderTop = `1px dashed ${accentColor}`;
+                    verseArea.style.padding = '20px 10px';
+                    // 배경에 약간의 대비 추가
+                    verseArea.style.backgroundColor = isDarkMode ? 'rgba(255,255,255,0.03)' : 'rgba(166,139,92,0.03)';
                     
                     const label = verseArea.querySelector('.verse-label');
                     const text = verseArea.querySelector('p');
                     if (label) {
                         label.style.color = accentColor;
                         label.style.opacity = '1';
+                        label.style.fontWeight = '800';
                     }
                     if (text) {
-                        // 가독성을 위해 색상을 더 명확하게 지정
-                        text.style.color = isDarkMode ? '#ffffff' : '#2c241e';
+                        text.style.color = textColor; // 본문과 동일한 색상
                         text.style.opacity = '1';
-                        text.style.fontWeight = '600';
+                        text.style.fontWeight = '600'; // 가독성을 위해 폰트 굵기 증가
+                        text.style.fontSize = '1.05rem'; // 크기 살짝 키움
                     }
                 }
 
-                // --- 맨 아래 성구(Footer Blessing) 강제 추가 ---
-                const footerBlessing = document.querySelector('.blessing-footer').innerText;
-                const footerElement = document.createElement('div');
-                footerElement.style.marginTop = '30px';
-                footerElement.style.paddingTop = '20px';
-                footerElement.style.borderTop = `1px solid ${isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(166, 139, 92, 0.2)'}`;
-                footerElement.style.textAlign = 'center';
-                footerElement.style.fontSize = '0.9rem';
-                footerElement.style.color = accentColor; // 금빛 유지
-                footerElement.style.fontWeight = '700'; // 더 굵게
-                footerElement.style.lineHeight = '1.6';
-                footerElement.innerText = footerBlessing;
-                
-                clonedCard.appendChild(footerElement);
+                // 하단 축복 문구 보정
+                const footerElements = clonedCard.querySelectorAll('div:last-child');
+                footerElements.forEach(fe => {
+                    if (fe.innerText.includes('주께서 당신의')) {
+                        fe.style.color = accentColor;
+                        fe.style.opacity = '1';
+                        fe.style.fontWeight = '700';
+                        fe.style.fontSize = '1rem';
+                    }
+                });
             }
         }
     }).then(canvas => {
@@ -286,12 +277,12 @@ function saveCardAsImage(cardElement, index) {
         link.href = canvas.toDataURL('image/png');
         link.click();
         
-        btnGroup.style.display = 'flex';
+        btnGroup.style.visibility = 'visible';
         tag.style.opacity = '1';
         saveBtn.innerText = originalText;
     }).catch(err => {
-        console.error('캡처 에러:', err);
-        btnGroup.style.display = 'flex';
+        console.error(err);
+        btnGroup.style.visibility = 'visible';
         tag.style.opacity = '1';
         saveBtn.innerText = originalText;
     });
