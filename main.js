@@ -78,6 +78,7 @@ function createCard(lines, verse, index) {
     
     const content = card.querySelector('.poem-content');
     
+    // N행시 출력
     lines.forEach((text, i) => {
         const line = document.createElement('div');
         line.className = 'poem-line';
@@ -85,13 +86,14 @@ function createCard(lines, verse, index) {
         typeWriter(line, text, i * 600);
     });
 
+    // 추천 성구 추가 (타이핑 효과 후 렌더링되도록 함)
     if (verse) {
         setTimeout(() => {
             const verseLine = document.createElement('div');
             verseLine.className = 'verse-line';
             verseLine.innerHTML = `<span class="verse-label">📜 추천 성구</span><p>${verse}</p>`;
             content.appendChild(verseLine);
-        }, lines.length * 600 + 500);
+        }, lines.length * 600 + 300);
     }
 
     // 버튼 그룹 추가
@@ -105,15 +107,16 @@ function createCard(lines, verse, index) {
     copyBtn.onclick = () => {
         const fullMessage = [...lines, "", verse].join('\n');
         navigator.clipboard.writeText(fullMessage).then(() => {
-            copyBtn.innerText = '✅ 복사 완료!';
-            setTimeout(() => { copyBtn.innerText = '메시지 복사'; }, 2000);
+            const original = copyBtn.innerText;
+            copyBtn.innerText = '✅ 완료';
+            setTimeout(() => { copyBtn.innerText = original; }, 2000);
         });
     };
 
     // 이미지 저장 버튼
     const saveImgBtn = document.createElement('button');
     saveImgBtn.className = 'action-btn save-btn';
-    saveImgBtn.innerText = '이미지로 저장';
+    saveImgBtn.innerText = '이미지 저장';
     saveImgBtn.onclick = () => saveCardAsImage(card, index);
 
     btnGroup.appendChild(copyBtn);
@@ -124,26 +127,42 @@ function createCard(lines, verse, index) {
 }
 
 function saveCardAsImage(cardElement, index) {
+    const originalText = cardElement.querySelector('.save-btn').innerText;
+    cardElement.querySelector('.save-btn').innerText = '저장 중...';
+
     // 캡처 시 불필요한 요소(버튼 등) 잠시 숨기기
     const btnGroup = cardElement.querySelector('.card-btn-group');
     const tag = cardElement.querySelector('.card-tag');
-    btnGroup.style.opacity = '0';
+    btnGroup.style.display = 'none';
     tag.style.opacity = '0';
 
     html2canvas(cardElement, {
-        scale: 2, // 고해상도 캡처
-        backgroundColor: '#fdfbf7', // 배경색 지정
-        useCORS: true, // 외부 리소스 허용
-        logging: false
+        scale: 2,
+        backgroundColor: '#fdfbf7',
+        useCORS: true,
+        logging: false,
+        onclone: (clonedDoc) => {
+            // 복제된 문서에서 버튼 그룹을 완전히 제거하여 여백 방지
+            const clonedCard = clonedDoc.querySelector(`.poem-card:nth-child(${index})`);
+            if (clonedCard) {
+                clonedCard.style.paddingBottom = '30px';
+            }
+        }
     }).then(canvas => {
         const link = document.createElement('a');
-        link.download = `축복메시지_${index}.png`;
+        link.download = `Blessing_Name_${index}.png`;
         link.href = canvas.toDataURL('image/png');
         link.click();
         
-        // 다시 버튼 보이기
-        btnGroup.style.opacity = '1';
+        // 원상 복구
+        btnGroup.style.display = 'flex';
         tag.style.opacity = '1';
+        cardElement.querySelector('.save-btn').innerText = originalText;
+    }).catch(err => {
+        console.error('이미지 저장 실패:', err);
+        btnGroup.style.display = 'flex';
+        tag.style.opacity = '1';
+        cardElement.querySelector('.save-btn').innerText = originalText;
     });
 }
 
