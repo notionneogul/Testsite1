@@ -1,5 +1,6 @@
 // UI 요소
 const generateBtn = document.getElementById('generateBtn');
+// 주석 추가: 환경 변수 적용을 위한 재배포용 트리거
 const nameInput = document.getElementById('nameInput');
 const resultArea = document.getElementById('resultArea');
 const loadingArea = document.getElementById('loadingArea');
