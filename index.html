@@ -1,14 +1,41 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hello World</title>
-  <link href='/style.css' rel='stylesheet'>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자동 N행시 생성기</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&family=Pretendard:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-  <h1>Hello, world!</h1>
-  <button onclick="console.log('hello');">Press me</button>
-  <script defer type="text/javascript" src="/main.js"></script>
+    <div class="container">
+        <header>
+            <h1>자동 N행시 생성기</h1>
+            <p>이름을 입력하면 멋진 삼행시가 펼쳐집니다.</p>
+        </header>
+
+        <main>
+            <div class="input-group">
+                <input type="text" id="nameInput" placeholder="이름을 입력하세요 (예: 홍길동)" maxlength="10">
+                <button id="generateBtn">생성하기</button>
+            </div>
+
+            <div id="resultArea" class="result-area hidden">
+                <div class="poem-card">
+                    <div id="poemContent" class="poem-content">
+                        <!-- N행시가 여기에 생성됩니다 -->
+                    </div>
+                    <button id="copyBtn" class="secondary-btn">결과 복사하기</button>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2026 삼행시 연구소. All rights reserved.</p>
+        </footer>
+    </div>
+    <script src="main.js"></script>
 </body>
 </html>
