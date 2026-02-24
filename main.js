@@ -153,6 +153,8 @@ function createCard(lines, verse, index) {
     const card = document.createElement('div');
     card.className = 'poem-card';
     card.dataset.index = index;
+    card.dataset.poem = JSON.stringify(lines);
+    card.dataset.verse = verse;
     card.style.animationDelay = `${index * 0.2}s`;
     card.innerHTML = `<span class="card-tag">축복 제안 ${index}</span><div class="poem-content"></div>`;
     const content = card.querySelector('.poem-content');
@@ -219,9 +221,9 @@ function saveCardAsImage(cardElement, index) {
                 clonedCard.style.backdropFilter = 'none';
                 clonedCard.style.webkitBackdropFilter = 'none';
                 clonedCard.style.boxShadow = 'none';
-                clonedCard.style.paddingBottom = '50px';
+                clonedCard.style.paddingBottom = '60px'; // 여백 충분히 확보
 
-                // 모든 줄 가시성 강제 고정
+                // 모든 텍스트 강제 고정
                 clonedCard.querySelectorAll('.poem-line').forEach(l => {
                     l.style.opacity = '1';
                     l.style.color = textColor;
@@ -232,43 +234,36 @@ function saveCardAsImage(cardElement, index) {
                     c.style.opacity = '1';
                 });
 
-                // 성구 영역 가시성 극대화 보정
                 const verseArea = clonedCard.querySelector('.verse-line');
                 if (verseArea) {
-                    verseArea.style.animation = 'none'; // 애니메이션 제거
                     verseArea.style.opacity = '1';
                     verseArea.style.visibility = 'visible';
                     verseArea.style.display = 'block';
                     verseArea.style.borderTop = `1px dashed ${accentColor}`;
-                    verseArea.style.padding = '20px 10px';
-                    // 배경에 약간의 대비 추가
-                    verseArea.style.backgroundColor = isDarkMode ? 'rgba(255,255,255,0.03)' : 'rgba(166,139,92,0.03)';
-                    
                     const label = verseArea.querySelector('.verse-label');
                     const text = verseArea.querySelector('p');
-                    if (label) {
-                        label.style.color = accentColor;
-                        label.style.opacity = '1';
-                        label.style.fontWeight = '800';
-                    }
+                    if (label) label.style.color = accentColor;
                     if (text) {
-                        text.style.color = textColor; // 본문과 동일한 색상
+                        text.style.color = textColor;
+                        text.style.fontWeight = '600';
                         text.style.opacity = '1';
-                        text.style.fontWeight = '600'; // 가독성을 위해 폰트 굵기 증가
-                        text.style.fontSize = '1.05rem'; // 크기 살짝 키움
                     }
                 }
 
-                // 하단 축복 문구 보정
-                const footerElements = clonedCard.querySelectorAll('div:last-child');
-                footerElements.forEach(fe => {
-                    if (fe.innerText.includes('주께서 당신의')) {
-                        fe.style.color = accentColor;
-                        fe.style.opacity = '1';
-                        fe.style.fontWeight = '700';
-                        fe.style.fontSize = '1rem';
-                    }
-                });
+                // --- 하단 성구(Footer Blessing) 명시적 강제 삽입 ---
+                const footerContent = document.querySelector('.blessing-footer').innerText;
+                const footerDiv = document.createElement('div');
+                footerDiv.style.marginTop = '40px';
+                footerDiv.style.paddingTop = '20px';
+                footerDiv.style.borderTop = `1px solid ${isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(166, 139, 92, 0.2)'}`;
+                footerDiv.style.textAlign = 'center';
+                footerDiv.style.color = accentColor;
+                footerDiv.style.fontSize = '0.95rem';
+                footerDiv.style.fontWeight = '700';
+                footerDiv.style.lineHeight = '1.6';
+                footerDiv.innerText = footerContent;
+                
+                clonedCard.appendChild(footerDiv);
             }
         }
     }).then(canvas => {
