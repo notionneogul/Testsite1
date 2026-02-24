@@ -238,10 +238,10 @@ function saveCardAsImage(cardElement, index) {
                 const contentArea = clonedCard.querySelector('.poem-content');
                 contentArea.innerHTML = ''; // 기존 내용 삭제 후 재구성
 
-                // 2. 색상 변수 설정
+                // 2. 색상 변수 설정 (본문과 성구 색상을 동일하게 일치)
                 const textColor = isDarkMode ? '#f0f0f0' : '#2c241e';
                 const accentColor = isDarkMode ? '#ffd700' : '#a68b5c';
-                const verseTextColor = isDarkMode ? '#e5e5e5' : '#4a3728';
+                const verseTextColor = textColor; // 성구 색상을 본문 색상과 동일하게 설정
 
                 // 3. 삼행시 본문 강제 재삽입 (타이핑 효과 없음)
                 poemLinesRaw.forEach(text => {
