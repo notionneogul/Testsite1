@@ -179,9 +179,12 @@ function generatePoem(name) {
     resultArea.classList.remove('hidden');
     if (window.navigator.vibrate) window.navigator.vibrate(10);
 
+    // 가시성 보장을 위해 약간의 지연 후 스크롤
     setTimeout(() => {
-        resultArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }, 100);
+        const yOffset = -50; // 여백 확보
+        const y = resultArea.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({top: y, behavior: 'smooth'});
+    }, 150);
 }
 
 copyBtn.addEventListener('click', () => {
