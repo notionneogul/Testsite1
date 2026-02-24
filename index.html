@@ -14,6 +14,21 @@
         <header>
             <h1>은혜로운 성함 N행시</h1>
             <p>이름 속에 담긴 축복과 소망의 메시지</p>
+            
+            <!-- AI 설정 영역 -->
+            <div class="ai-config-area">
+                <div class="ai-toggle-wrapper">
+                    <span class="ai-label">AI 축복 모드</span>
+                    <label class="switch">
+                        <input type="checkbox" id="aiModeToggle">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+                <div id="apiInputGroup" class="api-input-group hidden">
+                    <input type="password" id="apiKeyInput" placeholder="Gemini API Key를 입력하세요">
+                    <a href="https://aistudio.google.com/app/apikey" target="_blank" class="key-help">키 발급받기</a>
+                </div>
+            </div>
         </header>
 
         <main>
@@ -25,7 +40,7 @@
             <div id="resultArea" class="result-area hidden">
                 <p class="selection-guide">가장 마음에 드는 축복을 선택해 보세요</p>
                 <div id="cardsContainer" class="cards-container">
-                    <!-- 3개의 결과 카드가 여기에 생성됩니다 -->
+                    <!-- 결과 카드가 생성됩니다 -->
                 </div>
             </div>
         </main>
