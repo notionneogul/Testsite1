@@ -17,21 +17,23 @@ const dictionary = {
     '윤': ['윤슬처럼 반짝이는 주님의 은혜가 당신의 바다에 가득하길', '윤택한 영혼의 샘물이 마르지 않고 흘러넘치길', '윤기를 더하시는 성령의 만지심이 당신의 삶을 채우길'],
     '선': ['선한 목자 되신 주님이 푸른 초장으로 인도하시길', '선포되는 말씀이 당신의 삶을 변화시키는 능력이 되길', '선물로 주신 소중한 사람들과 사랑을 나누는 삶 되길'],
     '영': ['영원한 생명의 나라를 꿈꾸며 오늘도 믿음으로 전진하길', '영광의 광채가 당신의 얼굴 위에 가득히 비추길', '영혼의 깊은 곳에서 터져 나오는 기쁨의 찬양을 부르길'],
-    '조': ['조용한 시간 속에 들려주시는 주의 음성에 귀 기울이길', '조각난 마음을 싸매시고 치유하시는 주를 만나길', '조화로운 삶의 고백이 주님께 아름다운 향기 되길'],
-    '강': ['강하고 담대하라 내가 너와 함께함이라 하신 말씀 믿길', '강물처럼 도도하게 흐르는 주의 은혜 속에 머물길', '강가에 심은 나무처럼 시절을 좇아 과실을 맺길'],
-    '은': ['은밀한 중에 보시는 하나님이 당신의 기도를 들으시길', '은혜의 보좌 앞으로 담대히 나아가는 용기를 갖길', '은총의 구름 아래서 영원한 평안을 누리는 삶 되길'],
-    '현': ['현명한 판단과 지혜로 선한 길을 선택하는 당신 되길', '현실의 벽 너머에서 일하시는 하나님을 신뢰하길', '현존하시는 주님의 영광을 날마다 대면하며 살길'],
-    '승': ['승리의 깃발을 흔들며 주님의 영광을 선포하길', '승전보를 울리는 믿음의 군사로 당당히 서길', '승패를 넘어 주님과 함께 걷는 것 자체로 행복하길'],
-    '재': ['재능을 통해 주님의 나라를 확장하는 도구가 되길', '재 대신 화관을 주시는 주님의 위로가 당신께 있길', '재창조의 능력으로 날마다 새롭게 빚어지는 삶 되길'],
+    '전': ['전능하신 하나님의 손길이 당신의 삶을 붙드심을 믿습니다', '전신 갑주를 입고 믿음의 선한 싸움에서 승리하길', '전심으로 주를 찾는 자에게 만나주시는 은혜가 있길'],
+    '진': ['진리의 말씀이 당신의 발에 등이요 길에 빛이 되길', '진실한 고백이 담긴 당신의 기도를 주께서 들으십니다', '진흙 속에 핀 꽃처럼 세상을 아름답게 밝히는 존재 되길'],
+    '희': ['희망의 항구로 인도하시는 성령님의 바람을 타길', '희생과 사랑으로 세상을 치유하는 주의 도구 되길', '희귀하고 값진 진주처럼 당신의 영혼이 귀하게 쓰이길'],
+    '원': ['원하는 모든 소망이 주님의 뜻 안에서 결실을 맺길', '원대한 꿈을 품고 독수리처럼 날아오르는 믿음 되길', '원수 앞에서도 상을 베푸시는 주의 넉넉함을 누리길'],
+    '혜': ['혜성처럼 나타나 주의 영광을 온 땅에 비추길', '혜안을 주셔서 하나님의 뜻을 분별하는 지혜자가 되길', '혜택받은 은혜를 나누며 이웃을 섬기는 삶 되길'],
+    '준': ['준비된 마음 위에 성령의 단비가 내려 풍성케 하길', '준엄한 주의 말씀 앞에 겸손히 순종하는 삶 되길', '준비하신 예비의 복이 당신의 삶에 가득 쏟아지길'],
+    '경': ['경외하는 마음으로 주님과 날마다 깊이 교제하길', '경이로운 주의 창조 세계 속에 당신의 자리도 빛나길', '경주를 마치는 날까지 주님이 당신의 상급 되시길'],
 };
 
+// 범용 문구 - 조사 처리를 위해 {josa_i}, {josa_eul} 등의 플레이스홀더 사용
 const fallbacks = [
-    '의 마음 중심에 주님이 늘 계시기를 기도합니다',
-    '님의 삶이 하나님의 선하신 뜻대로 이루어지길 소망합니다',
+    '{josa_eui} 마음 중심에 주님이 늘 계시기를 기도합니다',
+    '{josa_nim}의 삶이 하나님의 선하신 뜻대로 이루어지길 소망합니다',
     '라는 소중한 이름 위에 하늘의 신령한 복이 더해지길',
-    '이 걷는 모든 길에 주의 등불이 밝게 비추길 바랍니다',
-    '속에 감추어진 하나님의 계획이 아름답게 꽃피길 축복합니다',
-    '을 사랑하시는 주님의 따뜻한 손길이 늘 함께하시길'
+    '{josa_i} 걷는 모든 길에 주의 등불이 밝게 비추길 바랍니다',
+    ' 속에 감추어진 하나님의 계획이 아름답게 꽃피길 축복합니다',
+    '{josa_eul} 사랑하시는 주님의 따뜻한 손길이 늘 함께하시길'
 ];
 
 const generateBtn = document.getElementById('generateBtn');
@@ -40,10 +42,27 @@ const resultArea = document.getElementById('resultArea');
 const poemContent = document.getElementById('poemContent');
 const copyBtn = document.getElementById('copyBtn');
 
+// 받침 유무 확인 함수
+function hasBatchim(char) {
+    const code = char.charCodeAt(0);
+    if (code < 44032 || code > 55203) return false;
+    return (code - 44032) % 28 !== 0;
+}
+
+// 조사 처리 함수
+function replaceJosa(char, text) {
+    const batchim = hasBatchim(char);
+    return text
+        .replace(/{josa_i}/g, batchim ? '이' : '가')
+        .replace(/{josa_eul}/g, batchim ? '을' : '를')
+        .replace(/{josa_eui}/g, batchim ? '의' : '의') // 의는 동일하지만 확장성 위해
+        .replace(/{josa_nim}/g, batchim ? '님' : '님');
+}
+
 generateBtn.addEventListener('click', () => {
     const name = nameInput.value.trim();
     if (!name) {
-        alert('이름을 입력해주세요!');
+        alert('성함을 입력해주세요!');
         return;
     }
     generatePoem(name);
@@ -52,6 +71,7 @@ generateBtn.addEventListener('click', () => {
 function generatePoem(name) {
     poemContent.innerHTML = '';
     const characters = name.split('');
+    const usedPhrases = new Set(); // 중복 방지
     
     characters.forEach((char, index) => {
         const line = document.createElement('div');
@@ -60,14 +80,21 @@ function generatePoem(name) {
         
         let phrase = '';
         if (dictionary[char]) {
-            const options = dictionary[char];
-            phrase = options[Math.floor(Math.random() * options.length)];
+            const options = dictionary[char].filter(p => !usedPhrases.has(p));
+            // 만약 모든 옵션을 다 썼다면 다시 전체에서 선택
+            const source = options.length > 0 ? options : dictionary[char];
+            phrase = source[Math.floor(Math.random() * source.length)];
+            usedPhrases.add(phrase);
+            
             if (phrase.startsWith(char)) {
                 phrase = phrase.substring(1);
             }
         } else {
-            const fallback = fallbacks[Math.floor(Math.random() * fallbacks.length)];
-            phrase = fallback;
+            const options = fallbacks.filter(p => !usedPhrases.has(p));
+            const source = options.length > 0 ? options : fallbacks;
+            let rawPhrase = source[Math.floor(Math.random() * source.length)];
+            usedPhrases.add(rawPhrase);
+            phrase = replaceJosa(char, rawPhrase);
         }
 
         line.innerHTML = `<span class="first-char">${char}</span>${phrase}`;
