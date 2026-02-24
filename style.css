@@ -1,93 +1,107 @@
 :root {
-    --primary-color: #4a6fa5;
-    --accent-color: #ff8b94;
-    --bg-color: #f8f9fa;
+    --primary-color: #8e735b;
+    --accent-color: #d4af37;
+    --bg-color: #fdfbf7;
     --card-bg: #ffffff;
-    --text-color: #333333;
-    --muted-text: #666666;
-    --border-radius: 12px;
-    --shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    --text-color: #4a4a4a;
+    --muted-text: #8c8c8c;
+    --border-radius: 16px;
+    --shadow: 0 8px 32px rgba(142, 115, 91, 0.1);
 }
 
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    -webkit-tap-highlight-color: transparent;
 }
 
 body {
-    font-family: 'Pretendard', sans-serif;
+    font-family: 'Pretendard', -apple-system, sans-serif;
     background-color: var(--bg-color);
+    background-image: 
+        radial-gradient(circle at 10% 20%, rgba(212, 175, 55, 0.05) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(142, 115, 91, 0.05) 0%, transparent 20%);
     color: var(--text-color);
     line-height: 1.6;
     display: flex;
     justify-content: center;
-    align-items: center;
     min-height: 100vh;
-    padding: 20px;
+    padding: 16px;
 }
 
 .container {
     width: 100%;
-    max-width: 500px;
+    max-width: 480px;
+    margin-top: 10vh;
+}
+
+header {
+    margin-bottom: 40px;
     text-align: center;
 }
 
 header h1 {
-    font-size: 2.5rem;
-    margin-bottom: 0.5rem;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 2rem;
     color: var(--primary-color);
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
 }
 
 header p {
     color: var(--muted-text);
-    margin-bottom: 2rem;
+    font-size: 0.95rem;
+    font-weight: 400;
 }
 
 .input-group {
+    background: var(--card-bg);
+    padding: 8px;
+    border-radius: 20px;
+    box-shadow: var(--shadow);
     display: flex;
-    gap: 10px;
-    margin-bottom: 2rem;
+    margin-bottom: 24px;
+    border: 1px solid rgba(142, 115, 91, 0.1);
 }
 
 input[type="text"] {
     flex: 1;
-    padding: 12px 20px;
-    border: 2px solid #ddd;
-    border-radius: var(--border-radius);
-    font-size: 1rem;
+    padding: 16px 20px;
+    border: none;
+    background: transparent;
+    font-size: 1.1rem;
     outline: none;
-    transition: border-color 0.3s;
+    color: var(--text-color);
 }
 
-input[type="text"]:focus {
-    border-color: var(--primary-color);
+input[type="text"]::placeholder {
+    color: #ccc;
 }
 
-button {
-    padding: 12px 24px;
+button#generateBtn {
+    padding: 0 24px;
     background-color: var(--primary-color);
     color: white;
     border: none;
-    border-radius: var(--border-radius);
+    border-radius: 14px;
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
-    transition: transform 0.2s, background-color 0.2s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-button:hover {
-    background-color: #3b5a8a;
-    transform: translateY(-2px);
+button#generateBtn:hover {
+    background-color: #6d5845;
 }
 
-button:active {
-    transform: translateY(0);
+button#generateBtn:active {
+    transform: scale(0.95);
 }
 
 .result-area {
-    margin-top: 2rem;
-    animation: fadeIn 0.5s ease-out;
+    margin-top: 32px;
+    animation: fadeInUp 0.6s ease-out;
 }
 
 .result-area.hidden {
@@ -96,25 +110,39 @@ button:active {
 
 .poem-card {
     background: var(--card-bg);
-    padding: 2.5rem;
+    padding: 32px 24px;
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
     position: relative;
-    border-top: 5px solid var(--primary-color);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    overflow: hidden;
+}
+
+.poem-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent-color), var(--primary-color));
 }
 
 .poem-content {
     font-family: 'Noto Serif KR', serif;
-    font-size: 1.25rem;
+    font-size: 1.2rem;
     text-align: left;
-    margin-bottom: 1.5rem;
+    margin-bottom: 28px;
+    word-break: keep-all;
 }
 
 .poem-line {
-    margin-bottom: 1rem;
+    margin-bottom: 16px;
     opacity: 0;
-    transform: translateX(-10px);
-    animation: slideIn 0.5s forwards;
+    transform: translateY(10px);
+    animation: lineFadeIn 0.8s forwards;
+    display: flex;
+    align-items: flex-start;
 }
 
 .poem-line:last-child {
@@ -122,40 +150,84 @@ button:active {
 }
 
 .first-char {
-    color: var(--primary-color);
+    color: var(--accent-color);
     font-weight: 700;
-    font-size: 1.5rem;
-    margin-right: 0.5rem;
-    display: inline-block;
+    font-size: 1.4rem;
+    margin-right: 12px;
+    flex-shrink: 0;
+    border-bottom: 2px solid rgba(212, 175, 55, 0.3);
+    line-height: 1.2;
 }
 
 .secondary-btn {
-    background-color: transparent;
+    width: 100%;
+    background-color: #fcf9f2;
     color: var(--primary-color);
-    border: 1px solid var(--primary-color);
-    font-size: 0.9rem;
-    padding: 8px 16px;
+    border: 1px solid rgba(142, 115, 91, 0.2);
+    font-size: 0.95rem;
+    padding: 14px;
+    font-weight: 500;
+    border-radius: 12px;
 }
 
-.secondary-btn:hover {
-    background-color: #f0f4f8;
-    transform: none;
+.secondary-btn.success {
+    background-color: #e8f5e9;
+    border-color: #81c784;
+    color: #2e7d32;
 }
 
 footer {
-    margin-top: 3rem;
+    margin-top: 60px;
+    text-align: center;
     font-size: 0.8rem;
     color: var(--muted-text);
+    padding-bottom: 40px;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes slideIn {
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
     to {
         opacity: 1;
-        transform: translateX(0);
+        transform: translateY(0);
+    }
+}
+
+@keyframes lineFadeIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Mobile Adjustments */
+@media (max-width: 400px) {
+    header h1 {
+        font-size: 1.75rem;
+    }
+    
+    .input-group {
+        flex-direction: column;
+        padding: 12px;
+        border-radius: 16px;
+    }
+    
+    input[type="text"] {
+        text-align: center;
+        margin-bottom: 12px;
+    }
+    
+    button#generateBtn {
+        height: 54px;
+    }
+    
+    .poem-card {
+        padding: 24px 18px;
+    }
+    
+    .poem-content {
+        font-size: 1.1rem;
     }
 }
