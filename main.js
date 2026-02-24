@@ -1,41 +1,12 @@
-import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
-
 // UI 요소
 const generateBtn = document.getElementById('generateBtn');
 const nameInput = document.getElementById('nameInput');
 const resultArea = document.getElementById('resultArea');
 const loadingArea = document.getElementById('loadingArea');
 const cardsContainer = document.getElementById('cardsContainer');
-const apiKeyInput = document.getElementById('apiKeyInput');
-const saveKeyBtn = document.getElementById('saveKeyBtn');
-
-// 초기 실행: 저장된 키가 있으면 입력창에 채워줌
-const savedKey = localStorage.getItem('GEMINI_API_KEY');
-if (savedKey) {
-    apiKeyInput.value = savedKey;
-}
-
-// 키 저장 버튼 이벤트
-saveKeyBtn.addEventListener('click', () => {
-    const key = apiKeyInput.value.trim();
-    if (key) {
-        localStorage.setItem('GEMINI_API_KEY', key);
-        alert('API 키가 연결되었습니다! 이제 축복을 생성할 수 있습니다.');
-        document.querySelector('.api-settings').open = false; // 설정창 닫기
-    } else {
-        alert('키를 입력해주세요.');
-    }
-});
 
 generateBtn.addEventListener('click', async () => {
     const name = nameInput.value.trim();
-    const currentKey = localStorage.getItem('GEMINI_API_KEY');
-
-    if (!currentKey) {
-        alert('AI 연결 설정이 필요합니다. 상단의 "AI 연결 설정" 버튼을 눌러 API 키를 입력해주세요.');
-        document.querySelector('.api-settings').open = true;
-        return;
-    }
     
     if (!name) return alert('성함을 입력해주세요!');
     
@@ -44,50 +15,36 @@ generateBtn.addEventListener('click', async () => {
     loadingArea.classList.remove('hidden');
 
     try {
-        await generateWithAI(name, currentKey);
+        // 우리가 만든 서버 API(/api/generate)로 요청을 보냅니다.
+        const response = await fetch('/api/generate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name })
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || '생성 실패');
+        }
+
+        const text = await response.text();
+        await renderResult(text);
+        
     } catch (error) {
-        console.error("AI 생성 중 오류:", error);
-        alert(`축복 생성 실패: ${error.message}\n(API 키가 올바른지 확인해주세요.)`);
+        console.error("오류:", error);
+        alert(`축복 생성 중 오류가 발생했습니다: ${error.message}`);
     } finally {
         loadingArea.classList.add('hidden');
         generateBtn.disabled = false;
     }
 });
 
-async function generateWithAI(name, apiKey) {
-    const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-    
+async function renderResult(text) {
     cardsContainer.innerHTML = '';
-    
-    const prompt = `당신은 기독교적인 따뜻한 감성을 가진 전문 시인이자 축복의 메신저입니다. 
-입력받은 성함 "${name}"을 바탕으로, 각 글자로 시작하는 ${name.length}행시 축복 메시지를 3가지 다른 버전으로 작성해 주세요.
-
-[작성 원칙]
-1. 각 행의 첫 글자는 반드시 이름의 각 글자로 시작해야 합니다. (두음법칙 허용)
-2. 주제: 하나님의 사랑, 평강, 소망, 은혜, 성령의 열매, 삶의 축복.
-3. 문체: 매우 정중하고 따뜻하며, 시적인 표현을 사용한 존댓말.
-4. 마무리: 각 행시의 마지막 행에는 이름과 상관없이 "오늘을 향한 짧은 축복 메시지"를 한 줄 더 추가하세요.
-
-[출력 형식]
-반드시 아래와 같은 JSON 배열 형식으로만 응답하세요. 다른 설명은 절대 하지 마세요.
-[
-  ["1행", "2행", "마지막축복"],
-  ["..."],
-  ["..."]
-]`;
-
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
     
     try {
         const startIdx = text.indexOf('[');
         const endIdx = text.lastIndexOf(']');
-        if (startIdx === -1 || endIdx === -1) {
-            throw new Error("AI가 유효한 형식을 생성하지 못했습니다.");
-        }
-        
         const jsonStr = text.substring(startIdx, endIdx + 1);
         const poemOptions = JSON.parse(jsonStr);
 
@@ -98,7 +55,7 @@ async function generateWithAI(name, apiKey) {
         resultArea.classList.remove('hidden');
         scrollToResult();
     } catch (e) {
-        throw new Error("응답 데이터 처리 중 오류가 발생했습니다.");
+        throw new Error("AI 응답을 처리하는 중 오류가 발생했습니다.");
     }
 }
 
