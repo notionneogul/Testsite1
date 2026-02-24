@@ -1,46 +1,63 @@
 import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
 
-// 사용자께서 제공하신 Gemini API 키
-const API_KEY = "AIzaSyAhQA4FYaG-zP6NLzzc0k-i5K9MVoA4A9A";
-const genAI = new GoogleGenerativeAI(API_KEY);
-// 안정적인 gemini-pro 모델 사용 (1.5-flash 404 에러 해결)
-const model = genAI.getGenerativeModel({ 
-    model: "gemini-pro",
-    generationConfig: {
-        temperature: 0.7,
-        topP: 0.8,
-        topK: 40,
-    }
-});
-
+// UI 요소
 const generateBtn = document.getElementById('generateBtn');
 const nameInput = document.getElementById('nameInput');
 const resultArea = document.getElementById('resultArea');
 const loadingArea = document.getElementById('loadingArea');
 const cardsContainer = document.getElementById('cardsContainer');
+const apiKeyInput = document.getElementById('apiKeyInput');
+const saveKeyBtn = document.getElementById('saveKeyBtn');
+
+// 초기 실행: 저장된 키가 있으면 입력창에 채워줌
+const savedKey = localStorage.getItem('GEMINI_API_KEY');
+if (savedKey) {
+    apiKeyInput.value = savedKey;
+}
+
+// 키 저장 버튼 이벤트
+saveKeyBtn.addEventListener('click', () => {
+    const key = apiKeyInput.value.trim();
+    if (key) {
+        localStorage.setItem('GEMINI_API_KEY', key);
+        alert('API 키가 연결되었습니다! 이제 축복을 생성할 수 있습니다.');
+        document.querySelector('.api-settings').open = false; // 설정창 닫기
+    } else {
+        alert('키를 입력해주세요.');
+    }
+});
 
 generateBtn.addEventListener('click', async () => {
     const name = nameInput.value.trim();
+    const currentKey = localStorage.getItem('GEMINI_API_KEY');
+
+    if (!currentKey) {
+        alert('AI 연결 설정이 필요합니다. 상단의 "AI 연결 설정" 버튼을 눌러 API 키를 입력해주세요.');
+        document.querySelector('.api-settings').open = true;
+        return;
+    }
+    
     if (!name) return alert('성함을 입력해주세요!');
     
-    // UI 초기화 및 로딩 시작
     generateBtn.disabled = true;
     resultArea.classList.add('hidden');
     loadingArea.classList.remove('hidden');
 
     try {
-        await generateWithAI(name);
+        await generateWithAI(name, currentKey);
     } catch (error) {
         console.error("AI 생성 중 오류:", error);
-        // 에러 메시지를 더 구체적으로 표시하여 원인 파악을 돕습니다.
-        alert(`축복 생성 실패: ${error.message}\n(API 키 설정이나 네트워크 상태를 확인해주세요.)`);
+        alert(`축복 생성 실패: ${error.message}\n(API 키가 올바른지 확인해주세요.)`);
     } finally {
         loadingArea.classList.add('hidden');
         generateBtn.disabled = false;
     }
 });
 
-async function generateWithAI(name) {
+async function generateWithAI(name, apiKey) {
+    const genAI = new GoogleGenerativeAI(apiKey);
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    
     cardsContainer.innerHTML = '';
     
     const prompt = `당신은 기독교적인 따뜻한 감성을 가진 전문 시인이자 축복의 메신저입니다. 
@@ -64,7 +81,6 @@ async function generateWithAI(name) {
     const response = await result.response;
     const text = response.text();
     
-    // JSON 데이터 추출 로직 강화
     try {
         const startIdx = text.indexOf('[');
         const endIdx = text.lastIndexOf(']');
@@ -75,8 +91,6 @@ async function generateWithAI(name) {
         const jsonStr = text.substring(startIdx, endIdx + 1);
         const poemOptions = JSON.parse(jsonStr);
 
-        if (!Array.isArray(poemOptions)) throw new Error("결과 형식이 올바르지 않습니다.");
-
         poemOptions.forEach((poemLines, i) => {
             cardsContainer.appendChild(createCard(poemLines, i + 1));
         });
@@ -84,7 +98,6 @@ async function generateWithAI(name) {
         resultArea.classList.remove('hidden');
         scrollToResult();
     } catch (e) {
-        console.error("파싱 에러 상세:", e, "원본 텍스트:", text);
         throw new Error("응답 데이터 처리 중 오류가 발생했습니다.");
     }
 }
@@ -105,7 +118,6 @@ function createCard(lines, index) {
             line.innerText = text;
         } else {
             content.appendChild(line);
-            // 첫 글자 강조를 위해 타이핑 효과 함수 호출
             typeWriter(line, text, i * 600);
         }
     });
@@ -131,12 +143,10 @@ function typeWriter(element, text, delay) {
         element.innerHTML = '';
         const firstChar = text[0];
         const rest = text.substring(1);
-        
         const firstSpan = document.createElement('span');
         firstSpan.className = 'first-char';
         firstSpan.innerText = firstChar;
         element.appendChild(firstSpan);
-        
         function typing() {
             if (i < rest.length) {
                 element.innerHTML += rest.charAt(i);
