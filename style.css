@@ -215,20 +215,105 @@ button#generateBtn:disabled {
     color: #2e7d32 !important;
 }
 
-footer {
-    margin-top: 60px;
+/* 추가 섹션 스타일 (애드센스 최적화) */
+.intro-section {
     text-align: center;
-    font-size: 0.9rem;
-    color: var(--muted-text) !important;
-    padding-bottom: 50px;
+    color: var(--muted-text);
+    margin-bottom: 30px;
+    font-size: 0.95rem;
+    padding: 0 10px;
 }
 
-@keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(20px); }
+.guide-section {
+    margin-top: 50px;
+    background: #fff;
+    padding: 25px;
+    border-radius: 16px;
+    border: 1px solid rgba(139, 109, 5, 0.1);
+}
+
+.guide-section h2 {
+    font-size: 1.1rem;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+.guide-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.guide-section li {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 8px;
+    position: relative;
+    padding-left: 18px;
+}
+
+.guide-section li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: var(--accent-color);
+}
+
+/* 추천 성구 스타일 */
+.verse-line {
+    margin-top: 25px;
+    padding-top: 15px;
+    border-top: 1px dashed rgba(139, 109, 5, 0.2);
+    text-align: center;
+    animation: fadeIn 0.8s forwards;
+}
+
+.verse-label {
+    display: inline-block;
+    font-size: 0.75rem;
+    color: var(--accent-color);
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.verse-line p {
+    font-size: 0.95rem;
+    color: var(--primary-color);
+    font-style: italic;
+    line-height: 1.5;
+}
+
+/* 푸터 및 하단 링크 */
+.footer-links {
+    margin-bottom: 15px;
+    font-size: 0.8rem;
+}
+
+.footer-links a {
+    color: #888;
+    text-decoration: none;
+}
+
+.copyright {
+    font-size: 0.75rem;
+    color: #aaa;
+    margin-bottom: 20px;
+}
+
+.blessing-footer {
+    font-size: 0.85rem;
+    color: var(--primary-color) !important;
+    font-weight: 500;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
 @media (max-width: 480px) {
+    body { padding: 15px; }
     header h1 { font-size: 1.8rem; }
+    .input-group { border-radius: 16px; }
+    .poem-card { padding: 25px 20px; }
     .poem-content { font-size: 1.1rem; }
 }

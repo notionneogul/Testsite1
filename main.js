@@ -1,5 +1,6 @@
 // UI 요소
 const generateBtn = document.getElementById('generateBtn');
+// 주석 추가: 환경 변수 적용을 위한 재배포용 트리거
 const nameInput = document.getElementById('nameInput');
 const resultArea = document.getElementById('resultArea');
 const loadingArea = document.getElementById('loadingArea');
@@ -21,7 +22,6 @@ generateBtn.addEventListener('click', async () => {
             body: JSON.stringify({ name })
         });
 
-        // HTML 응답이 올 경우를 대비해 텍스트로 먼저 받음
         const responseText = await response.text();
 
         if (!response.ok) {
@@ -30,7 +30,6 @@ generateBtn.addEventListener('click', async () => {
                 const errorJson = JSON.parse(responseText);
                 errorMessage = errorJson.error || errorMessage;
             } catch (e) {
-                // JSON 파싱 실패 시 (HTML 응답인 경우)
                 errorMessage = `서버 에러 (${response.status})`;
             }
             throw new Error(errorMessage);
@@ -58,37 +57,53 @@ async function renderResult(text) {
         const jsonStr = text.substring(startIdx, endIdx + 1);
         const poemOptions = JSON.parse(jsonStr);
 
-        poemOptions.forEach((poemLines, i) => {
-            cardsContainer.appendChild(createCard(poemLines, i + 1));
+        poemOptions.forEach((option, i) => {
+            // option은 { poem: [], verse: "" } 형태임
+            const poemLines = option.poem || option; // 구버전 대응
+            const verse = option.verse || "";
+            cardsContainer.appendChild(createCard(poemLines, verse, i + 1));
         });
         
         resultArea.classList.remove('hidden');
         scrollToResult();
     } catch (e) {
+        console.error("렌더링 에러:", e);
         throw new Error("AI 응답을 처리하는 중 오류가 발생했습니다.");
     }
 }
 
-function createCard(lines, index) {
+function createCard(lines, verse, index) {
     const card = document.createElement('div');
     card.className = 'poem-card';
     card.style.animationDelay = `${index * 0.2}s`;
     card.innerHTML = `<span class="card-tag">축복 제안 ${index}</span><div class="poem-content"></div>`;
     
     const content = card.querySelector('.poem-content');
+    
+    // N행시 출력
     lines.forEach((text, i) => {
         const line = document.createElement('div');
         line.className = 'poem-line';
-        // 모든 줄을 동일한 N행시 스타일로 처리 (마지막 줄 특수 효과 제거)
         content.appendChild(line);
         typeWriter(line, text, i * 600);
     });
+
+    // 추천 성구 추가 (마지막 시 이후에 출력되도록 딜레이)
+    if (verse) {
+        setTimeout(() => {
+            const verseLine = document.createElement('div');
+            verseLine.className = 'verse-line';
+            verseLine.innerHTML = `<span class="verse-label">📜 추천 성구</span><p>${verse}</p>`;
+            content.appendChild(verseLine);
+        }, lines.length * 600 + 500);
+    }
 
     const btn = document.createElement('button');
     btn.className = 'copy-btn-small';
     btn.innerText = '이 축복 메시지 복사하기';
     btn.onclick = () => {
-        navigator.clipboard.writeText(lines.join('\n')).then(() => {
+        const fullMessage = [...lines, "", verse].join('\n');
+        navigator.clipboard.writeText(fullMessage).then(() => {
             const original = btn.innerText;
             btn.innerText = '✅ 복사 완료!';
             btn.classList.add('success');
