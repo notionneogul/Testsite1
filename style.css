@@ -1,446 +1,346 @@
 :root {
-    --primary-color: #4a3728;
-    --accent-color: #a68b5c;
-    --sky-blue: #f0f7ff;
-    --cream-white: #fdfbf7;
-    --light-gold: #fff9e6;
-    --card-bg: rgba(255, 255, 255, 0.82);
+    --bg-color: #fdfbf7;
     --text-color: #2c241e;
-    --muted-text: #6d5b4e;
-    --border-radius: 24px;
-    --shadow: 0 12px 40px rgba(74, 55, 40, 0.15);
-    --canvas-bg: linear-gradient(135deg, #fdfbf7 0%, #f0f7ff 50%, #fff9e6 100%);
+    --accent-color: #a68b5c;
+    --secondary-color: #e8e1d5;
+    --card-bg: rgba(255, 255, 255, 0.8);
+    --shadow-color: rgba(166, 139, 92, 0.15);
+    --transition: all 0.3s ease;
 }
 
-/* 다크 모드 변수 정의 */
 body.dark-mode {
-    --primary-color: #e5e5e5;
-    --accent-color: #ffd700;
-    --card-bg: rgba(30, 30, 30, 0.85);
+    --bg-color: #0f172a;
     --text-color: #f0f0f0;
-    --muted-text: #aaaaaa;
-    --shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
-    --canvas-bg: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #020617 100%);
-}
-
-@keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    --accent-color: #ffd700;
+    --secondary-color: #1e293b;
+    --card-bg: rgba(30, 41, 59, 0.8);
+    --shadow-color: rgba(0, 0, 0, 0.4);
 }
 
 * {
-    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    -webkit-tap-highlight-color: transparent;
+    box-sizing: border-box;
 }
 
 body {
-    font-family: 'Pretendard', -apple-system, sans-serif;
-    background-color: #fdfbf7;
-    transition: background-color 0.5s ease;
-    position: relative;
-    overflow-x: hidden;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+    background-color: var(--bg-color);
     color: var(--text-color);
-    line-height: 1.7;
-    display: flex;
-    justify-content: center;
+    line-height: 1.6;
+    transition: var(--transition);
+    overflow-x: hidden;
     min-height: 100vh;
-    padding: 20px;
 }
 
 #bgCanvas {
     position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     z-index: -1;
-    background: var(--canvas-bg);
-    transition: background 0.5s ease;
-}
-
-/* 테마 토글 버튼 스타일 */
-.theme-toggle {
-    position: fixed;
-    bottom: 25px;
-    right: 25px;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: var(--card-bg);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: var(--shadow);
-    cursor: pointer;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-}
-
-.theme-toggle:hover {
-    transform: scale(1.1) rotate(15deg);
 }
 
 .container {
-    width: 100%;
-    max-width: 500px;
-    margin-top: 3vh;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
 }
 
 header {
-    margin-bottom: 25px;
     text-align: center;
+    margin-bottom: 50px;
 }
 
-header h1 {
+h1 {
     font-family: 'Noto Serif KR', serif;
-    font-size: 2.2rem;
-    color: var(--primary-color) !important;
-    margin-bottom: 8px;
-    letter-spacing: -1px;
-    font-weight: 700;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    color: var(--accent-color);
 }
 
-header p {
-    color: var(--muted-text) !important;
-    font-size: 1rem;
-    opacity: 0.8;
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--card-bg);
+    border: 1px solid var(--secondary-color);
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 4px 12px var(--shadow-color);
+    z-index: 100;
+    transition: var(--transition);
+}
+
+.theme-toggle:hover {
+    transform: scale(1.1);
 }
 
 .intro-section {
     text-align: center;
-    color: var(--muted-text);
-    margin-bottom: 25px;
-    font-size: 0.9rem;
-    padding: 0 15px;
-    line-height: 1.5;
+    margin-bottom: 40px;
+    font-size: 1.1rem;
 }
 
 .input-group {
-    background: var(--card-bg);
-    padding: 8px;
-    border-radius: 28px;
-    box-shadow: var(--shadow);
     display: flex;
-    margin-bottom: 35px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    gap: 5px;
-    transition: all 0.3s ease;
+    gap: 10px;
+    margin-bottom: 40px;
 }
 
 input[type="text"] {
     flex: 1;
-    padding: 15px 15px 15px 20px;
-    border: none;
-    background: transparent;
+    padding: 15px 20px;
+    border-radius: 12px;
+    border: 2px solid var(--secondary-color);
+    background: var(--card-bg);
+    color: var(--text-color);
     font-size: 1.1rem;
-    outline: none;
-    color: var(--text-color) !important;
-    font-weight: 500;
-    min-width: 0;
+    transition: var(--transition);
 }
 
-/* 개선된 축복 생성 버튼 디자인 */
+input[type="text"]:focus {
+    outline: none;
+    border-color: var(--accent-color);
+}
+
 button#generateBtn {
-    padding: 0 24px;
-    background-color: var(--accent-color);
-    color: #ffffff !important; /* 기본 흰색 글자 */
+    padding: 0 30px;
+    border-radius: 12px;
     border: none;
-    border-radius: 20px;
-    font-size: 1rem;
-    font-weight: 700;
+    background-color: var(--accent-color);
+    color: white;
+    font-weight: 600;
+    font-size: 1.1rem;
     cursor: pointer;
-    white-space: nowrap;
-    flex-shrink: 0;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(166, 139, 92, 0.3);
+    transition: var(--transition);
 }
 
 button#generateBtn:hover {
-    filter: brightness(1.1);
+    background-color: #8e764d;
     transform: translateY(-2px);
-    box-shadow: 0 6px 18px rgba(166, 139, 92, 0.4);
-}
-
-/* 다크 모드 버튼 보정 */
-body.dark-mode button#generateBtn {
-    background-color: var(--accent-color);
-    color: #1a1a1a !important; /* 금빛 배경에 어두운 글자색으로 대비 극대화 */
-    box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
 }
 
 button#generateBtn:disabled {
-    background-color: #666;
-    color: #999 !important;
+    opacity: 0.6;
     cursor: not-allowed;
-    box-shadow: none;
-    transform: none;
 }
 
 .loading-area {
     text-align: center;
-    padding: 40px 0;
-}
-
-.loading-area p {
-    margin-top: 15px;
-    color: var(--primary-color);
-    font-size: 0.9rem;
-    font-weight: 600;
+    margin: 40px 0;
 }
 
 .loader {
-    width: 40px;
-    height: 40px;
-    border: 4px solid rgba(255, 255, 255, 0.1);
-    border-top: 4px solid var(--accent-color);
+    width: 48px;
+    height: 48px;
+    border: 5px solid var(--secondary-color);
+    border-bottom-color: var(--accent-color);
     border-radius: 50%;
-    margin: 0 auto;
-    animation: spin 1s linear infinite;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
 }
 
-@keyframes spin {
+@keyframes rotation {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
 
-.result-area { margin-top: 30px; }
-.result-area.hidden, .loading-area.hidden { display: none; }
+.result-area {
+    margin-top: 50px;
+}
 
 .selection-guide {
     text-align: center;
-    font-size: 0.9rem;
-    color: var(--accent-color);
-    font-weight: 600;
     margin-bottom: 20px;
+    font-weight: 600;
 }
 
 .cards-container {
-    display: flex;
-    flex-direction: column;
+    display: grid;
     gap: 30px;
 }
 
 .poem-card {
-    background: var(--card-bg) !important;
-    padding: 55px 28px 35px;
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow);
-    position: relative;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    overflow: hidden;
-    animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-    transition: all 0.3s ease;
+    background: var(--card-bg);
+    padding: 30px;
+    border-radius: 20px;
+    border: 1px solid var(--secondary-color);
+    box-shadow: 0 10px 30px var(--shadow-color);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    animation: fadeIn 0.8s ease backwards;
 }
 
-.poem-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 5px;
-    background: linear-gradient(90deg, #d4af37, var(--accent-color), #d4af37);
-    opacity: 0.8;
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .card-tag {
-    position: absolute;
-    top: 18px; left: 25px;
-    font-size: 0.75rem;
-    background: rgba(166, 139, 92, 0.15);
-    padding: 4px 14px;
-    border-radius: 20px;
+    display: inline-block;
+    padding: 4px 12px;
+    background: var(--secondary-color);
     color: var(--accent-color);
-    font-weight: 800;
-    letter-spacing: 0.5px;
-    z-index: 2;
-}
-
-.poem-content {
-    font-family: 'Noto Serif KR', serif;
-    font-size: 1.25rem;
-    text-align: left;
-    margin-bottom: 30px;
-    word-break: keep-all;
-    color: var(--text-color) !important;
-    font-weight: 500;
-    margin-top: 10px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 20px;
 }
 
 .poem-line {
-    margin-bottom: 18px;
-    line-height: 1.6;
+    font-size: 1.25rem;
+    margin-bottom: 15px;
+    font-family: 'Noto Serif KR', serif;
 }
 
 .first-char {
-    color: var(--accent-color) !important;
-    font-weight: 800 !important;
-    font-size: 1.6rem !important;
-    margin-right: 4px !important;
-    display: inline-block !important;
-    position: relative;
+    color: var(--accent-color);
+    font-weight: 800;
+    font-size: 1.6rem;
+    margin-right: 5px;
 }
 
-.first-char::after {
-    content: '';
-    position: absolute;
-    bottom: 2px; left: 0; width: 100%; height: 6px;
-    background: rgba(166, 139, 92, 0.15);
-    z-index: -1;
+.verse-line {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px dashed var(--accent-color);
+}
+
+.verse-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--accent-color);
+    margin-bottom: 8px;
 }
 
 .card-btn-group {
     display: flex;
-    gap: 12px;
-    margin-top: 25px;
+    gap: 10px;
+    margin-top: 30px;
 }
 
 .action-btn {
     flex: 1;
     padding: 12px;
-    font-size: 0.9rem;
-    font-weight: 700;
-    border-radius: 12px;
+    border-radius: 8px;
+    border: 1px solid var(--accent-color);
+    background: transparent;
+    color: var(--accent-color);
+    font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s ease;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(255, 255, 255, 0.05);
-    color: var(--text-color) !important;
+    transition: var(--transition);
 }
 
-.copy-btn {
-    background-color: rgba(166, 139, 92, 0.1);
-}
-
-.save-btn {
-    background-color: var(--primary-color);
-    color: #ffffff !important;
-}
-
-/* 다크 모드 이미지 저장 버튼 가시성 강화 */
-body.dark-mode .save-btn {
-    background-color: #5d4037; /* 다크 모드에 어울리는 깊은 브라운 */
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #ffffff !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
-body.dark-mode .save-btn:hover {
-    background-color: #6d4c41;
-}
-
-.action-btn.success {
-    background-color: #2e7d32;
-    color: #fff !important;
+.action-btn:hover {
+    background: var(--accent-color);
+    color: white;
 }
 
 .guide-section {
-    margin-top: 50px;
+    margin-top: 60px;
+    padding: 30px;
     background: var(--card-bg);
-    padding: 25px;
     border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .guide-section h2 {
-    font-size: 1.1rem;
-    color: var(--primary-color);
-    margin-bottom: 15px;
+    font-family: 'Noto Serif KR', serif;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
 }
 
 .guide-section ul {
     list-style: none;
-    padding: 0;
 }
 
 .guide-section li {
-    font-size: 0.85rem;
-    color: var(--muted-text);
-    margin-bottom: 8px;
-    padding-left: 18px;
+    margin-bottom: 10px;
     position: relative;
+    padding-left: 20px;
 }
 
 .guide-section li::before {
-    content: "•";
+    content: '✨';
     position: absolute;
     left: 0;
-    color: var(--accent-color);
-}
-
-.verse-line {
-    margin-top: 25px;
-    padding-top: 15px;
-    border-top: 1px dashed rgba(166, 139, 92, 0.3);
-    text-align: center;
-    animation: fadeIn 0.8s forwards;
-}
-
-.verse-label {
-    display: inline-block;
-    font-size: 0.75rem;
-    color: var(--accent-color) !important;
-    font-weight: 700;
-    margin-bottom: 10px;
-}
-
-.verse-line p {
-    font-size: 0.95rem;
-    color: var(--primary-color) !important;
-    font-style: italic;
-    line-height: 1.5;
-    font-weight: 500;
 }
 
 footer {
-    margin-top: 60px;
+    margin-top: 80px;
     text-align: center;
-    padding-bottom: 50px;
+    border-top: 1px solid var(--secondary-color);
+    padding-top: 40px;
 }
 
 .footer-links {
-    margin-bottom: 15px;
-    font-size: 0.8rem;
-}
-
-.footer-links a {
-    color: var(--muted-text);
-    text-decoration: none;
-}
-
-.copyright {
-    font-size: 0.75rem;
-    color: var(--muted-text);
-    opacity: 0.6;
     margin-bottom: 20px;
 }
 
-.blessing-footer {
-    font-size: 0.85rem;
-    color: var(--primary-color) !important;
-    font-weight: 500;
+.footer-links a {
+    color: var(--text-color);
+    text-decoration: none;
+    margin: 0 10px;
+    font-size: 0.9rem;
 }
 
-@media (max-width: 480px) {
-    body { padding: 15px; }
-    header h1 { font-size: 1.8rem; }
-    .input-group { border-radius: 16px; }
-    .poem-card { padding: 60px 20px 30px; }
-    .poem-content { font-size: 1.15rem; }
-    .theme-toggle { bottom: 20px; right: 20px; width: 45px; height: 45px; }
+.footer-links a:hover {
+    color: var(--accent-color);
+}
+
+.copyright {
+    font-size: 0.85rem;
+    opacity: 0.7;
+}
+
+.blessing-footer {
+    margin-top: 20px;
+    font-style: italic;
+    color: var(--accent-color);
+}
+
+.hidden {
+    display: none;
+}
+
+.example-section {
+    margin-bottom: 40px;
+    padding: 20px;
+    background: var(--card-bg);
+    border-radius: 12px;
+    border: 1px dashed var(--accent-color);
+}
+
+.example-section p {
+    margin-bottom: 5px;
+}
+
+/* Common Styles for Policy Pages */
+.policy-container {
+    background: var(--card-bg);
+    padding: 40px;
+    border-radius: 20px;
+    margin-top: 20px;
+}
+
+.policy-container h2 {
+    margin: 30px 0 15px;
+    font-family: 'Noto Serif KR', serif;
+}
+
+.policy-container p, .policy-container li {
+    margin-bottom: 15px;
+}
+
+@media (max-width: 600px) {
+    .input-group {
+        flex-direction: column;
+    }
+    button#generateBtn {
+        padding: 15px;
+    }
 }
