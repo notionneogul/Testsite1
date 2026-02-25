@@ -284,6 +284,11 @@ function saveCardAsImage(cardElement, index) {
         link.download = `Blessing_Card_${index}.png`;
         link.href = canvas.toDataURL('image/png');
         link.click();
+        
+        // --- A 방식: 로컬 리스트에 즉시 추가 ---
+        const name = document.getElementById('nameInput').value.trim() || '익명';
+        addSampleToGrid(poemLinesRaw, name);
+        
         btnGroup.style.visibility = 'visible';
         tag.style.opacity = '1';
         saveBtn.innerText = originalText;
@@ -294,6 +299,49 @@ function saveCardAsImage(cardElement, index) {
         saveBtn.innerText = originalText;
     });
 }
+
+function addSampleToGrid(lines, name) {
+    const samplesGrid = document.getElementById('samplesGrid');
+    const newSample = document.createElement('div');
+    newSample.className = 'sample-mini-card newly-added';
+    
+    // N행시 텍스트 구성
+    const contentHtml = lines.map(line => {
+        const first = line[0];
+        const rest = line.substring(1);
+        return `<strong>${first}</strong>: ${rest}`;
+    }).join('<br>');
+
+    newSample.innerHTML = `
+        <div class="sample-content">${contentHtml}</div>
+        <div class="sample-footer">
+            <span class="sample-name">${name} 님</span>
+            <div class="reaction-group">
+                <button class="emoji-btn" onclick="react(this, '❤️')">❤️ <span class="count">0</span></button>
+                <button class="emoji-btn" onclick="react(this, '✨')">✨ <span class="count">0</span></button>
+                <button class="emoji-btn" onclick="react(this, '🙏')">🙏 <span class="count">0</span></button>
+            </div>
+        </div>
+    `;
+    
+    samplesGrid.prepend(newSample);
+}
+
+// 이모지 반응 로직
+window.react = function(btn, emoji) {
+    const countSpan = btn.querySelector('.count');
+    let count = parseInt(countSpan.innerText);
+    
+    if (btn.classList.contains('active')) {
+        count--;
+        btn.classList.remove('active');
+    } else {
+        count++;
+        btn.classList.add('active');
+        // 파티클 효과 같은 걸 넣으면 더 좋음
+    }
+    countSpan.innerText = count;
+};
 
 function typeWriter(element, text, delay) {
     setTimeout(() => {

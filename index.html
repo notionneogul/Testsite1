@@ -74,9 +74,11 @@
                         </div>
                         <div class="sample-footer">
                             <span class="sample-name">김은혜 님</span>
-                            <button class="like-btn" onclick="this.classList.toggle('active')">
-                                <span>❤️</span> <span class="like-count">12</span>
-                            </button>
+                            <div class="reaction-group">
+                                <button class="emoji-btn" onclick="react(this, '❤️')">❤️ <span class="count">12</span></button>
+                                <button class="emoji-btn" onclick="react(this, '✨')">✨ <span class="count">5</span></button>
+                                <button class="emoji-btn" onclick="react(this, '🙏')">🙏 <span class="count">7</span></button>
+                            </div>
                         </div>
                     </div>
                     <div class="sample-mini-card">
@@ -87,22 +89,11 @@
                         </div>
                         <div class="sample-footer">
                             <span class="sample-name">박지훈 님</span>
-                            <button class="like-btn" onclick="this.classList.toggle('active')">
-                                <span>❤️</span> <span class="like-count">8</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="sample-mini-card">
-                        <div class="sample-content">
-                            <strong>이</strong>: 이 세상 그 무엇보다 소중한<br>
-                            <strong>서</strong>: 서로를 아끼는 마음으로<br>
-                            <strong>아</strong>: 아름다운 사랑 가득하시길
-                        </div>
-                        <div class="sample-footer">
-                            <span class="sample-name">이서아 님</span>
-                            <button class="like-btn" onclick="this.classList.toggle('active')">
-                                <span>❤️</span> <span class="like-count">15</span>
-                            </button>
+                            <div class="reaction-group">
+                                <button class="emoji-btn" onclick="react(this, '❤️')">❤️ <span class="count">8</span></button>
+                                <button class="emoji-btn" onclick="react(this, '✨')">✨ <span class="count">3</span></button>
+                                <button class="emoji-btn" onclick="react(this, '🙏')">🙏 <span class="count">4</span></button>
+                            </div>
                         </div>
                     </div>
                 </div>
