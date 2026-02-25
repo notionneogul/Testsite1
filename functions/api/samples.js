@@ -1,6 +1,11 @@
 export async function onRequestGet(context) {
     const { env } = context;
-    // SAMPLES라는 이름의 KV 바인딩이 필요합니다.
+    if (!env.SAMPLES) {
+        return new Response(JSON.stringify({ error: "KV binding 'SAMPLES' is missing. Please check Cloudflare settings." }), {
+            status: 500,
+            headers: { 'Content-Type': 'application/json' }
+        });
+    }
     const samples = await env.SAMPLES.get('recent_blessings', { type: 'json' }) || [];
     return new Response(JSON.stringify(samples), {
         headers: { 'Content-Type': 'application/json' }
@@ -9,6 +14,9 @@ export async function onRequestGet(context) {
 
 export async function onRequestPost(context) {
     const { request, env } = context;
+    if (!env.SAMPLES) {
+        return new Response(JSON.stringify({ error: "KV binding 'SAMPLES' is missing." }), { status: 500 });
+    }
     const newSample = await request.json(); // { id, name, poem, reactions }
 
     // 기존 데이터 가져오기
