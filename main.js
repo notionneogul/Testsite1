@@ -137,18 +137,13 @@ function createSampleCard(sample) {
     card.className = 'sample-mini-card';
     card.dataset.id = sample.id;
     
-    // 데이터에 이미 콜론이 포함되어 있을 경우를 대비한 방어 로직
     const contentHtml = sample.poem.map(line => {
         let first = line[0];
-        let rest = line.substring(1);
-        // 만약 rest가 ": "로 시작한다면 중복 방지를 위해 제거
-        if (rest.startsWith(': ')) {
-            rest = rest.substring(2);
-        } else if (rest.startsWith(':')) {
-            rest = rest.substring(1);
-        }
-        return `<strong>${first}</strong>: ${rest}`;
-    }).join('<br>');
+        let rest = line.substring(1).replace(/^[:\s]+/, ''); // 콜론 및 공백 제거
+        return `<div class="poem-line" style="font-size: 1.1rem; margin-bottom: 8px;">
+                    <span class="first-char" style="font-size: 1.3rem;">${first}</span>${rest}
+                </div>`;
+    }).join('');
 
     card.innerHTML = `
         <div class="sample-content">${contentHtml}</div>
