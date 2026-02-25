@@ -140,10 +140,8 @@ function createSampleCard(sample) {
     const contentHtml = sample.poem.map(line => {
         let first = line[0];
         let rest = line.substring(1).replace(/^[:\s]+/, ''); // 콜론 및 공백 제거
-        return `<div class="poem-line" style="font-size: 1.1rem; margin-bottom: 8px;">
-                    <span class="first-char" style="font-size: 1.3rem;">${first}</span>${rest}
-                </div>`;
-    }).join('');
+        return `<strong>${first}</strong>: ${rest}`;
+    }).join('<br>');
 
     card.innerHTML = `
         <div class="sample-content">${contentHtml}</div>
