@@ -3,31 +3,32 @@
     --text-color: #2c241e;
     --accent-color: #a68b5c;
     --secondary-color: #e8e1d5;
-    --card-bg: rgba(255, 255, 255, 0.95);
-    --shadow-color: rgba(166, 139, 92, 0.12);
+    --card-bg: rgba(255, 255, 255, 0.98);
+    --shadow-color: rgba(166, 139, 92, 0.15);
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 body.dark-mode {
     --bg-color: #0f172a;
-    --text-color: #f1f5f9;
+    --text-color: #f8fafc;
     --accent-color: #fbbf24;
     --secondary-color: #1e293b;
-    --card-bg: rgba(30, 41, 59, 0.9);
-    --shadow-color: rgba(0, 0, 0, 0.5);
+    --card-bg: rgba(30, 41, 59, 0.95);
+    --shadow-color: rgba(0, 0, 0, 0.6);
 }
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
 }
 
 body {
     font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
     background-color: var(--bg-color);
     color: var(--text-color);
-    line-height: 1.7; /* 가독성을 위해 행간 증가 */
+    line-height: 1.8;
     transition: var(--transition);
     overflow-x: hidden;
     min-height: 100vh;
@@ -45,159 +46,256 @@ body {
 .container {
     max-width: 800px;
     margin: 0 auto;
-    padding: 60px 24px;
+    padding: 80px 24px;
 }
 
 header {
     text-align: center;
-    margin-bottom: 50px;
+    margin-bottom: 60px;
 }
 
 h1 {
     font-family: 'Noto Serif KR', serif;
-    font-size: 2.6rem;
-    margin-bottom: 12px;
+    font-size: 2.8rem;
+    margin-bottom: 16px;
     color: var(--accent-color);
-    letter-spacing: -0.5px;
+    letter-spacing: -1px;
+    font-weight: 700;
 }
 
 header p {
-    font-size: 1.15rem;
-    opacity: 0.85;
+    font-size: 1.2rem;
+    opacity: 0.8;
+    font-weight: 400;
 }
 
 .theme-toggle {
     position: fixed;
-    top: 20px;
-    right: 20px;
+    top: 24px;
+    right: 24px;
     background: var(--card-bg);
     border: 1px solid var(--secondary-color);
-    width: 52px;
-    height: 52px;
+    width: 56px;
+    height: 56px;
     border-radius: 50%;
     cursor: pointer;
-    box-shadow: 0 4px 15px var(--shadow-color);
-    z-index: 100;
+    box-shadow: 0 8px 20px var(--shadow-color);
+    z-index: 1000;
     transition: var(--transition);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.3rem;
+    font-size: 1.4rem;
+}
+
+.theme-toggle:active {
+    transform: scale(0.9);
 }
 
 .intro-section {
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 48px;
 }
 
 .intro-section p {
-    font-size: 1.15rem;
+    font-size: 1.2rem;
     line-height: 1.8;
     opacity: 0.9;
 }
 
+/* Input Area - Enhanced for Mobile */
 .input-group {
     display: flex;
     gap: 12px;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
+    width: 100%;
 }
 
 input[type="text"] {
     flex: 1;
-    padding: 20px 24px;
-    border-radius: 18px;
+    padding: 22px 28px;
+    border-radius: 20px;
     border: 2px solid var(--secondary-color);
     background: var(--card-bg);
     color: var(--text-color);
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     transition: var(--transition);
+    box-shadow: 0 4px 12px var(--shadow-color);
 }
 
 input[type="text"]:focus {
     outline: none;
     border-color: var(--accent-color);
-    box-shadow: 0 0 0 4px var(--shadow-color);
+    box-shadow: 0 8px 24px var(--shadow-color);
+    transform: translateY(-2px);
 }
 
 button#generateBtn {
-    padding: 0 32px;
-    border-radius: 18px;
+    padding: 0 40px;
+    border-radius: 20px;
     border: none;
     background-color: var(--accent-color);
     color: #fff;
-    font-weight: 700;
-    font-size: 1.1rem;
+    font-weight: 800;
+    font-size: 1.2rem;
     cursor: pointer;
     transition: var(--transition);
-    box-shadow: 0 6px 20px var(--shadow-color);
+    box-shadow: 0 8px 25px var(--shadow-color);
+    white-space: nowrap;
 }
 
 body.dark-mode button#generateBtn {
-    color: #1e293b;
-    font-weight: 800;
+    color: #0f172a;
+}
+
+button#generateBtn:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+}
+
+button#generateBtn:active {
+    transform: translateY(0);
 }
 
 .example-container {
     text-align: center;
-    margin-bottom: 60px;
+    margin-bottom: 80px;
 }
 
 .example-label {
     display: inline-block;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     font-weight: 800;
     color: var(--accent-color);
     background: var(--secondary-color);
-    padding: 4px 14px;
+    padding: 4px 16px;
     border-radius: 10px;
     margin-bottom: 12px;
 }
 
 .example-text {
-    font-size: 1rem;
-    opacity: 0.7;
+    font-size: 1.05rem;
+    opacity: 0.6;
     font-style: italic;
 }
 
-/* Recent Samples */
-.samples-section {
-    margin-top: 100px;
-    margin-bottom: 80px;
+/* Poem Result Cards */
+.cards-container {
+    display: grid;
+    gap: 40px;
 }
 
-.samples-header {
-    margin-bottom: 30px;
-    text-align: left;
+.poem-card {
+    background: var(--card-bg);
+    padding: 56px 48px;
+    border-radius: 40px;
+    border: 1px solid var(--secondary-color);
+    box-shadow: 0 30px 70px var(--shadow-color);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+.card-tag {
+    display: inline-block;
+    padding: 8px 20px;
+    background: var(--secondary-color);
+    color: var(--accent-color);
+    border-radius: 14px;
+    font-size: 0.95rem;
+    font-weight: 800;
+    margin-bottom: 40px;
+}
+
+.poem-line {
+    font-size: 1.6rem;
+    margin-bottom: 28px;
+    font-family: 'Noto Serif KR', serif;
+    line-height: 1.8;
+}
+
+.first-char {
+    color: var(--accent-color);
+    font-weight: 900;
+    font-size: 2.1rem;
+    margin-right: 14px;
+    display: inline-block;
+}
+
+.verse-line {
+    margin-top: 48px;
+    padding-top: 40px;
+    border-top: 2px dashed var(--secondary-color);
+}
+
+.verse-label {
+    display: block;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--accent-color);
+    margin-bottom: 16px;
+}
+
+.verse-line p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    font-weight: 500;
+}
+
+.card-btn-group {
+    display: flex;
+    gap: 16px;
+    margin-top: 56px;
+}
+
+.action-btn {
+    flex: 1;
+    padding: 20px;
+    border-radius: 20px;
+    border: 2px solid var(--accent-color);
+    background: transparent;
+    color: var(--accent-color);
+    font-weight: 800;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.action-btn:hover {
+    background: var(--accent-color);
+    color: white;
+}
+
+/* Recent Samples - Better Grid */
+.samples-section {
+    margin-top: 120px;
+    margin-bottom: 80px;
 }
 
 .samples-header h2 {
     font-family: 'Noto Serif KR', serif;
-    font-size: 1.6rem;
+    font-size: 1.8rem;
     color: var(--accent-color);
-    margin-bottom: 8px;
+    margin-bottom: 32px;
 }
 
 .samples-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 24px;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 28px;
 }
 
 .sample-mini-card {
     background: var(--card-bg);
-    padding: 28px;
-    border-radius: 24px;
+    padding: 32px;
+    border-radius: 28px;
     border: 1px solid var(--secondary-color);
-    transition: var(--transition);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    box-shadow: 0 10px 30px var(--shadow-color);
 }
 
 .sample-content {
-    font-size: 1.05rem;
-    line-height: 1.8;
-    margin-bottom: 20px;
+    font-size: 1.15rem;
+    line-height: 1.9;
+    margin-bottom: 24px;
     font-family: 'Noto Serif KR', serif;
 }
 
@@ -206,11 +304,11 @@ body.dark-mode button#generateBtn {
     justify-content: space-between;
     align-items: center;
     border-top: 1px solid var(--secondary-color);
-    padding-top: 16px;
+    padding-top: 20px;
 }
 
 .sample-name {
-    font-size: 0.9rem;
+    font-size: 1rem;
     font-weight: 700;
     opacity: 0.8;
 }
@@ -223,237 +321,130 @@ body.dark-mode button#generateBtn {
 .emoji-btn {
     background: var(--bg-color);
     border: 1px solid var(--secondary-color);
-    padding: 6px 12px;
-    border-radius: 14px;
+    padding: 8px 14px;
+    border-radius: 16px;
     cursor: pointer;
-    font-size: 0.9rem;
+    font-size: 1rem;
     transition: var(--transition);
     display: flex;
     align-items: center;
-    gap: 5px;
-    color: var(--text-color);
+    gap: 6px;
 }
 
-.emoji-btn.active {
-    border-color: var(--accent-color);
-    background: rgba(166, 139, 92, 0.1);
-    transform: scale(1.05);
-}
-
-/* Poem Cards */
-.cards-container {
-    display: grid;
-    gap: 40px;
-}
-
-.poem-card {
-    background: var(--card-bg);
-    padding: 50px;
-    border-radius: 36px;
-    border: 1px solid var(--secondary-color);
-    box-shadow: 0 25px 60px var(--shadow-color);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-}
-
-.card-tag {
-    display: inline-block;
-    padding: 8px 18px;
-    background: var(--secondary-color);
-    color: var(--accent-color);
-    border-radius: 14px;
-    font-size: 0.9rem;
-    font-weight: 800;
-    margin-bottom: 35px;
-}
-
-.poem-line {
-    font-size: 1.45rem;
-    margin-bottom: 24px;
-    font-family: 'Noto Serif KR', serif;
-    line-height: 1.8;
-}
-
-.first-char {
-    color: var(--accent-color);
-    font-weight: 900;
-    font-size: 1.9rem;
-    margin-right: 12px;
-    text-shadow: 0 2px 4px var(--shadow-color);
-}
-
-.verse-line {
-    margin-top: 40px;
-    padding-top: 35px;
-    border-top: 2px dashed var(--secondary-color);
-}
-
-.verse-label {
-    display: block;
-    font-size: 1rem;
-    font-weight: 800;
-    color: var(--accent-color);
-    margin-bottom: 15px;
-}
-
-.card-btn-group {
-    display: flex;
-    gap: 15px;
-    margin-top: 50px;
-}
-
-.action-btn {
-    flex: 1;
-    padding: 18px;
-    border-radius: 18px;
-    border: 2px solid var(--accent-color);
-    background: transparent;
-    color: var(--accent-color);
-    font-weight: 800;
-    font-size: 1.05rem;
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-.action-btn:hover {
-    background: var(--accent-color);
-    color: white;
-}
-
-/* Guide Section */
-.guide-section {
-    margin-top: 120px;
-    padding: 50px;
-    background: var(--card-bg);
-    border-radius: 36px;
-    border: 1px solid var(--secondary-color);
-}
-
-.guide-section h2 {
-    font-family: 'Noto Serif KR', serif;
-    margin-top: 45px;
-    margin-bottom: 20px;
-    font-size: 1.7rem;
-    color: var(--accent-color);
-}
-
-/* Footer */
-footer {
-    margin-top: 120px;
-    text-align: center;
-    border-top: 1px solid var(--secondary-color);
-    padding: 80px 24px 60px;
-}
-
-.footer-links {
-    margin-bottom: 40px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-}
-
-.footer-links a {
-    color: var(--text-color);
-    text-decoration: none;
-    font-size: 1.05rem;
-    font-weight: 600;
-    opacity: 0.7;
-    padding: 5px 10px;
-}
-
-.footer-links a:hover {
-    color: var(--accent-color);
-    opacity: 1;
-}
-
-.blessing-footer {
-    margin-top: 50px;
-    font-size: 1.1rem;
-    color: var(--accent-color);
-    line-height: 2;
-    font-style: italic;
-}
-
-/* Policy Pages */
+/* Policy Content UX */
 .policy-card {
     background: var(--card-bg);
-    padding: 50px;
-    border-radius: 36px;
-    margin-top: 30px;
+    padding: 60px 48px;
+    border-radius: 40px;
     border: 1px solid var(--secondary-color);
 }
 
-/* Mobile Optimizations */
+/* Mobile Specific Optimizations */
 @media (max-width: 600px) {
     .container {
-        padding: 40px 18px;
+        padding: 60px 20px;
     }
 
     h1 {
-        font-size: 2rem;
+        font-size: 2.2rem;
     }
 
-    header p {
-        font-size: 1rem;
+    header {
+        margin-bottom: 40px;
     }
 
-    .intro-section p {
-        font-size: 1.05rem;
+    .theme-toggle {
+        width: 48px;
+        height: 48px;
+        top: 16px;
+        right: 16px;
+        font-size: 1.2rem;
     }
 
-    input[type="text"], button#generateBtn {
+    .input-group {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    input[type="text"] {
+        padding: 24px;
+        font-size: 1.3rem; /* 칸을 시각적으로 더 크게 */
+        text-align: center;
+    }
+
+    button#generateBtn {
         width: 100%;
-        padding: 20px;
-        font-size: 1.15rem;
+        padding: 24px;
+        font-size: 1.3rem;
     }
 
     .poem-card {
-        padding: 35px 24px;
-        border-radius: 28px;
+        padding: 48px 24px;
+        border-radius: 32px;
     }
 
     .poem-line {
-        font-size: 1.3rem;
-        margin-bottom: 20px;
+        font-size: 1.45rem;
+        margin-bottom: 24px;
     }
 
     .first-char {
-        font-size: 1.6rem;
-        margin-right: 8px;
+        font-size: 1.8rem;
     }
 
-    .sample-mini-card {
-        padding: 24px;
-    }
-
-    .sample-content {
-        font-size: 1rem;
+    .verse-line p {
+        font-size: 1.1rem;
     }
 
     .action-btn {
-        padding: 16px 12px;
-        font-size: 1rem;
+        padding: 20px 12px;
+        font-size: 1.05rem;
     }
 
-    .footer-links {
-        gap: 12px;
+    .samples-grid {
+        grid-template-columns: 1fr;
     }
 
-    .footer-links a {
-        font-size: 0.95rem;
+    .sample-mini-card {
+        padding: 28px;
+    }
+
+    .policy-card {
+        padding: 40px 24px;
+    }
+
+    footer {
+        padding: 80px 20px 60px;
     }
 }
 
 .hidden { display: none; }
 
-.newly-added {
-    animation: slideInAndHighlight 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-    border-color: var(--accent-color);
-    box-shadow: 0 0 20px var(--shadow-color);
+.loading-area {
+    text-align: center;
+    margin: 80px 0;
 }
 
-@keyframes slideInAndHighlight {
-    0% { opacity: 0; transform: scale(0.9) translateY(-30px); }
-    100% { opacity: 1; transform: scale(1) translateY(0); }
+.loader {
+    width: 56px;
+    height: 56px;
+    border: 6px solid var(--secondary-color);
+    border-bottom-color: var(--accent-color);
+    border-radius: 50%;
+    display: inline-block;
+    animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.newly-added {
+    animation: slideIn 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes slideIn {
+    0% { opacity: 0; transform: translateY(-30px); }
+    100% { opacity: 1; transform: translateY(0); }
 }
