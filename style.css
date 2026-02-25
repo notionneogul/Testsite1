@@ -84,7 +84,6 @@ header p {
     align-items: center;
     justify-content: center;
     font-size: 1.2rem;
-    transition: var(--transition);
 }
 
 .intro-section {
@@ -114,7 +113,6 @@ input[type="text"] {
     color: var(--text-color);
     font-size: 1.1rem;
     transition: var(--transition);
-    box-shadow: 0 2px 8px var(--shadow-color);
 }
 
 input[type="text"]:focus {
@@ -133,7 +131,6 @@ button#generateBtn {
     font-size: 1.1rem;
     cursor: pointer;
     transition: var(--transition);
-    box-shadow: 0 4px 12px var(--shadow-color);
     white-space: nowrap;
 }
 
@@ -188,6 +185,8 @@ body.dark-mode button#generateBtn {
     font-size: 0.85rem;
     font-weight: 800;
     margin-bottom: 30px;
+    /* 소제목이 본문 첫 글자와 수직선상에 맞도록 미세 조정 */
+    margin-left: 2px;
 }
 
 .poem-line {
@@ -203,9 +202,13 @@ body.dark-mode button#generateBtn {
     color: var(--accent-color);
     font-weight: 900;
     font-size: 1.8rem;
-    margin-right: 12px;
+    margin-right: 14px;
     flex-shrink: 0;
-    margin-top: -4px; /* Align with baseline of rest text better */
+    /* 시각적 정렬 보정: 큰 글자가 약간 올라가 보이는 현상 수정 */
+    margin-top: -2px;
+    display: inline-block;
+    min-width: 1.8rem;
+    text-align: center;
 }
 
 .verse-line {
@@ -274,7 +277,6 @@ body.dark-mode button#generateBtn {
     padding: 24px;
     border-radius: 20px;
     border: 1px solid var(--secondary-color);
-    box-shadow: 0 4px 15px var(--shadow-color);
 }
 
 .sample-content {
@@ -362,6 +364,11 @@ body.dark-mode button#generateBtn {
         border-radius: 24px;
     }
 
+    .card-tag {
+        margin-left: 0;
+        margin-bottom: 24px;
+    }
+
     .poem-line {
         font-size: 1.25rem;
         margin-bottom: 16px;
@@ -370,6 +377,7 @@ body.dark-mode button#generateBtn {
     .first-char {
         font-size: 1.6rem;
         margin-right: 10px;
+        min-width: 1.6rem;
     }
 
     .verse-line p {
