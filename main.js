@@ -105,6 +105,8 @@ function animate() {
 }
 
 // --- 페이지 초기화 및 데이터 로딩 ---
+let recentSamplesData = []; // 원본 데이터 보관용
+
 window.addEventListener('DOMContentLoaded', () => {
     initCanvas();
     animate();
@@ -115,8 +117,8 @@ async function loadRecentSamples() {
     try {
         const res = await fetch('/api/samples');
         if (!res.ok) return;
-        const samples = await res.json();
-        renderSamples(samples);
+        recentSamplesData = await res.json();
+        renderSamples(recentSamplesData);
     } catch (e) {
         console.error('샘플 로딩 실패:', e);
     }
@@ -135,9 +137,16 @@ function createSampleCard(sample) {
     card.className = 'sample-mini-card';
     card.dataset.id = sample.id;
     
+    // 데이터에 이미 콜론이 포함되어 있을 경우를 대비한 방어 로직
     const contentHtml = sample.poem.map(line => {
-        const first = line[0];
-        const rest = line.substring(1);
+        let first = line[0];
+        let rest = line.substring(1);
+        // 만약 rest가 ": "로 시작한다면 중복 방지를 위해 제거
+        if (rest.startsWith(': ')) {
+            rest = rest.substring(2);
+        } else if (rest.startsWith(':')) {
+            rest = rest.substring(1);
+        }
         return `<strong>${first}</strong>: ${rest}`;
     }).join('<br>');
 
@@ -155,16 +164,19 @@ function createSampleCard(sample) {
     return card;
 }
 
-// 이모지 반응 로직 (서버 동기화 포함)
+// 이모지 반응 로직 (UI 스크래핑 대신 저장된 데이터 사용)
 window.react = async function(sampleId, emoji) {
-    const sampleCards = document.querySelectorAll('.sample-mini-card');
-    let targetCard = Array.from(sampleCards).find(c => c.dataset.id === sampleId);
+    const sample = recentSamplesData.find(s => s.id === sampleId);
+    if (!sample) return;
+
+    const targetCard = document.querySelector(`.sample-mini-card[data-id="${sampleId}"]`);
     if (!targetCard) return;
 
     const btn = Array.from(targetCard.querySelectorAll('.emoji-btn')).find(b => b.innerText.includes(emoji));
     const countSpan = btn.querySelector('.count');
     let count = parseInt(countSpan.innerText);
     
+    // UI 낙관적 업데이트
     if (btn.classList.contains('active')) {
         count--;
         btn.classList.remove('active');
@@ -173,20 +185,15 @@ window.react = async function(sampleId, emoji) {
         btn.classList.add('active');
     }
     countSpan.innerText = count;
-
-    const poemText = targetCard.querySelector('.sample-content').innerText.replace(/<strong>|<\/strong>/g, '').split('\n').map(l => l.trim()).filter(l => l);
-    const name = targetCard.querySelector('.sample-name').innerText.replace(' 님', '');
     
-    const reactions = {};
-    targetCard.querySelectorAll('.emoji-btn').forEach(b => {
-        const e = b.innerText.split(' ')[0];
-        reactions[e] = parseInt(b.querySelector('.count').innerText);
-    });
+    // 메모리 데이터 업데이트
+    if (!sample.reactions) sample.reactions = {};
+    sample.reactions[emoji] = count;
 
     try {
         await fetch('/api/samples', {
             method: 'POST',
-            body: JSON.stringify({ id: sampleId, name, poem: poemText, reactions })
+            body: JSON.stringify(sample)
         });
     } catch (e) {
         console.error('반응 저장 실패');
