@@ -35,14 +35,14 @@
             </section>
 
             <div class="input-group">
-                <input type="text" id="nameInput" placeholder="이름을 입력해 보세요" maxlength="10" inputmode="text">
-                <button id="generateBtn">축복 시작하기</button>
+                <input type="text" id="nameInput" placeholder="성함을 입력하세요" maxlength="10" inputmode="text">
+                <button id="generateBtn">축복 생성하기</button>
             </div>
 
-            <!-- 예시 영역 -->
+            <!-- 예시 영역 (축소 및 정돈) -->
             <div class="example-container">
-                <span class="example-label">Discovery</span>
-                <p class="example-text">"은혜로운 이름 속에 담긴 당신만의 이야기를 찾아보세요"</p>
+                <span class="example-label">생성 예시</span>
+                <p class="example-text">"<strong>은</strong>혜가 가득한 삶, <strong>혜</strong>성처럼 빛나길"</p>
             </div>
 
             <!-- 로딩 모션 영역 -->
@@ -74,11 +74,9 @@
                         </div>
                         <div class="sample-footer">
                             <span class="sample-name">김은혜 님</span>
-                            <div class="reaction-group">
-                                <button class="emoji-btn" onclick="react(this, '❤️')">❤️ <span class="count">12</span></button>
-                                <button class="emoji-btn" onclick="react(this, '✨')">✨ <span class="count">5</span></button>
-                                <button class="emoji-btn" onclick="react(this, '🙏')">🙏 <span class="count">7</span></button>
-                            </div>
+                            <button class="like-btn" onclick="this.classList.toggle('active')">
+                                <span>❤️</span> <span class="like-count">12</span>
+                            </button>
                         </div>
                     </div>
                     <div class="sample-mini-card">
@@ -89,11 +87,22 @@
                         </div>
                         <div class="sample-footer">
                             <span class="sample-name">박지훈 님</span>
-                            <div class="reaction-group">
-                                <button class="emoji-btn" onclick="react(this, '❤️')">❤️ <span class="count">8</span></button>
-                                <button class="emoji-btn" onclick="react(this, '✨')">✨ <span class="count">3</span></button>
-                                <button class="emoji-btn" onclick="react(this, '🙏')">🙏 <span class="count">4</span></button>
-                            </div>
+                            <button class="like-btn" onclick="this.classList.toggle('active')">
+                                <span>❤️</span> <span class="like-count">8</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="sample-mini-card">
+                        <div class="sample-content">
+                            <strong>이</strong>: 이 세상 그 무엇보다 소중한<br>
+                            <strong>서</strong>: 서로를 아끼는 마음으로<br>
+                            <strong>아</strong>: 아름다운 사랑 가득하시길
+                        </div>
+                        <div class="sample-footer">
+                            <span class="sample-name">이서아 님</span>
+                            <button class="like-btn" onclick="this.classList.toggle('active')">
+                                <span>❤️</span> <span class="like-count">15</span>
+                            </button>
                         </div>
                     </div>
                 </div>
