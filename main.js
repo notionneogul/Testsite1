@@ -104,9 +104,115 @@ function animate() {
     requestAnimationFrame(animate);
 }
 
-initCanvas();
-animate();
+// --- 페이지 초기화 및 데이터 로딩 ---
+window.addEventListener('DOMContentLoaded', () => {
+    initCanvas();
+    animate();
+    loadRecentSamples();
+});
 
+async function loadRecentSamples() {
+    try {
+        const res = await fetch('/api/samples');
+        if (!res.ok) return;
+        const samples = await res.json();
+        renderSamples(samples);
+    } catch (e) {
+        console.error('샘플 로딩 실패:', e);
+    }
+}
+
+function renderSamples(samples) {
+    const samplesGrid = document.getElementById('samplesGrid');
+    samplesGrid.innerHTML = '';
+    samples.forEach(sample => {
+        samplesGrid.appendChild(createSampleCard(sample));
+    });
+}
+
+function createSampleCard(sample) {
+    const card = document.createElement('div');
+    card.className = 'sample-mini-card';
+    card.dataset.id = sample.id;
+    
+    const contentHtml = sample.poem.map(line => {
+        const first = line[0];
+        const rest = line.substring(1);
+        return `<strong>${first}</strong>: ${rest}`;
+    }).join('<br>');
+
+    card.innerHTML = `
+        <div class="sample-content">${contentHtml}</div>
+        <div class="sample-footer">
+            <span class="sample-name">${sample.name} 님</span>
+            <div class="reaction-group">
+                <button class="emoji-btn" onclick="react('${sample.id}', '❤️')">❤️ <span class="count">${sample.reactions?.['❤️'] || 0}</span></button>
+                <button class="emoji-btn" onclick="react('${sample.id}', '✨')">✨ <span class="count">${sample.reactions?.['✨'] || 0}</span></button>
+                <button class="emoji-btn" onclick="react('${sample.id}', '🙏')">🙏 <span class="count">${sample.reactions?.['🙏'] || 0}</span></button>
+            </div>
+        </div>
+    `;
+    return card;
+}
+
+// 이모지 반응 로직 (서버 동기화 포함)
+window.react = async function(sampleId, emoji) {
+    const sampleCards = document.querySelectorAll('.sample-mini-card');
+    let targetCard = Array.from(sampleCards).find(c => c.dataset.id === sampleId);
+    if (!targetCard) return;
+
+    const btn = Array.from(targetCard.querySelectorAll('.emoji-btn')).find(b => b.innerText.includes(emoji));
+    const countSpan = btn.querySelector('.count');
+    let count = parseInt(countSpan.innerText);
+    
+    if (btn.classList.contains('active')) {
+        count--;
+        btn.classList.remove('active');
+    } else {
+        count++;
+        btn.classList.add('active');
+    }
+    countSpan.innerText = count;
+
+    const poemText = targetCard.querySelector('.sample-content').innerText.replace(/<strong>|<\/strong>/g, '').split('\n').map(l => l.trim()).filter(l => l);
+    const name = targetCard.querySelector('.sample-name').innerText.replace(' 님', '');
+    
+    const reactions = {};
+    targetCard.querySelectorAll('.emoji-btn').forEach(b => {
+        const e = b.innerText.split(' ')[0];
+        reactions[e] = parseInt(b.querySelector('.count').innerText);
+    });
+
+    try {
+        await fetch('/api/samples', {
+            method: 'POST',
+            body: JSON.stringify({ id: sampleId, name, poem: poemText, reactions })
+        });
+    } catch (e) {
+        console.error('반응 저장 실패');
+    }
+};
+
+async function saveSampleToServer(lines, name) {
+    const newSample = {
+        id: Date.now().toString(),
+        name: name,
+        poem: lines,
+        reactions: { '❤️': 0, '✨': 0, '🙏': 0 }
+    };
+
+    try {
+        await fetch('/api/samples', {
+            method: 'POST',
+            body: JSON.stringify(newSample)
+        });
+        loadRecentSamples();
+    } catch (e) {
+        console.error('샘플 저장 실패');
+    }
+}
+
+// --- 생성 및 UI 제어 ---
 generateBtn.addEventListener('click', async () => {
     const name = nameInput.value.trim();
     if (!name) return alert('성함을 입력해주세요!');
@@ -232,7 +338,6 @@ function saveCardAsImage(cardElement, index) {
                 clonedCard.style.boxShadow = 'none';
                 clonedCard.style.paddingBottom = '60px';
 
-                // 내용을 캡처용으로 강제 재구성
                 const contentArea = clonedCard.querySelector('.poem-content');
                 contentArea.innerHTML = ''; 
 
@@ -285,9 +390,9 @@ function saveCardAsImage(cardElement, index) {
         link.href = canvas.toDataURL('image/png');
         link.click();
         
-        // --- A 방식: 로컬 리스트에 즉시 추가 ---
-        const name = document.getElementById('nameInput').value.trim() || '익명';
-        addSampleToGrid(poemLinesRaw, name);
+        // --- 서버 저장소에 추가 ---
+        const name = nameInput.value.trim() || '익명';
+        saveSampleToServer(poemLinesRaw, name);
         
         btnGroup.style.visibility = 'visible';
         tag.style.opacity = '1';
@@ -299,49 +404,6 @@ function saveCardAsImage(cardElement, index) {
         saveBtn.innerText = originalText;
     });
 }
-
-function addSampleToGrid(lines, name) {
-    const samplesGrid = document.getElementById('samplesGrid');
-    const newSample = document.createElement('div');
-    newSample.className = 'sample-mini-card newly-added';
-    
-    // N행시 텍스트 구성
-    const contentHtml = lines.map(line => {
-        const first = line[0];
-        const rest = line.substring(1);
-        return `<strong>${first}</strong>: ${rest}`;
-    }).join('<br>');
-
-    newSample.innerHTML = `
-        <div class="sample-content">${contentHtml}</div>
-        <div class="sample-footer">
-            <span class="sample-name">${name} 님</span>
-            <div class="reaction-group">
-                <button class="emoji-btn" onclick="react(this, '❤️')">❤️ <span class="count">0</span></button>
-                <button class="emoji-btn" onclick="react(this, '✨')">✨ <span class="count">0</span></button>
-                <button class="emoji-btn" onclick="react(this, '🙏')">🙏 <span class="count">0</span></button>
-            </div>
-        </div>
-    `;
-    
-    samplesGrid.prepend(newSample);
-}
-
-// 이모지 반응 로직
-window.react = function(btn, emoji) {
-    const countSpan = btn.querySelector('.count');
-    let count = parseInt(countSpan.innerText);
-    
-    if (btn.classList.contains('active')) {
-        count--;
-        btn.classList.remove('active');
-    } else {
-        count++;
-        btn.classList.add('active');
-        // 파티클 효과 같은 걸 넣으면 더 좋음
-    }
-    countSpan.innerText = count;
-};
 
 function typeWriter(element, text, delay) {
     setTimeout(() => {
