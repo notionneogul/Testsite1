@@ -1,4 +1,4 @@
-// Last updated: 2026-02-27 13:55 KST
+// Last updated: 2026-02-27 14:05 KST
 export async function onRequestPost(context) {
   const { request, env } = context;
 
@@ -15,8 +15,8 @@ export async function onRequestPost(context) {
     const { name } = await request.json();
     const origin = new URL(request.url).origin;
     
-    // Using gemini-2.5-flash for enhanced creativity and emotional depth
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`, {
+    // Using gemini-2.0-flash for high performance and improved quality
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -56,8 +56,9 @@ export async function onRequestPost(context) {
     const data = await response.json();
     
     if (!response.ok) {
+      const errorMessage = data.error?.message || "Google API 호출 중 오류가 발생했습니다.";
       return new Response(JSON.stringify({ 
-        error: data.error?.message || "Google API 호출 중 오류가 발생했습니다.",
+        error: `[Google API Error ${response.status}] ${errorMessage}`,
         status: response.status 
       }), {
         status: response.status,
@@ -74,7 +75,6 @@ export async function onRequestPost(context) {
 
     const text = data.candidates[0].content.parts[0].text;
     
-    // Return the text as part of a JSON object for consistency
     return new Response(JSON.stringify({ result: text }), {
       headers: { "Content-Type": "application/json" }
     });
