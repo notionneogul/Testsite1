@@ -1,4 +1,4 @@
-// Last updated: 2026-02-27 13:50 KST
+// Last updated: 2026-02-27 13:55 KST
 export async function onRequestPost(context) {
   const { request, env } = context;
 
@@ -15,7 +15,8 @@ export async function onRequestPost(context) {
     const { name } = await request.json();
     const origin = new URL(request.url).origin;
     
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
+    // Using gemini-2.5-flash for enhanced creativity and emotional depth
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -32,7 +33,7 @@ export async function onRequestPost(context) {
 - 형식적인 기도문 표현 절대 금지.
 - 중학생도 바로 이해할 수 있는 쉬운 단어 사용.
 - 한 사람이 다른 사람에게 조용히 건네는 말처럼 자연스럽고 짧은 문장으로 작성.
-- 전체 메시지는 가볍지만 따뜻하게, 카카오톡으로 바로 보내도 어색하지 않은 톤.
+- 전체 메시지는 가볍지만 따뜻하게, 인스타그램 감성 사진의 캡션처럼 트렌디하고 다정한 톤.
 
 [추가 기능]
 - 각 N행시가 끝난 뒤, 그 메시지의 주제와 어울리는 짧은 '성경 구절'을 하나씩 추천해줘.
