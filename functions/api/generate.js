@@ -13,7 +13,7 @@ export async function onRequestPost(context) {
   try {
     const { name } = await request.json();
     
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`, {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -52,20 +52,31 @@ export async function onRequestPost(context) {
     const data = await response.json();
     
     if (!response.ok) {
-      return new Response(JSON.stringify({ error: data.error.message }), {
+      return new Response(JSON.stringify({ 
+        error: data.error?.message || "Google API 호출 중 오류가 발생했습니다.",
+        status: response.status 
+      }), {
         status: response.status,
+        headers: { "Content-Type": "application/json" }
+      });
+    }
+
+    if (!data.candidates || data.candidates.length === 0 || !data.candidates[0].content) {
+      return new Response(JSON.stringify({ error: "응답을 생성하지 못했습니다. 다시 시도해주세요." }), {
+        status: 500,
         headers: { "Content-Type": "application/json" }
       });
     }
 
     const text = data.candidates[0].content.parts[0].text;
     
-    return new Response(text, {
+    // Return the text as part of a JSON object for consistency
+    return new Response(JSON.stringify({ result: text }), {
       headers: { "Content-Type": "application/json" }
     });
 
   } catch (error) {
-    return new Response(JSON.stringify({ error: "서버 내부 오류가 발생했습니다." }), {
+    return new Response(JSON.stringify({ error: "서버 내부 오류가 발생했습니다: " + error.message }), {
       status: 500,
       headers: { "Content-Type": "application/json" }
     });

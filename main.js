@@ -225,9 +225,15 @@ generateBtn.addEventListener('click', async () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name })
         });
-        const responseText = await response.text();
-        if (!response.ok) throw new Error('생성 실패');
-        await renderResult(responseText);
+        
+        const responseData = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(responseData.error || '생성 실패');
+        }
+        
+        // Pass the generated text (poem JSON string) to renderResult
+        await renderResult(responseData.result);
     } catch (error) {
         alert(`오류가 발생했습니다: ${error.message}`);
     } finally {
