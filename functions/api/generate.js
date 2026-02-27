@@ -1,3 +1,4 @@
+// Last updated: 2026-02-27 13:50 KST
 export async function onRequestPost(context) {
   const { request, env } = context;
 
